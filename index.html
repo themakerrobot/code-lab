@@ -1,153 +1,138 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python IDE</title>
-    <link rel="shortcut icon" href="./static/icon.png" type="image/x-icon" />
-    <link rel="stylesheet" href="./static/codemirror.css">
-    <link rel="stylesheet" href="./static/cobalt.css" />
-    <link rel="stylesheet" href="./static/index.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <script src="./static/skulpt.min.js"></script>
-    <script src="./static/skulpt-stdlib.js"></script>
-    <script src="./static/codemirror.min.js"></script>
-    <script src="./static/python.js"></script>
-    <script src="./static/index.js" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Code Lab — 블록 · 파이썬</title>
+<meta name="description" content="블록과 파이썬으로 코딩하고, 브라우저나 piBrain 에서 바로 실행해요.">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<meta name="theme-color" content="#FBF7EF">
+<link rel="stylesheet" href="assets/fonts/pretendard.css?v=1">
+<link rel="stylesheet" href="css/all.min.css?v=1">
+<link rel="stylesheet" href="css/themaker-ui.css?v=1">
+<link rel="stylesheet" href="vendor/codemirror/codemirror.css?v=1">
+<link rel="stylesheet" href="vendor/codemirror/cobalt.css?v=1">
+<link rel="stylesheet" href="css/app.css?v=1">
 </head>
 <body>
-    <div class="ide-wrapper">
-        <!-- Header -->
-        <header class="ide-header">
-            <div class="header-left">
-                <div class="logo">
-                    <span class="logo-icon">&lt;/&gt;</span>
-                    <span class="logo-text">Python IDE</span>
-                </div>
-            </div>
-            <div class="header-center">
-                <!-- Examples -->
-                <div class="example-dropdown">
-                    <button id="examples-btn" class="toolbar-btn" title="예제 불러오기">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                        <span>예제</span>
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                    </button>
-                    <div id="examples-menu" class="dropdown-menu">
-                        <div class="dropdown-item" data-example="hello">👋 Hello World</div>
-                        <div class="dropdown-item" data-example="input">⌨️ 입력(input) 예제</div>
-                        <div class="dropdown-item" data-example="loop">🔁 반복문 예제</div>
-                        <div class="dropdown-item" data-example="function">⚙️ 함수 예제</div>
-                        <div class="dropdown-item" data-example="list">📋 리스트 예제</div>
-                        <div class="dropdown-item" data-example="turtle">🤖 로봇 그래픽</div>
-                        <div class="dropdown-item" data-example="turtle2">🌀 로봇 나선</div>
-                        <div class="dropdown-item" data-example="game">🎲 숫자 맞추기 게임</div>
-                    </div>
-                </div>
-                <div class="toolbar-divider"></div>
-                <!-- Save / Load / Download -->
-                <button id="save-btn" class="toolbar-btn" title="코드 저장 (Ctrl+S)">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                    <span>저장</span>
-                </button>
-                <button id="load-btn" class="toolbar-btn" title="저장된 코드 불러오기">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                    <span>불러오기</span>
-                </button>
-                <button id="download-btn" class="toolbar-btn" title=".py 파일로 내보내기">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    <span>.py</span>
-                </button>
-                <div class="toolbar-divider"></div>
-                <!-- Font Size -->
-                <div class="font-size-control">
-                    <label>크기</label>
-                    <button id="font-decrease" class="font-btn" title="글자 줄이기">−</button>
-                    <span id="font-size-display">18</span>
-                    <button id="font-increase" class="font-btn" title="글자 키우기">+</button>
-                </div>
-            </div>
-            <div class="header-right">
-                <kbd class="shortcut-hint">Ctrl+Enter 실행</kbd>
-                <button id="fullscreen-btn" class="toolbar-btn icon-only" title="전체화면">
-                    <svg id="fs-expand" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-                    <svg id="fs-compress" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-                </button>
-            </div>
-        </header>
 
-        <!-- Main Body -->
-        <div class="ide-body">
-            <!-- Editor Panel -->
-            <div class="panel editor-panel" id="editor-panel">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                        <span>편집기</span>
-                    </div>
-                    <div class="run-controls">
-                        <button id="run-btn" class="action-btn run-button" title="실행 (Ctrl+Enter)">
-                            <svg class="play-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                            실행
-                        </button>
-                        <button id="stop-btn" class="action-btn stop-button" title="정지" disabled>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
-                            정지
-                        </button>
-                    </div>
-                </div>
-                <div class="editor-area">
-                    <textarea id="python-code" name="code"></textarea>
-                </div>
-                <div class="status-bar">
-                    <span id="status-text">준비</span>
-                    <span id="exec-time"></span>
-                    <span id="cursor-pos">줄 1, 칸 1</span>
-                </div>
-            </div>
+<header>
+  <h1><img src="assets/img/pibo-logo.png" alt=""><span class="brand-txt">Code Lab</span></h1>
+  <button type="button" class="navlink" data-mode="block"><i class="fa-solid fa-cubes"></i>블록</button>
+  <button type="button" class="navlink" data-mode="python"><i class="fa-brands fa-python"></i>파이썬</button>
+  <span class="cl-flex"></span>
+  <span class="badge" id="devBadge">piBrain 연결 안 됨</span>
+  <button type="button" class="hbtn" id="fsBtn" title="전체화면"></button>
+</header>
 
-            <!-- Resize Handle -->
-            <div class="resize-handle" id="resize-handle">
-                <div class="resize-grip"></div>
-            </div>
+<div class="cl-bar">
+  <span class="cl-lb">실행 위치</span>
+  <div class="seg">
+    <button type="button" data-target="browser"><i class="fa-solid fa-globe"></i>브라우저</button>
+    <button type="button" data-target="device"><i class="fa-solid fa-microchip"></i>piBrain</button>
+  </div>
+  <button type="button" class="db cl-dev" id="connBtn"></button>
+  <button type="button" class="db cl-dev" id="dispBtn" title="piBrain 화면을 네트워크 정보로 돌려요"><i class="fa-solid fa-display"></i> 화면 처음으로</button>
 
-            <!-- Output Panel -->
-            <div class="panel output-panel" id="output-panel">
-                <div class="panel-header">
-                    <div class="output-tabs">
-                        <button class="tab-btn active" data-tab="console">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-                            콘솔
-                        </button>
-                        <button class="tab-btn" data-tab="turtle">
-                            🤖 로봇
-                        </button>
-                    </div>
-                    <button id="clear-btn" class="action-btn clear-button" title="출력 지우기">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                        지우기
-                    </button>
-                </div>
-                <div class="output-area">
-                    <div id="console-panel" class="tab-panel active">
-                        <div id="output-content"></div>
-                        <div id="input-area" style="display:none">
-                            <span id="input-prompt"></span>
-                            <input type="text" id="input-field" autocomplete="off" spellcheck="false" />
-                        </div>
-                    </div>
-                    <div id="turtle-panel" class="tab-panel">
-                        <div id="turtle"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <span class="cl-sep"></span>
+  <button type="button" class="db go" id="runBtn" title="실행 (Ctrl+Enter)"><i class="fa-solid fa-play"></i> 실행</button>
+  <button type="button" class="db" id="stopBtn" title="정지 (Esc)"><i class="fa-solid fa-stop"></i> 정지</button>
+
+  <span class="cl-sep"></span>
+  <span class="cl-drop" id="exBtnWrap">
+    <button type="button" class="db" id="exBtn"><i class="fa-solid fa-book-open"></i> 예제 <i class="fa-solid fa-caret-down"></i></button>
+    <span class="cl-menu" id="exMenu" hidden></span>
+  </span>
+  <button type="button" class="db" id="importBtn" title=".json(블록) 또는 .py(파이썬) 파일"><i class="fa-solid fa-folder-open"></i> 불러오기</button>
+  <button type="button" class="db" id="exportBtn" title="블록은 .json, 파이썬은 .py 로 내보내요"><i class="fa-solid fa-download"></i> 내보내기</button>
+  <input type="file" id="importFile" accept=".json,.py,.txt">
+
+  <span class="cl-flex"></span>
+  <span class="cl-font">
+    <span class="cl-lb">글자</span>
+    <button type="button" class="db" id="fontDown" title="글자 작게">−</button>
+    <span id="fontSize" class="num">16</span>
+    <button type="button" class="db" id="fontUp" title="글자 크게">+</button>
+  </span>
+</div>
+
+<main class="mk-main" id="clMain">
+
+  <section class="pan pan-wide" id="panEdit">
+    <div class="ph"><i id="editIcon" class="fa-solid fa-cubes"></i><span id="editTitle">블록 편집기</span></div>
+    <div class="cl-edit">
+      <div id="blocklyDiv"></div>
+      <div id="pyWrap" hidden><textarea id="pyCode"></textarea></div>
+    </div>
+    <div class="cl-statusbar">
+      <span id="status" class="cl-status">준비</span>
+      <span id="execTime" class="num"></span>
+      <span class="cl-flex"></span>
+      <span id="cursorPos" class="num">줄 1, 칸 1</span>
+    </div>
+  </section>
+
+  <div class="cl-splitter" id="splitter" title="끌어서 넓이 바꾸기"></div>
+
+  <section class="pan pan-out" id="panOut">
+    <div class="ph">
+      <button type="button" class="cl-tab" data-tab="out"><i class="fa-solid fa-terminal"></i>결과</button>
+      <button type="button" class="cl-tab" data-tab="draw" id="tabDrawBtn"><i class="fa-solid fa-robot"></i>그림</button>
+      <button type="button" class="cl-tab" data-tab="code" id="tabCodeBtn"><i class="fa-brands fa-python"></i>코드</button>
+      <span class="cl-flex"></span>
+      <button type="button" class="db danger cl-mini" id="clearBtn" title="결과 지우기"><i class="fa-solid fa-eraser"></i> 지우기</button>
     </div>
 
-    <!-- Toast -->
-    <div id="toast" class="toast"></div>
+    <div class="cl-tabpane" id="tab-out">
+      <div class="cl-out" id="outBox">
+        <pre id="outText"></pre>
+        <div class="cl-in" id="inRow" hidden>
+          <span class="cl-in-mark">▸</span>
+          <input type="text" id="inField" autocomplete="off" spellcheck="false" placeholder="여기에 입력하고 Enter">
+        </div>
+      </div>
+    </div>
+
+    <div class="cl-tabpane" id="tab-draw">
+      <div id="turtle"></div>
+    </div>
+
+    <div class="cl-tabpane" id="tab-code">
+      <div id="codeView"></div>
+      <div class="cl-codebar">
+        <span class="hint">블록이 만든 파이썬 코드예요</span>
+        <span class="cl-flex"></span>
+        <button type="button" class="db cl-mini" id="pyBtn" title=".py 파일로 받기"><i class="fa-solid fa-download"></i> .py</button>
+        <button type="button" class="db cl-mini" id="toPyBtn"><i class="fa-solid fa-pen"></i> 파이썬으로 고치기</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast" class="toast"></div>
+
+<!-- 실행기 · 편집기 -->
+<script src="vendor/skulpt/skulpt.min.js?v=1"></script>
+<script src="vendor/skulpt/skulpt-stdlib.js?v=1"></script>
+<script src="vendor/codemirror/codemirror.min.js?v=1"></script>
+<script src="vendor/codemirror/python.js?v=1"></script>
+
+<!-- 블록 -->
+<script src="blocks/ko2en.js?v=1"></script>
+<script src="vendor/blockly/blockly_compressed.js?v=1"></script>
+<script src="vendor/blockly/blocks_compressed.js?v=1"></script>
+<script src="vendor/blockly/python_compressed.js?v=1"></script>
+<script src="vendor/blockly/ko.js?v=1"></script>
+<script src="blocks/field-bitmap.js?v=1"></script>
+<script src="blocks/customblock.js?v=1"></script>
+<script src="blocks/customblock_callback.js?v=1"></script>
+<script src="blocks/customblock_toolbox.js?v=1"></script>
+<script src="blocks/disable-top-blocks.js?v=1"></script>
+
+<!-- Code Lab -->
+<script src="lib/examples.js?v=1"></script>
+<script src="lib/pibrain-serial.js?v=1"></script>
+<script src="lib/app.js?v=1"></script>
 </body>
 </html>
