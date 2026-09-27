@@ -1,0 +1,144 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Code Lab 전용 스타일
+   ═══════════════════════════════════════════════════════════════════
+   공통 규격(색·헤더·패널·버튼·배지·토스트)은 css/themaker-ui.css 에 있다.
+   그 파일은 themakerrobot/themaker-ui 의 복사본이므로 여기서 고치지 말 것.
+
+   이 파일에는 Code Lab 에만 있는 것만 둔다:
+     도구 줄 · 편집기(Blockly / CodeMirror) · 결과 탭 · 입력 줄 · turtle 캔버스
+   색은 킷 토큰만 쓴다. 예외는 편집기 안쪽(cobalt 테마)과 Blockly 블록 색.
+   ─────────────────────────────────────────────────────────────────── */
+
+[hidden]{display:none !important}
+.cl-flex{flex:1}
+
+/* 헤더 탭을 button 으로 쓴다 */
+header .navlink{font-family:inherit}
+header .badge{flex-shrink:0}
+
+/* ── 도구 줄 ── */
+.cl-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex-shrink:0;
+  margin:8px 8px 0;padding:8px 12px;background:var(--panel2);
+  border:1px solid var(--line);border-radius:10px}
+.cl-lb{font-size:11px;font-weight:700;color:var(--ink3);flex-shrink:0}
+.cl-sep{width:1px;height:22px;background:var(--line-soft);margin:0 4px}
+
+/* 둘 중 하나 고르기 (실행 위치) */
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel)}
+.seg button{border:0;background:transparent;padding:5px 11px;font-size:12.5px;font-weight:700;
+  color:var(--ink2);cursor:pointer;display:flex;gap:6px;align-items:center;font-family:inherit}
+.seg button+button{border-left:1.5px solid var(--line)}
+.seg button.on{background:var(--acc-soft);color:var(--acc-ink)}
+
+/* piBrain 전용 버튼은 piBrain 을 골랐을 때만 */
+.cl-dev{display:none}
+body.t-device .cl-dev{display:inline-flex}
+
+/* 예제 메뉴 */
+.cl-drop{position:relative;display:inline-flex}
+.cl-menu{position:absolute;top:calc(100% + 4px);left:0;z-index:60;min-width:180px;
+  display:flex;flex-direction:column;padding:4px;background:var(--panel);
+  border:1px solid var(--line);border-radius:9px;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.cl-menuitem{border:0;background:none;text-align:left;padding:7px 10px;border-radius:6px;
+  font-family:inherit;font-size:12.5px;font-weight:600;color:var(--ink2);cursor:pointer}
+.cl-menuitem:hover{background:var(--acc-soft);color:var(--acc-ink)}
+
+.cl-font{display:inline-flex;align-items:center;gap:5px}
+.cl-font .db{padding:4px 9px}
+#fontSize{min-width:20px;text-align:center;font-weight:700;color:var(--ink2);font-size:12px}
+
+/* ── 본문 2단: 편집기(넓게) + 결과 ── */
+#clMain{gap:0}
+#panOut{width:440px}
+.cl-splitter{width:12px;flex-shrink:0;cursor:col-resize;position:relative}
+.cl-splitter::after{content:'';position:absolute;top:50%;left:50%;width:4px;height:40px;
+  transform:translate(-50%,-50%);border-radius:2px;background:var(--line-soft);transition:background .12s}
+.cl-splitter:hover::after,.cl-splitter.on::after{background:var(--acc)}
+
+/* 편집기 */
+#panEdit .ph i{color:var(--acc)}
+.cl-edit{flex:1;min-height:0;position:relative}
+#blocklyDiv,#pyWrap{position:absolute;inset:0}
+#pyWrap .CodeMirror{height:100%;font-family:var(--mono);line-height:1.55}
+
+.cl-statusbar{display:flex;align-items:center;gap:12px;flex-shrink:0;padding:6px 13px;
+  border-top:1px solid var(--line-soft);font-size:11.5px;color:var(--ink3);font-weight:600}
+.cl-status.run{color:var(--acc-ink)}
+.cl-status.ok{color:var(--ok)}
+.cl-status.err{color:var(--warn)}
+
+/* ── 결과 탭 ── */
+#panOut > .ph{padding:6px 10px 0;gap:2px;align-items:flex-end}
+.cl-tab{background:transparent;border:0;border-bottom:3px solid transparent;
+  padding:6px 11px 6px;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--ink2);
+  cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.cl-tab:hover{color:var(--ink);border-bottom-color:var(--line-soft)}
+.cl-tab.on{color:var(--acc-ink);border-bottom-color:var(--acc);font-weight:700}
+.db.cl-mini{padding:4px 9px;font-size:11.5px;margin-bottom:5px}
+
+.cl-tabpane{display:none;flex:1;min-height:0;flex-direction:column}
+.cl-tabpane.on{display:flex}
+
+/* 결과 글자 */
+.cl-out{flex:1;min-height:0;overflow:auto;padding:12px 13px;background:var(--panel)}
+#outText{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--mono);
+  font-size:14px;line-height:1.6;color:var(--ink)}
+#outText .info{color:var(--ink3)}
+#outText .err{color:var(--warn)}
+#outText .echo{color:var(--acc-ink);font-weight:700}
+
+/* input() 입력 줄 */
+.cl-in{display:flex;align-items:center;gap:6px;margin-top:6px;padding:7px 9px;
+  border:1.5px solid var(--acc);border-radius:8px;background:var(--acc-soft)}
+.cl-in-mark{color:var(--acc);font-weight:700}
+#inField{flex:1;min-width:0;border:0;background:transparent;outline:none;
+  font-family:var(--mono);font-size:14px;color:var(--ink)}
+
+/* turtle 그림 */
+#tab-draw{background:var(--panel2);align-items:center;justify-content:center;overflow:auto;padding:10px}
+#turtle{display:flex;align-items:center;justify-content:center}
+#turtle .turtle-canvas-wrapper{position:relative;display:inline-block;background:#fff;
+  border:1px solid var(--line-soft);border-radius:8px;overflow:hidden}
+#turtle .turtle-canvas-wrapper canvas{position:absolute !important;top:0 !important;left:0 !important;
+  margin-top:0 !important;display:block !important}
+#turtle .turtle-canvas-wrapper canvas:first-child{position:relative !important}
+
+/* 블록 → 코드 보기 */
+#codeView{flex:1;min-height:0;position:relative}
+#codeView .CodeMirror{position:absolute;inset:0;height:auto;font-family:var(--mono);line-height:1.55}
+.cl-codebar{display:flex;align-items:center;gap:6px;padding:7px 10px 2px;border-top:1px solid var(--line-soft);flex-shrink:0}
+.cl-codebar .hint{margin-top:0;margin-bottom:5px}
+
+/* ── Blockly 툴박스를 학습지 톤으로 ── */
+.blocklyToolboxDiv{background:var(--panel2);border-right:1px solid var(--line-soft);padding-top:4px}
+.blocklyTreeRow{height:auto;line-height:1.3;margin:2px 6px;padding:6px 10px 6px 6px !important;
+  border-radius:7px;transition:background .12s}
+.blocklyTreeRow:not(.blocklyTreeSelected):hover{background:var(--acc-soft)}
+.blocklyTreeSelected{background:var(--acc) !important}
+.blocklyTreeSelected .blocklyTreeLabel,.blocklyTreeSelected .customIcon{color:#fff}
+.blocklyTreeLabel{font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink)}
+.blocklyTreeSeparator{border-bottom:1px solid var(--line-soft);margin:6px 10px}
+.customIcon{color:var(--ink2);width:22px;text-align:center;margin-right:4px}
+.blocklyWidgetDiv,.blocklyDropDownDiv,.blocklyTooltipDiv{z-index:1000}
+
+/* ── 반응형 ── */
+@media (max-width:1100px){
+  /* 킷은 여기서 페이지 스크롤로 바꾼다. 편집기는 화면 높이를 잡아 둔다 */
+  #clMain{gap:8px}
+  .cl-splitter{display:none}
+  #panOut{width:100% !important}
+  #panEdit{height:62vh;flex:none}
+  #panOut{height:46vh;flex:none}
+}
+@media (max-width:700px){
+  .cl-bar{margin:8px 8px 0;padding:8px}
+  .cl-sep{display:none}
+  .seg button{font-size:14px;padding:7px 11px}
+  .cl-tab{font-size:14px}
+  .blocklyTreeLabel{font-size:14px}
+  #inField{font-size:16px}
+}
+@media (max-width:420px){
+  header h1 .brand-txt{display:none}
+  header .badge{font-size:10.5px;padding:3px 8px}
+}
