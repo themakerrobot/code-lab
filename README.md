@@ -239,7 +239,11 @@ sense-lab · teach-lab 과 같은 헤더 · 버튼 · 패널 · 배지 · 토스
 - Code Lab 에만 있는 것(도구 줄 · 편집기 · 결과 탭 · 입력 줄 · turtle)은 `css/app.css` 에 둡니다. 색은 킷 토큰만 씁니다.
 - 예외: 코드 편집기 안쪽(cobalt 어두운 테마)과 블록 색은 눈에 익은 기존 색을 유지합니다.
 
-## 포함된 오픈소스
+## 라이선스
+
+Code Lab 코드는 [MIT](LICENSE) 입니다.
+
+### 포함된 오픈소스
 
 | 구성 요소 | 라이선스 |
 |---|---|
@@ -249,4 +253,4 @@ sense-lab · teach-lab 과 같은 헤더 · 버튼 · 패널 · 배지 · 토스
 | [Font Awesome Free 6.2](https://fontawesome.com/) | 아이콘 CC BY 4.0 · 글꼴 SIL OFL 1.1 · 코드 MIT |
 | [Pretendard](https://github.com/orioncactus/pretendard) | SIL OFL 1.1 |
 
-Code Lab 자체 코드의 라이선스는 아직 정하지 않았습니다 — **확인 필요**.
+각 구성 요소는 자기 라이선스를 따릅니다 (`vendor/`, `assets/fonts/`, `css/all.min.css`, `webfonts/`).
