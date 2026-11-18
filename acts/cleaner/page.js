@@ -11,7 +11,9 @@ import { W, H, ROOMS, RULES, QAgent, Sim, randomRoom, seeded, DIRS } from './wor
 const T = s => (typeof GL_T === 'function' ? GL_T(s) : s);
 const $ = id => document.getElementById(id);
 
-const RACE_STEPS = 150, EPISODES = 600;
+// 기본값 (고급 설정에서 바꿀 수 있다). 기본값은 DEVELOP.md · LESSONS.md 의 잰 값 기준
+const DEF = { raceSteps: 150, episodes: 600, epsStart: 0.3, alpha: 0.2, gamma: 0.9, raceEps: 0.05 };
+let raceSteps = DEF.raceSteps, raceEps = DEF.raceEps, curveEpisodes = DEF.episodes;
 const ACT_LABEL = ['앞으로', '왼쪽으로', '오른쪽으로', '뒤로'];
 const ACT_ICON = ['fa-arrow-up', 'fa-arrow-left', 'fa-arrow-right', 'fa-arrow-down'];
 
@@ -64,15 +66,30 @@ function resetSim() { sim = new Sim(rooms[roomId], null, { useCompass: useCompas
 
 const cv = $('roomCv');
 let cell = 30;
+// 방 그림은 가로 폭과 패널의 남는 높이 둘 다에 맞춘다 — 넓은 화면에서 가운데 패널만 스크롤되지 않게.
+// 잠깐 그림 높이를 0 으로 접고 재서, 높이가 고정된 패널이면 남는 높이를 쓰고
+// (폰처럼 패널이 내용만큼 늘어나는 배치면 남는 높이가 없으니 가로 폭만 본다).
 function sizeCanvas() {
-  const w = $('roomBox').clientWidth; if (!w) return;
+  const box = $('roomBox'), pb = box.closest('.pb'), w = box.clientWidth; if (!w) return;
+  cv.style.height = '0px';
+  // scrollHeight 는 clientHeight 보다 작아지지 않아서, 내용 높이는 자식들을 더해 잰다
+  const ps = getComputedStyle(pb);
+  let used = parseFloat(ps.paddingTop) + parseFloat(ps.paddingBottom);
+  for (const el of pb.children) {
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none') continue;
+    used += el.offsetHeight + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+  }
+  const free = pb.clientHeight - used;
   cell = Math.floor(w / W);
+  if (free > 0) cell = Math.max(16, Math.min(cell, Math.floor(free / H)));
   const dpr = devicePixelRatio || 1;
   cv.style.width = cell * W + 'px'; cv.style.height = cell * H + 'px';
   cv.width = cell * W * dpr; cv.height = cell * H * dpr;
   draw();
 }
-new ResizeObserver(sizeCanvas).observe($('roomBox'));
+const roomRO = new ResizeObserver(sizeCanvas);
+roomRO.observe($('roomBox')); roomRO.observe($('roomBox').closest('.pb'));
 
 cv.addEventListener('pointerdown', e => {
   if (!$('editRoom').checked) return;
@@ -108,6 +125,8 @@ function renderBots() {
   }));
   $('botHint').textContent = T(BOT_HINT[bot]);
   $('thinkSec').style.display = bot === 'learn' && agent ? '' : 'none';
+  think();                       // 생각 칸을 먼저 채워 두고
+  sizeCanvas();                  // 방 그림 크기를 남는 높이에 다시 맞춘다
 }
 const curStep = () => [1, 2, 3].find(i => $('s' + i).classList.contains('on')) || 1;
 
@@ -117,7 +136,7 @@ $('raceBtn').addEventListener('click', () => {
   if (running) stop();
   raceRnd = seeded((Math.random() * 1e9) | 0);
   resetSim();
-  botImpl = bot === 'learn' ? agent.policy(raceRnd) : RULES[bot].make(raceRnd);
+  botImpl = bot === 'learn' ? agent.policy(raceRnd, raceEps) : RULES[bot].make(raceRnd);
   running = true; $('raceBtn').disabled = true; $('stopBtn').disabled = false;
   lastT = performance.now(); acc = 0;
   requestAnimationFrame(loop);
@@ -137,7 +156,7 @@ function loop(now) {
   while (acc >= per && running) {
     acc -= per;
     botImpl.after(sim.act(botImpl.pick(sim)));
-    if (sim.steps >= RACE_STEPS || sim.cleaned >= sim.floor) { finish(); break; }
+    if (sim.steps >= raceSteps || sim.cleaned >= sim.floor) { finish(); break; }
   }
   draw(); badges(); think();
   if (running) requestAnimationFrame(loop);
@@ -146,7 +165,8 @@ function finish() {
   stop();
   logRows.unshift({
     bot: bot === 'learn' ? T('배우는 청소기') : T(RULES[bot].label),
-    extra: bot === 'learn' ? agentInfo : '',
+    extra: [bot === 'learn' ? agentInfo : '', raceSteps !== DEF.raceSteps ? `${raceSteps}${T('걸음')}` : '',
+      bot === 'learn' && raceEps !== DEF.raceEps ? `${T('시합 중 아무거나')} ${Math.round(raceEps * 100)}%` : ''].filter(Boolean).join(' · '),
     room: roomLabel(roomId), cov: sim.coverage, bumps: sim.bumps, steps: sim.steps,
   });
   logRows.length = Math.min(logRows.length, 10);
@@ -178,6 +198,30 @@ function think() {
   $('senseLine').textContent = `${T('청소기가 보는 것')}: ${T('앞')} ${T(CELL_NAME[f])} · ${T('왼쪽')} ${T(CELL_NAME[l])} · ${T('오른쪽')} ${T(CELL_NAME[r])} · ${T('먼지 나침반')} ${useCompass() ? T(COMPASS_NAME[sim.compass()]) : T('꺼짐')}`;
 }
 
+// ── 고급 설정 ───────────────────────────────────────────────
+const segVal = (id, key) => +$(id).querySelector('button.on').dataset[key];
+function bindSeg(id, onChange) {
+  $(id).querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    $(id).querySelectorAll('button').forEach(o => o.classList.toggle('on', o === b));
+    onChange();
+  }));
+}
+function advSettings() {
+  return { episodes: segVal('epSeg', 'n'), epsStart: +$('epsStart').value / 100, alpha: +(+$('alpha').value).toFixed(2), gamma: +(+$('gamma').value).toFixed(2) };
+}
+function paintAdv() {
+  const a = advSettings();
+  $('trainLbl').textContent = T('연습하기 ({n}판)').replace('{n}', a.episodes);
+  $('epsStartVal').textContent = Math.round(a.epsStart * 100) + '%';
+  $('alphaVal').textContent = a.alpha; $('gammaVal').textContent = a.gamma;
+  raceSteps = segVal('raceStepsSeg', 'n'); raceEps = segVal('raceEpsSeg', 'e');
+  $('raceLbl').textContent = T('시합 ({n}걸음)').replace('{n}', raceSteps);
+  $('stepsHint').textContent = T('먼지가 있는 칸은 진하고, 치운 칸은 밝아요. 한 판은 {n}걸음이에요.').replace('{n}', raceSteps);
+}
+['epsStart', 'alpha', 'gamma'].forEach(id => $(id).addEventListener('input', paintAdv));
+['epSeg', 'raceStepsSeg', 'raceEpsSeg'].forEach(id => bindSeg(id, paintAdv));
+paintAdv();
+
 // ── 연습 ────────────────────────────────────────────────────
 for (const [id, out, fmt] of [['rClean', 'rCleanVal', v => '+' + v], ['rStep', 'rStepVal', v => (v > 0 ? '+' : '') + v], ['rBump', 'rBumpVal', v => v]]) {
   $(id).addEventListener('input', () => { $(out).textContent = fmt(+(+$(id).value).toFixed(2)); });
@@ -188,14 +232,17 @@ $('manyRooms').addEventListener('change', () => { if (agent) setStep(3); });
 $('trainBtn').addEventListener('click', async () => {
   if (running) stop();
   $('trainBtn').disabled = true;
-  const ag = new QAgent(), rw = reward(), comp = useCompass(), many = $('manyRooms').checked;
+  const adv = advSettings();
+  const ag = new QAgent({ alpha: adv.alpha, gamma: adv.gamma }), rw = reward(), comp = useCompass(), many = $('manyRooms').checked;
+  const EPISODES = adv.episodes;
+  curveEpisodes = EPISODES;
   const rnd = seeded((Math.random() * 1e9) | 0), home = rooms[roomId];
   curve = []; let avg = null;
   for (let e = 0; e < EPISODES; e++) {
     const g = many ? randomRoom(rnd) : home;
     const floors = []; for (let i = 0; i < W * H; i++) if (!g[i]) floors.push(i);
     const i = floors[(rnd() * floors.length) | 0];
-    const r = ag.episode(g, rw, { rnd, useCompass: comp, start: [i % W, (i / W) | 0, (rnd() * 4) | 0], eps: Math.max(0.05, 0.3 * (1 - e / EPISODES)) });
+    const r = ag.episode(g, rw, { rnd, useCompass: comp, start: [i % W, (i / W) | 0, (rnd() * 4) | 0], eps: Math.max(0.05, adv.epsStart * (1 - e / EPISODES)) });
     avg = avg === null ? r.coverage : 0.9 * avg + 0.1 * r.coverage;
     if (e % 10 === 9) {
       curve.push(avg);
@@ -209,6 +256,10 @@ $('trainBtn').addEventListener('click', async () => {
   const bits = [`${T('청소')}${rw.clean >= 0 ? '+' : ''}${rw.clean}`, `${T('걸음')}${rw.step > 0 ? '+' : ''}${rw.step}`, `${T('부딪힘')}${rw.bump}`];
   if (!comp) bits.push(T('나침반 끔'));
   bits.push(many ? T('여러 방') : roomLabel(roomId));
+  if (adv.episodes !== DEF.episodes) bits.push(`${adv.episodes}${T('판')}`);
+  if (adv.epsStart !== DEF.epsStart) bits.push(`${T('처음 아무거나')} ${Math.round(adv.epsStart * 100)}%`);
+  if (adv.alpha !== DEF.alpha) bits.push(`${T('학습 속도')} ${adv.alpha}`);
+  if (adv.gamma !== DEF.gamma) bits.push(`${T('나중 상')} ${adv.gamma}`);
   agentInfo = bits.join(' · ');
   $('prgPct').textContent = '';
   $('prgLabel').textContent = `${T('연습 끝')} · ${agentInfo}`;
@@ -225,7 +276,7 @@ function drawChart() {
   const g = c.getContext('2d'); g.scale(dpr, dpr); g.clearRect(0, 0, Wc, Hc);
   if (curve.length < 2) return;
   g.strokeStyle = css('--acc'); g.lineWidth = 2; g.beginPath();
-  const n = EPISODES / 10;
+  const n = curveEpisodes / 10;
   curve.forEach((v, i) => { const x = 6 + i / (n - 1) * (Wc - 12), y = Hc - 6 - v * (Hc - 12); i ? g.lineTo(x, y) : g.moveTo(x, y); });
   g.stroke();
 }

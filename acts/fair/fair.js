@@ -22,30 +22,36 @@ export function seeded(seed) {
 }
 const gauss = rnd => { let u = 0; for (let i = 0; i < 6; i++) u += rnd(); return (u - 3) / Math.sqrt(0.5); };
 
-// 지원자 한 명
-function person(rnd, class2) {
+// 세상 설정 (고급): 반별 버스 타는 비율, 버스 타는 친구의 출석률이 기록에 낮게 적히는 정도(%p).
+// 기본값이면 예전과 난수 순서까지 같다 — DEVELOP.md · LESSONS.md 의 잰 값이 그대로다.
+export const WORLD = { bus1: 0.1, bus2: 0.9, attendPenalty: 0 };
+
+// 지원자 한 명. 실력(merit)은 진짜 출석률로 정하고, 기록에는 버스 감점이 들어간 출석률이 적힌다
+// (통학이 멀어 지각 · 결석이 기록에 더 남는 경우 — 실력 정보 자체가 치우칠 수 있다는 것을 보여 준다)
+function person(rnd, class2, w = WORLD) {
   const practice = Math.round(rnd() * 10);
   const works = Math.min(5, Math.max(0, Math.round(practice / 2.5 + gauss(rnd) * 1.1)));
-  const attend = Math.min(100, Math.max(55, Math.round(78 + gauss(rnd) * 10)));
-  const bus = class2 ? rnd() < 0.9 : rnd() < 0.1;   // 2반의 90%, 1반의 10% 가 버스를 탄다
-  const merit = 0.5 * practice / 10 + 0.3 * works / 5 + 0.2 * (attend - 55) / 45 + gauss(rnd) * 0.05;
+  const trueAttend = Math.min(100, Math.max(55, Math.round(78 + gauss(rnd) * 10)));
+  const bus = class2 ? rnd() < w.bus2 : rnd() < w.bus1;   // 기본: 2반의 90%, 1반의 10% 가 버스를 탄다
+  const merit = 0.5 * practice / 10 + 0.3 * works / 5 + 0.2 * (trueAttend - 55) / 45 + gauss(rnd) * 0.05;
+  const attend = bus ? Math.max(40, trueAttend - w.attendPenalty) : trueAttend;
   return { practice, works, attend, class2: class2 ? 1 : 0, bus: bus ? 1 : 0, merit, fit: merit > 0.5 ? 1 : 0 };
 }
 
 // 지난 선발 기록. n1·n2 = 반별 사람 수, bias = 2반에 불리했던 정도 (0 = 공정)
-export function pastData({ n1 = 120, n2 = 60, bias = 0.25, seed = 1 } = {}) {
+export function pastData({ n1 = 120, n2 = 60, bias = 0.25, seed = 1, world = WORLD } = {}) {
   const rnd = seeded(seed), rows = [];
   for (let i = 0; i < n1 + n2; i++) {
-    const p = person(rnd, i >= n1);
+    const p = person(rnd, i >= n1, world);
     p.passed = p.merit - (p.class2 ? bias : 0) > 0.5 ? 1 : 0;   // 지난 심사 결과 (편향 있음)
     rows.push(p);
   }
   return rows;
 }
 // 올해 지원자: 두 반 같은 수, 같은 실력 분포
-export function thisYear({ n = 200, seed = 99 } = {}) {
+export function thisYear({ n = 200, seed = 99, world = WORLD } = {}) {
   const rnd = seeded(seed), rows = [];
-  for (let i = 0; i < n; i++) rows.push(person(rnd, i % 2 === 1));
+  for (let i = 0; i < n; i++) rows.push(person(rnd, i % 2 === 1, world));
   return rows;
 }
 

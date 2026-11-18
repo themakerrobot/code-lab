@@ -213,11 +213,46 @@ table.exam .sub{font-size:10px;color:var(--ink3);font-weight:600;margin-top:2px}
 #roomPick .mradio .mt,#botPick .mradio .mt{color:var(--ink3)}
 
 /* ── 공정 ── */
-.sumrow{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:5px}
-.sumrow span:first-child{width:62px;flex-shrink:0}
-.sumrow .bt{flex:1;height:8px;border-radius:4px;background:var(--line-soft);overflow:hidden}
-.sumrow .bf{height:100%;background:var(--acc)}
-.sumrow .num{width:64px;text-align:right;flex-shrink:0}
+.story{padding:9px 11px;border-radius:8px;background:var(--panel2);border:1px solid var(--line-soft);font-size:12.5px;line-height:1.6;color:var(--ink2)}
+.dotrow{margin-top:8px}
+.dotlb{font-size:12px;color:var(--ink2);font-weight:600;margin-bottom:4px}
+.dotlb>b{color:var(--ink);margin-right:4px}
+.dots{display:flex;flex-wrap:wrap;gap:2px 3px}
+.dots i,.legend-dots i{font-size:11px}
+.dots i.pass,.legend-dots i.pass{color:var(--ok)}
+.dots i.fail,.legend-dots i.fail{color:var(--warn);opacity:.4}
+.legend-dots{display:flex;gap:12px;margin-top:6px;font-size:11px;color:var(--ink3);font-weight:600}
+.okt{color:var(--ok)}
+details.more{margin-top:12px;border:1px solid var(--line-soft);border-radius:8px;padding:0 10px}
+details.more summary{cursor:pointer;padding:8px 0;font-size:12.5px;font-weight:700;color:var(--acc-ink);list-style:none}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:'＋';float:right;color:var(--ink3)}
+details.more[open] summary::after{content:'－'}
+details.more[open]{padding-bottom:10px}
+.missions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.mission{display:flex;align-items:center;gap:7px;text-align:left;border:1.5px solid var(--line);border-radius:9px;background:var(--panel);
+  padding:8px 9px;font:inherit;font-size:12.5px;font-weight:700;color:var(--ink);cursor:pointer;line-height:1.35}
+.mission:hover{border-color:var(--acc)}
+.mission .mn{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--line-soft);color:var(--ink2);font-size:11.5px}
+.mission.done .mn{background:var(--ok);color:var(--panel)}
+.mission.on{border-color:var(--acc);background:var(--acc-soft)}
+.mission-msg{margin-top:8px;padding:8px 10px;border-radius:8px;background:var(--panel2);font-size:12.5px;font-weight:600;color:var(--ink2);line-height:1.55}
+.friends{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}
+.friend{border:1.5px solid var(--line);border-radius:10px;padding:10px 8px;text-align:center;background:var(--panel)}
+.friend .face{font-size:26px;color:var(--ink3)}
+.friend .fname{font-size:14px;font-weight:800;color:var(--ink);margin-top:4px}
+.friend .ftag{font-size:11.5px;font-weight:600;color:var(--ink3);margin-top:2px}
+.friend .stamp{margin-top:8px;font-size:15px;font-weight:800;color:var(--ink3)}
+.friend.pass{border-color:var(--ok);background:var(--ok-soft)}
+.friend.pass .stamp,.friend.pass .face{color:var(--ok)}
+.friend.fail{border-color:var(--warn)}
+.friend.fail .stamp,.friend.fail .face{color:var(--warn)}
+.verdict{margin-top:8px}
+.vline{font-size:13px;font-weight:800}
+.why{margin:4px 0 0 18px;padding:0;font-size:12.5px;color:var(--ink2);line-height:1.6}
+.depth-thr{margin:0;flex:1;min-width:160px;max-width:320px}
+.optrow{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:12px;font-weight:600;color:var(--ink2)}
+.optrow .seg button{padding:4px 10px}
 .tblwrap{overflow-x:auto;margin-top:8px}
 table.exam td.ok{color:var(--ok);font-weight:700}
 .feats{display:flex;flex-wrap:wrap;gap:6px}
@@ -311,6 +346,9 @@ table.exam td.ok{color:var(--ok);font-weight:700}
   .augs{font-size:14px}
   .chk{font-size:14px}
   .wi-grid{grid-template-columns:1fr}
+  .missions{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mission{font-size:13.5px}
+  .friend .fname{font-size:15px}
   .feat{font-size:14px}
   .fcell .note{font-size:12px}
   .sensor{font-size:12.5px}
