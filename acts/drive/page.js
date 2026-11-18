@@ -12,6 +12,7 @@
 import { TRACKS, CONTEST, WORLD_W, WORLD_H, buildTrack, centerline } from './track.js?v=8';
 import { Car, RAY_DEG, RAY_MAX, DT, drive as raceDrive } from './sim.js?v=8';
 import { Policy, savePolicy, loadPolicy } from './policy.js?v=7';
+import { fitInPanel } from '../../lib/fitpanel.js?v=2';
 
 const T = s => (typeof GL_T === 'function' ? GL_T(s) : s);
 const $ = id => document.getElementById(id);
@@ -106,6 +107,7 @@ function paintMode() {
     : T('← → 키로 운전해요. 아무것도 안 누르면 곧게 가요.');
   $('sensTitle').textContent = pro() ? T('AI가 보는 숫자 — 센서 7개 + 빠르기') : T('AI가 보는 숫자 — 센서 7개');
   $('padsUD').hidden = !pro();
+  if (cv.width) { sizeCanvas(); draw(); }   // ↑↓ 단추가 생기면 남는 높이가 바뀐다
 }
 $('modeSeg').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
   const m = b.dataset.mode;
@@ -526,8 +528,10 @@ function refreshLive() {
 const cv = $('cv');
 let roadCache = null, scale = 1;
 
+// 트랙 그림은 패널의 가로 폭과 남는 높이 둘 다에 맞춘다 (넓은 화면에서 가운데 패널만 스크롤되지 않게 — lib/fitpanel.js)
 function sizeCanvas() {
-  const box = $('trackBox'), w = box.clientWidth, dpr = devicePixelRatio || 1;
+  const box = $('trackBox'), dpr = devicePixelRatio || 1;
+  const w = fitInPanel({ box, target: cv, aspect: WORLD_H / WORLD_W });
   if (!w) return;                 // 아직 화면에 자리가 안 잡혔다 — ResizeObserver 가 다시 부른다
   const h = w * WORLD_H / WORLD_W;
   cv.style.height = h + 'px';
@@ -664,7 +668,8 @@ function overlay(html, kind) {
   o.innerHTML = html; o.className = html ? 'on ' + (kind || '') : '';
 }
 
-new ResizeObserver(() => { sizeCanvas(); draw(); }).observe($('trackBox'));
+// 패널 크기가 바뀌면 다시 맞춘다 (트랙 상자 자체를 보면 max-width 를 바꿀 때마다 다시 불린다)
+new ResizeObserver(() => { sizeCanvas(); draw(); }).observe($('trackBox').closest('.pb'));
 addEventListener('resize', drawChart);
 
 // ── 시작 ────────────────────────────────────────────────────

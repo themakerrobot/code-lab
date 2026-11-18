@@ -11,6 +11,7 @@
 import { KNN, ColorMLP, buildLUT, qIndex, thin, rgb2hsv, hsv2rgb } from './colorcore.js';
 import { LIGHTS, BLOCKS, blocksScene, blockPatch, roomScenes, seeded } from './scenes.js';
 import { classifyPatch, runRobotTest } from './robot.js';
+import { fitInPanel } from '../../lib/fitpanel.js?v=2';
 
 const T = s => (typeof GL_T === 'function' ? GL_T(s) : s);
 const $ = id => document.getElementById(id);
@@ -95,6 +96,7 @@ $('modeSeg').querySelectorAll('button').forEach(b => b.addEventListener('click',
   renderLeft(); renderViewSeg(); renderPhoto(); renderWheel();
   $('beltSec').style.display = mode === 'robot' ? '' : 'none';
   $('testSec').style.display = mode === 'robot' ? '' : 'none';
+  fitPhoto();                    // 컨베이어 칸이 생기거나 사라지면 남는 높이가 바뀐다
   setStep(mode === 'robot' && S().lut ? 3 : S().lut ? 2 : 1);
 }));
 
@@ -266,14 +268,19 @@ function renderViewSeg() {
     view = b.dataset.view; renderViewSeg(); renderPhoto();
   }));
   $('viewHint').textContent = T(VIEW_HINT[view]);
+  fitPhoto();                    // 안내 글 길이가 바뀌면 남는 높이도 바뀐다
 }
 
+// 사진은 패널의 가로 폭과 남는 높이 둘 다에 맞춘다 (넓은 화면에서 가운데 패널만 스크롤되지 않게 — lib/fitpanel.js)
+function fitPhoto() {
+  if (photo.width) fitInPanel({ box: $('photoBox'), target: photo, aspect: photo.height / photo.width });
+}
 const work = { im: null };
 function renderPhoto() {
   const im = currentImage();
   const g = photo.getContext('2d');
   if (!im) { g.fillStyle = css('--panel2'); g.fillRect(0, 0, photo.width, photo.height); return; }
-  if (photo.width !== im.width || photo.height !== im.height) { photo.width = im.width; photo.height = im.height; }
+  if (photo.width !== im.width || photo.height !== im.height) { photo.width = im.width; photo.height = im.height; fitPhoto(); }
   const s = S(), lut = s.lut;
   if (view === 'paint' || !lut) { g.putImageData(toImageData(im), 0, 0); drawDots(); return; }
   if (!work.im || work.im.width !== im.width || work.im.height !== im.height) work.im = g.createImageData(im.width, im.height);
@@ -444,4 +451,5 @@ function beltLoop(now) {
 
 // ── 시작 ────────────────────────────────────────────────────
 $('engine').textContent = T('인터넷 없이 이 컴퓨터에서 배워요');
+new ResizeObserver(fitPhoto).observe($('photoBox').closest('.pb'));
 renderLeft(); renderViewSeg(); renderPhoto(); renderWheel();

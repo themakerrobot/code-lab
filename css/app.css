@@ -112,7 +112,7 @@ table.att tr.last th{color:var(--acc-ink);font-weight:800}
 #duelIn{max-width:110px;text-align:center;font-size:15px}
 
 /* ── 운전 ── */
-#trackBox{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel2)}
+#trackBox{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel2);margin:0 auto}
 #cv{display:block;width:100%;touch-action:none}
 #overlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:none;
   padding:12px 20px;border-radius:10px;background:var(--panel);border:1.5px solid var(--line);
@@ -196,7 +196,7 @@ table.exam td.low{color:var(--warn);font-weight:700}
 #srcPick .db{padding:5px 9px;font-size:12px}
 .clsrow .swatch{width:16px;height:16px;border-radius:4px;border:1px solid var(--line);background:var(--panel2);flex-shrink:0}
 #viewSeg{margin-bottom:8px}
-#photoBox{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel2)}
+#photoBox{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel2);margin:0 auto}
 #photo{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
 #wheel{display:block;width:220px;max-width:100%;margin:4px auto 0}
 #belt{display:block;width:100%;height:auto;margin-top:8px;border:1px solid var(--line-soft);border-radius:8px}
