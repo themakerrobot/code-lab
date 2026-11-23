@@ -598,6 +598,30 @@
     toast('.py 파일로 내보냈어요');
   }
 
+  // ── 보관함 (공용 shared/ui/box.js) — 작품을 이름 붙여 모아 두고, 보관함 화면에서 다시 연다 ──
+  const boxMod = import(new URL('../shared/ui/box.js', location.href).href);   // 이 화면(code/index.html) 기준
+  async function saveToBox() {
+    const isBlock = state.mode === 'block';
+    const def = (isBlock ? '블록 작품' : '파이썬 작품') + ' ' + new Date().toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' });
+    const name = prompt('보관함에 넣을 이름', def);
+    if (name === null) return;
+    const data = isBlock
+      ? { mode: 'block', blocks: Blockly.serialization.workspaces.save(workspace) }
+      : { mode: 'python', code: editor.getValue() };
+    try { const { Box } = await boxMod; await Box.put({ kind: 'code', name, data }); toast('보관함에 넣었어요'); }
+    catch (e) { toast('보관함에 넣지 못했어요'); }
+  }
+  async function openFromBox(id) {
+    try {
+      const { Box } = await boxMod;
+      const it = await Box.get(id);
+      if (!it || it.kind !== 'code') return;
+      if (it.data.mode === 'block') { loadBlocks(it.data.blocks); setMode('block'); }
+      else { editor.setValue(it.data.code || ''); setMode('python'); }
+      toast(`'${it.name}' 을(를) 열었어요`);
+    } catch (e) { toast('보관함에서 열지 못했어요'); }
+  }
+
   function importFile(file) {
     if (!file) return;
     if (/\.zip$/i.test(file.name)) { importModel(file); return; }
@@ -725,6 +749,8 @@
   $('#stopBtn').addEventListener('click', stop);
   $('#clearBtn').addEventListener('click', clearOut);
   $('#exportBtn').addEventListener('click', exportFile);
+  $('#boxBtn').addEventListener('click', saveToBox);
+  { const id = new URLSearchParams(location.search).get('box'); if (id) setTimeout(() => openFromBox(id), 0); }
   $('#pyBtn').addEventListener('click', exportPy);
   $('#importBtn').addEventListener('click', () => $('#importFile').click());
   $('#importFile').addEventListener('change', (e) => { importFile(e.target.files[0]); e.target.value = ''; });

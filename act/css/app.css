@@ -370,3 +370,26 @@ table.exam td.ok{color:var(--ok);font-weight:700}
 
 /* 상단바 · 작업 화면 여백은 ../shared/ui/lab.css 가 정한다 (세 도구 공통) */
 
+
+/* ── 운전: 장면 수 카드 · 빨간 펜 · 배우기까지 남은 장면 ── */
+.cntcards{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.cc{position:relative;border:1px solid var(--line-soft);border-radius:var(--r-s);background:var(--panel2);padding:7px 4px 6px;text-align:center}
+.cc i{color:var(--ink3);font-size:12px}
+.cc b{display:block;font-size:22px;font-weight:800;line-height:1.15;margin:1px 0}
+.cc small{font-size:11.5px;color:var(--ink3);font-weight:600}
+.cc .cb{height:5px;border-radius:3px;background:var(--line-soft);margin-top:5px;overflow:hidden}
+.cc .cb > div{height:100%;background:var(--acc)}
+.cc .ring{position:absolute;left:-9%;top:-10%;width:118%;height:120%;overflow:visible;pointer-events:none}
+.cc .ring path{fill:none;stroke:var(--pen-red);stroke-width:1.6;stroke-linecap:round;vector-effect:non-scaling-stroke}
+#redNote{text-align:right;margin:6px 4px 0 0;font-size:14.5px}
+.meter{margin-top:7px;display:flex;align-items:center;gap:8px}
+.meter[hidden]{display:none}
+.meter .mt{flex:1;height:7px;border-radius:4px;background:var(--line-soft);overflow:hidden}
+.meter .mt > div{height:100%;background:var(--acc);border-radius:4px;transition:width .2s}
+.meter span{font-size:12px;font-weight:700;color:var(--ink2);white-space:nowrap}
+.boxrow{display:flex;align-items:center;gap:8px;width:100%;border:1px solid var(--line-soft);background:#fff;border-radius:var(--r-s);padding:6px 9px;margin-bottom:5px;font:inherit;font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;text-align:left}
+.boxrow:hover{border-color:var(--acc);background:var(--acc-soft)}
+.boxrow i{color:var(--acc)}
+.boxrow span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.boxrow small{color:var(--ink3);font-size:11.5px}
+details.more summary i{margin-right:4px}

@@ -10,7 +10,7 @@
 //    '__codelab__/sensor' 로 물으면 그 값을 바로 준다.
 // 카메라 AI 모델·wasm(models/ · vendor/tasks-vision/)은 처음 쓸 때 받아 담는다 (약 29MB).
 
-const VERSION = 'ailab-code-2';
+const VERSION = 'ailab-code-3';
 const RUNTIME = 'codelab-runtime';
 const INPUT_WAIT_MS = 4 * 60 * 1000;   // 그 뒤엔 204 → 워커가 같은 id 로 다시 묻는다
 
@@ -40,7 +40,7 @@ const PRECACHE = [
   'lib/my-ai.js', 'lib/sensors.js', '../ai/lib/jszip.min.js',
   '../ai/lib/landmarker.js', '../ai/lib/theme.js', '../ai/lib/features.js', '../ai/lib/signals.js',
   '../ai/lib/embedder.js', '../ai/lib/sound.js', '../ai/lib/sources.js', '../ai/lib/classifier.js', '../ai/lib/project.js',
-  '../shared/ui/menu.js', '../shared/ui/nav.js', '../shared/ui/lab.css',
+  '../shared/ui/menu.js', '../shared/ui/nav.js', '../shared/ui/lab.css', '../shared/ui/box.js',
   'blocks/svg/hand-solid.svg', 'blocks/svg/face-smile-solid.svg', 'blocks/svg/person-solid.svg',
   'blocks/svg/microphone-solid.svg', 'blocks/svg/brain-solid.svg',
 ];

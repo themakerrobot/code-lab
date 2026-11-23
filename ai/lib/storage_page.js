@@ -5,6 +5,7 @@
 
 import { Store, exportZip, importZip, PROJECT_EXT } from './project.js';
 import { SOURCE_LIST } from './sources.js';
+import { Box } from '../../shared/ui/box.js';
 
 const $ = id => document.getElementById(id);
 const T = s => (typeof GL_T === 'function' ? GL_T(s) : s);
@@ -148,3 +149,55 @@ $('zipInput').addEventListener('change', e => {
 // ── 시작 ──
 $('engine').textContent = T('준비 완료');
 render();
+
+
+// ═══ 운전 AI · 코딩 작품 (공용 보관함 shared/ui/box.js) ═══
+const OPEN = {
+  drive: it => '../act/drive.html?box=' + encodeURIComponent(it.id),
+  code: it => '../code/index.html?box=' + encodeURIComponent(it.id) + '&mode=' + (it.data && it.data.mode === 'python' ? 'python' : 'block'),
+};
+const EMPTY = {
+  drive: '아직 없어요. 운전 따라 배우기에서 배운 뒤 [보관함에 저장]을 눌러요.',
+  code: '아직 없어요. 블록 · 파이썬에서 [보관함에 저장]을 눌러요.',
+};
+function fileOf(it) {
+  if (it.kind === 'drive') return { name: 'car-ai.json', type: 'application/json', text: JSON.stringify(it.data) };
+  if (it.data.mode === 'python') return { name: 'code.py', type: 'text/x-python', text: it.data.code || '' };
+  return { name: 'blocks.json', type: 'application/json', text: JSON.stringify(it.data.blocks, null, 2) };
+}
+async function renderBox(kind) {
+  const box = $(kind + 'List');
+  let items = [];
+  try { items = await Box.list(kind); } catch (e) { console.error(e); }
+  if (!items.length) { box.innerHTML = '<div class="hint" style="margin-top:0">' + esc(T(EMPTY[kind])) + '</div>'; return; }
+  box.innerHTML = '';
+  items.forEach(it => {
+    const row = document.createElement('div');
+    row.className = 'brow';
+    const icon = kind === 'drive' ? 'fa-car-side' : (it.data && it.data.mode === 'python' ? 'fa-brands fa-python' : 'fa-cubes');
+    row.innerHTML = '<i class="' + (icon.startsWith('fa-brands') ? icon : 'fa-solid ' + icon) + '"></i>' +
+      '<span class="nm">' + esc(it.name) + '</span><span class="dt">' + dateText(it.createdAt) + '</span>' +
+      '<div class="acts"><a class="db" href="' + OPEN[kind](it) + '" title="' + T('열기') + '"><i class="fa-solid fa-folder-open"></i> ' + T('열기') + '</a>' +
+      '<button class="db" data-a="file" title="' + T('파일로 내려받기') + '"><i class="fa-solid fa-file-arrow-down"></i></button>' +
+      '<button class="db" data-a="ren" title="' + T('이름 바꾸기') + '"><i class="fa-solid fa-pen"></i></button>' +
+      '<button class="db danger" data-a="del" title="' + T('지우기') + '"><i class="fa-solid fa-trash"></i></button></div>';
+    row.querySelector('[data-a=file]').addEventListener('click', () => {
+      const f = fileOf(it);
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([f.text], { type: f.type }));
+      a.download = f.name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    });
+    row.querySelector('[data-a=ren]').addEventListener('click', async () => {
+      const n = prompt(T('새 이름'), it.name);
+      if (n && n.trim()) { await Box.rename(it.id, n); renderBox(kind); }
+    });
+    row.querySelector('[data-a=del]').addEventListener('click', async () => {
+      if (!confirm(T('지울까요?') + ' ' + it.name)) return;
+      await Box.del(it.id); renderBox(kind);
+    });
+    box.appendChild(row);
+  });
+}
+renderBox('drive');
+renderBox('code');

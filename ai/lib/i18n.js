@@ -18,6 +18,20 @@ const GL_LANG = (function () {
 })();
 
 const GL_I18N = {
+  '보관함은 이 컴퓨터의 브라우저 안에만 있어요. 다른 컴퓨터로 옮기거나 오래 둘 때는 파일로 내려받아 두세요.': 'My box lives only in this browser. Download files to move them or keep them long.',
+  '내가 만든 것': 'What I made',
+  '가르친 AI': 'My AIs',
+  '블록 · 파이썬 · 순서도 놀이에서 바로 골라 써요': 'Pick them right away in Blocks · Python · Flow play',
+  '운전 AI': 'Driving AI',
+  '운전 따라 배우기에서 [보관함에 저장]': 'From Learn to drive → [Save to My box]',
+  '코딩 작품': 'Code projects',
+  '블록 · 파이썬에서 [보관함에 저장]': 'From Blocks · Python → [Save to My box]',
+  '아직 없어요. 운전 따라 배우기에서 배운 뒤 [보관함에 저장]을 눌러요.': 'Nothing yet. Teach in Learn to drive, then press [Save to My box].',
+  '아직 없어요. 블록 · 파이썬에서 [보관함에 저장]을 눌러요.': 'Nothing yet. Press [Save to My box] in Blocks · Python.',
+  '열기': 'Open',
+  '파일로 내려받기': 'Download file',
+  '새 이름': 'New name',
+  '지울까요?': 'Delete?',
   // ── 순서도 (만들기 → 순서도 놀이) ──
   '순서도': 'Flowchart',
   '칩': 'Chips',

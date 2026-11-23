@@ -12,6 +12,7 @@
 import { TRACKS, CONTEST, WORLD_W, WORLD_H, buildTrack, centerline } from './track.js?v=8';
 import { Car, RAY_DEG, RAY_MAX, DT, drive as raceDrive } from './sim.js?v=8';
 import { Policy, savePolicy, loadPolicy } from './policy.js?v=7';
+import { Box } from '../../../shared/ui/box.js';
 import { fitInPanel } from '../../lib/fitpanel.js?v=2';
 
 const T = s => (typeof GL_T === 'function' ? GL_T(s) : s);
@@ -211,14 +212,39 @@ function bars(c, labels, icons) {
       <span class="num">${n}</span></div>
       <div class="bt"><div class="bf" style="width:${n / max * 100}%"></div></div></div>`).join('');
 }
+// 장면 수 카드: 큰 숫자 + 작은 막대. 모자란 칸에는 빨간 펜 동그라미 (need 는 모자란 칸 번호)
+const RING = '<svg class="ring" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M14 56 C8 22 40 4 64 8 C92 14 98 46 90 70 C82 94 40 98 20 84 C8 74 8 60 16 46"/></svg>';
+function cards(c, labels, icons, goal, need) {
+  return '<div class="cntcards">' + c.map((n, k) => `
+    <div class="cc${need.includes(k) ? ' need' : ''}"><i class="fa-solid ${icons[k]}"></i><b class="num">${n}</b><small>${T(labels[k])}</small>
+      <div class="cb"><div style="width:${Math.min(100, n / goal * 100)}%"></div></div>${need.includes(k) ? RING : ''}</div>`).join('') + '</div>';
+}
 function refreshCounts() {
   const { Y, L } = M.data, c = [0, 0, 0], v = [0, 0, 0];
   Y.forEach(y => { c[y % 3]++; v[(y / 3) | 0]++; });
+  // 한쪽만 모였을 때(다른 쪽은 넉넉한데) 모자란 쪽을 짚는다 — 처음부터 둘 다 0 이면 짚지 않는다
+  const turnNeed = [0, 2].filter(k => c[k] < READY_TURNS && c[2 - k] >= READY_TURNS / 2);
+  const thrNeed = pro() ? [0, 2].filter(k => v[k] < READY_THR && v[2 - k] >= READY_THR / 2) : [];
   $('counts').innerHTML = pro()
-    ? `<div class="cnt2"><div><div class="grp">${T('방향')}</div>${bars(c, ACT_LABEL, ACT_ICON)}</div><div><div class="grp">${T('빠르기')}</div>${bars(v, THR_LABEL, THR_ICON)}</div></div>`
-    : bars(c, ACT_LABEL, ACT_ICON);
+    ? `<div class="grp">${T('방향')}</div>${cards(c, ACT_LABEL, ACT_ICON, READY_TURNS, turnNeed)}<div class="grp">${T('빠르기')}</div>${cards(v, THR_LABEL, THR_ICON, READY_THR, thrNeed)}`
+    : cards(c, ACT_LABEL, ACT_ICON, READY_TURNS, turnNeed);
   $('totalCnt').textContent = T('모두 {n}장면').replace('{n}', Y.length);
   $('trainBtn').disabled = training || racing || Y.length < MIN_SAMPLES;
+  // 배우기 단추 아래: 아직 못 누르면 몇 장면 남았는지 막대로
+  const left = Y.length < MIN_SAMPLES && !training && !M.policy;   // 이미 배운 AI 가 있으면 막대는 안 보인다
+  $('trainMeter').hidden = !left;
+  if (left) {
+    $('trainMeterFill').style.width = (Y.length / MIN_SAMPLES * 100) + '%';
+    $('trainMeterTxt').textContent = T('장면 {n} / {m}').replace('{n}', Y.length).replace('{m}', MIN_SAMPLES);
+  }
+  const red = turnNeed.concat(thrNeed.map(k => k + 10));
+  $('redNote').hidden = !red.length;
+  if (red.length) {
+    const k = turnNeed.length ? turnNeed[0] : thrNeed[0];
+    $('redNote').textContent = turnNeed.length
+      ? T('{x} 커브도 보여 줘요!').replace('{x}', T(ACT_LABEL[k]))
+      : T('{x}도 보여 줘요!').replace('{x}', T(THR_LABEL[k]));
+  }
   // 언제 배우기를 누르면 되나 — 도는 장면이 양쪽 다 충분한지, (고급) 가속·감속도 있는지, 급한 커브도 보여 줬는지
   // 모자란 것만 한 줄로: "더 필요한 장면: 왼쪽 12/30 · 감속 3/20"
   const need = [0, 2].filter(k => c[k] < READY_TURNS).map(k => `${T(ACT_LABEL[k])} ${c[k]}/${READY_TURNS}`);
@@ -372,6 +398,7 @@ function paintRuns() {
 // ── 배우기 ──────────────────────────────────────────────────
 function paintTrain() {
   $('saveAiBtn').disabled = !M.policy || training;
+  $('fileAiBtn').disabled = !M.policy || training;
   $('loadAiBtn').disabled = training || racing;
   $('raceBtn').disabled = !M.policy || training || racing;
   $('raceBtn').innerHTML = `<i class="fa-solid fa-trophy"></i> ${racing ? T('달리는 중…') : T('대회 트랙 3개 달리기')}`;
@@ -430,24 +457,30 @@ function drawChart() {
 }
 
 // ── AI 파일 — 저장하면 다른 컴퓨터(edge-lab 포함)에서 불러와도 똑같이 운전한다 ──
-$('saveAiBtn').addEventListener('click', () => {
+// ── AI 저장 · 불러오기 — 보관함(같은 브라우저)이 먼저, 파일은 다른 컴퓨터로 옮길 때 ──
+function driveFile() {
+  const now = new Date();
+  return savePolicy(M.policy, { mode, scenes: M.trainedOn, acc: M.lastAcc, saved: now.toISOString() });
+}
+$('saveAiBtn').addEventListener('click', async () => {
+  if (!M.policy) return;
+  const acc = Number.isFinite(+M.lastAcc) ? ` · ${Math.round(M.lastAcc)}%` : '';
+  const name = `${T(mode === 'pro' ? '고급' : '초급')} · ${$('curName').textContent}${acc}`;
+  try { await Box.put({ kind: 'drive', name, data: driveFile() }); toast(T('보관함에 넣었어요')); renderBoxList(); }
+  catch (e) { toast(T('보관함에 넣지 못했어요')); }
+});
+$('fileAiBtn').addEventListener('click', () => {
   if (!M.policy) return;
   const now = new Date(), pad = n => String(n).padStart(2, '0');
   const stamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
-  const o = savePolicy(M.policy, { mode, scenes: M.trainedOn, acc: M.lastAcc, saved: now.toISOString() });
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(o)], { type: 'application/json' }));
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(driveFile())], { type: 'application/json' }));
   a.download = `car-ai-${mode}-${stamp}.json`;     // 이름은 영문 — 한글 이름을 버리는 브라우저가 있다
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 });
-$('loadAiBtn').addEventListener('click', () => { if (!training && !racing) $('aiFile').click(); });
-$('aiFile').addEventListener('change', async e => {
-  const f = e.target.files && e.target.files[0]; e.target.value = '';
-  if (!f) return;
+function useDriveAI(o) {
   try {
-    let o;
-    try { o = JSON.parse(await f.text()); } catch { throw new Error('운전 AI 파일이 아니에요'); }
     const pol = loadPolicy(o), m = pol.nIn === 8 ? 'pro' : 'basic';
     if (o.mode && o.mode !== m) throw new Error('운전 AI 파일이 아니에요');
     if (running) stop();
@@ -463,7 +496,34 @@ $('aiFile').addEventListener('change', async e => {
     const msg = T(err.message || '운전 AI 파일이 아니에요') + (err.part ? ` (${err.part})` : '');
     toast(`${T('불러오지 못했어요')}: ${msg}`);
   }
+}
+$('loadAiBtn').addEventListener('click', () => { if (!training && !racing) $('aiFile').click(); });
+$('aiFile').addEventListener('change', async e => {
+  const f = e.target.files && e.target.files[0]; e.target.value = '';
+  if (!f) return;
+  let o;
+  try { o = JSON.parse(await f.text()); } catch { toast(`${T('불러오지 못했어요')}: ${T('운전 AI 파일이 아니에요')}`); return; }
+  useDriveAI(o);
 });
+async function renderBoxList() {
+  let items = [];
+  try { items = await Box.list('drive'); } catch (e) { /* 보관함을 못 열면 목록만 비운다 */ }
+  const box = $('boxList');
+  box.innerHTML = items.length ? '' : `<div class="hint" style="margin-top:0">${T('보관함에 운전 AI 가 아직 없어요')}</div>`;
+  items.slice(0, 6).forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'boxrow';
+    b.innerHTML = `<i class="fa-solid fa-car-side"></i><span>${it.name.replace(/[&<>]/g, '')}</span><small>${it.createdAt.slice(5, 10).replace('-', '.')}</small>`;
+    b.addEventListener('click', () => { if (!training && !racing) useDriveAI(it.data); });
+    box.appendChild(b);
+  });
+}
+renderBoxList();
+// 보관함 화면의 [열기] — ?box=아이디
+{
+  const id = new URLSearchParams(location.search).get('box');
+  if (id) Box.get(id).then(it => { if (it && it.kind === 'drive') { useDriveAI(it.data); $('aiMore').open = true; } }).catch(() => {});
+}
 
 // ── 대회 — 대회 트랙 3개를 화면 없이 AI 만 3바퀴씩. 트랙 하나마다 화면에 한 번 돌려준다 ──
 $('raceBtn').addEventListener('click', () => {

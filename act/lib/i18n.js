@@ -17,6 +17,18 @@ const GL_LANG = (function () {
 })();
 
 const GL_I18N = {
+  '보관함에 넣었어요': 'Saved to My box',
+  '보관함에 넣지 못했어요': 'Could not save to My box',
+  '보관함에 운전 AI 가 아직 없어요': 'No driving AI in My box yet',
+  '보관함에 저장': 'Save to My box',
+  'AI 저장 · 불러오기': 'Save · load AI',
+  '대회 — 트랙 3개': 'Race — 3 tracks',
+  'AI 운전 기록': 'AI driving log',
+  '파일로 내려받기': 'Download file',
+  '파일 불러오기': 'Open file',
+  '장면 {n} / {m}': 'Scenes {n} / {m}',
+  '{x} 커브도 보여 줘요!': 'Show {x} turns too!',
+  '{x}도 보여 줘요!': 'Show {x} too!',
   'AI에게 미리 칠해 뒀어요. 칠하기에서 더 가르쳐 봐요': 'We painted some for the AI. Paint more to teach it.',
   // ── 페이지 / 헤더 ──
   '홈': 'Home',

@@ -171,3 +171,6 @@ body.sheet-page{overflow:auto;height:auto;min-height:100vh;padding-bottom:0}
 .menu-sheet .wide .cell{width:auto}
 .sheet-wrap:has(.menu-sheet){align-items:flex-start}
 @media (max-width:900px){ .menu-sheet .cells,.menu-sheet.ladder .cells{grid-template-columns:1fr 1fr} .menu-sheet .arrow{display:none} }
+
+/* 글 속 링크 */
+.hint a,.stnote a,.how a{color:var(--acc-ink);font-weight:700;text-underline-offset:2px}

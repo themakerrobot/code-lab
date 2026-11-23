@@ -75,6 +75,7 @@
       <div class="sec2" id="dataSec">
         <div class="st">AI에게 보여 준 운전</div>
         <div id="counts"></div>
+        <div class="redpen" id="redNote" hidden></div>
         <div class="row" style="margin-top:8px;align-items:center">
           <span class="hint" style="margin:0;flex:1" id="totalCnt"></span>
           <button class="db danger" id="clearBtn"><i class="fa-solid fa-trash"></i> 지우기</button>
@@ -123,15 +124,11 @@
     <div class="ph"><i class="fa-solid fa-chart-simple"></i>배우기 &amp; AI</div>
     <div class="pb">
       <button class="db go wide" id="trainBtn" disabled><i class="fa-solid fa-graduation-cap"></i> 배우기 시작</button>
+      <div class="meter" id="trainMeter"><div class="mt"><div id="trainMeterFill"></div></div><span id="trainMeterTxt"></span></div>
       <div class="hint" id="trainHint" style="margin-top:6px">운전을 조금 보여 준 뒤에 눌러요.</div>
       <div class="prg" style="margin-top:10px">
         <div class="lb"><span id="prgLabel">아직 안 배웠어요</span><span class="num" id="prgPct"></span></div>
         <div class="track"><div class="fill" id="prgFill"></div></div>
-      </div>
-      <div class="row" style="margin-top:8px">
-        <button class="db grow" id="saveAiBtn" disabled><i class="fa-solid fa-download"></i> AI 저장</button>
-        <button class="db grow" id="loadAiBtn"><i class="fa-solid fa-upload"></i> AI 불러오기</button>
-        <input type="file" id="aiFile" accept=".json,application/json" hidden>
       </div>
       <canvas id="chart"></canvas>
       <div class="chart-legend">
@@ -150,17 +147,28 @@
         <div id="choice"><div class="hint" style="margin-top:0">배운 뒤에 보여요</div></div>
       </div>
 
-      <div class="sec2" id="raceSec">
-        <div class="st">대회 기록</div>
+      <details class="more" id="raceSec">
+        <summary><i class="fa-solid fa-trophy"></i> 대회 — 트랙 3개</summary>
         <button class="db wide" id="raceBtn" disabled><i class="fa-solid fa-trophy"></i> 대회 트랙 3개 달리기</button>
         <div id="raceBoard"></div>
         <div class="hint" id="raceHint">대회 트랙마다 AI만 3바퀴 달려요. 같은 AI면 어느 컴퓨터에서 해도 결과가 같아요.</div>
-      </div>
+      </details>
 
-      <div class="sec2">
-        <div class="st">AI 운전 기록</div>
+      <details class="more" id="aiMore">
+        <summary><i class="fa-solid fa-box-archive"></i> AI 저장 · 불러오기</summary>
+        <div class="row" style="margin:2px 0 6px">
+          <button class="db grow" id="saveAiBtn" disabled><i class="fa-solid fa-box-archive"></i> 보관함에 저장</button>
+          <button class="db" id="fileAiBtn" disabled title="파일로 내려받기"><i class="fa-solid fa-download"></i></button>
+          <button class="db" id="loadAiBtn" title="파일 불러오기"><i class="fa-solid fa-upload"></i></button>
+          <input type="file" id="aiFile" accept=".json,application/json" hidden>
+        </div>
+        <div id="boxList"></div>
+      </details>
+
+      <details class="more">
+        <summary><i class="fa-solid fa-list"></i> AI 운전 기록</summary>
         <div id="runLog"><div class="hint" style="margin-top:0">아직 없어요</div></div>
-      </div>
+      </details>
     </div>
   </div>
 
