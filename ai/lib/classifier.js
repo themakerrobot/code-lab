@@ -11,7 +11,7 @@
 // 층 구성: 입력 D → dense(relu) → dense(softmax). dropout 은 학습에만 쓰이므로
 // 저장하지 않는다.
 
-export const CLF_FORMAT = 'teachlab-classifier';   // edge-lab 과 같은 형식 이름 — 두 제품이 같은 파일을 읽는다
+export const CLF_FORMAT = 'ailab-classifier';
 export const CLF_VERSION = 1;
 
 // ── TF.js AI → { json, bin } ──
@@ -56,7 +56,7 @@ export async function serialize(model, classes, inputDim) {
 
 // ── { json, bin } → 추론 가능한 분류기 ──
 export function deserialize(json, binBuffer) {
-  if (!json || json.format !== CLF_FORMAT) throw new Error('not a teachlab classifier');
+  if (!json || json.format !== CLF_FORMAT) throw new Error('not an ailab classifier');
   const all = new Float32Array(binBuffer);
   if (all.length < json.totalCount) throw new Error('weights file is too short');
   const layers = json.layers.map(l => ({

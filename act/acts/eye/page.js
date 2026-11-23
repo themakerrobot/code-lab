@@ -392,7 +392,7 @@ requestAnimationFrame(live);
 $('saveBtn').addEventListener('click', () => {
   if (!model) return;
   // app 이름은 edge-lab 과 같게 둔다 (두 제품이 같은 AI 눈 파일을 읽는다)
-  const body = JSON.stringify({ app: 'ml-lab-eye', v: 1, names: modelNames, notes, model: model.toJSON() });
+  const body = JSON.stringify({ app: 'ai-lab-eye', v: 1, names: modelNames, notes, model: model.toJSON() });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([body], { type: 'application/json' }));
   a.download = `ai-eye-${modelNames.join('-').slice(0, 30) || 'model'}.json`;
@@ -405,7 +405,7 @@ $('loadFile').addEventListener('change', async () => {
   if (!f) return;
   try {
     const o = JSON.parse(await f.text());
-    if (o.app !== 'ml-lab-eye' || !o.model || !Array.isArray(o.names) || o.names.length !== o.model.nClass) throw new Error('bad');
+    if (o.app !== 'ai-lab-eye' || !o.model || !Array.isArray(o.names) || o.names.length !== o.model.nClass) throw new Error('bad');
     model = TinyCNN.fromJSON(o.model); modelNames = o.names.map(String);
     notes = Array.from({ length: model.F }, (_, i) => String((o.notes || [])[i] || ''));
     $('saveBtn').disabled = false;
