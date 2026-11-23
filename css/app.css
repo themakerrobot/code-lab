@@ -12,19 +12,17 @@
 [hidden]{display:none !important}
 .cl-flex{flex:1}
 
-/* 헤더: 킷의 갈색 외곽선 상자 대신 테두리 없이 (code-lab 만의 선택 — 킷은 그대로) */
-header{border:0;box-shadow:none}
-
 /* 헤더 탭을 button 으로 쓴다 */
 header .navlink{font-family:inherit}
 header .badge{flex-shrink:0}
 
-/* ── 도구 줄 ── */
-.cl-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex-shrink:0;
-  margin:8px 8px 0;padding:8px 12px;background:var(--panel2);
-  border:1px solid var(--line);border-radius:10px}
+/* ── 도구 줄 — 자매 서비스의 단계 표시줄만큼 얇게 (킷 v1.4.0 헤더 36px 에 맞춤) ── */
+/* 킷의 단계 표시줄(#steps)과 같은 띠: 헤더 밑에 붙는 옅은 면 + 아래 괘선 */
+.cl-bar{display:flex;align-items:center;gap:5px;flex-wrap:wrap;flex-shrink:0;
+  padding:4px 16px;background:var(--panel2);border-bottom:1px solid var(--line)}
+.cl-bar .db{padding:4px 10px}
 .cl-lb{font-size:11px;font-weight:700;color:var(--ink3);flex-shrink:0}
-.cl-sep{width:1px;height:22px;background:var(--line-soft);margin:0 4px}
+.cl-sep{width:1px;height:18px;background:var(--line-soft);margin:0 4px}
 
 /* 예제 메뉴 */
 .cl-drop{position:relative;display:inline-flex}
@@ -132,7 +130,7 @@ header .badge{flex-shrink:0}
   #panOut{height:46vh;flex:none}
 }
 @media (max-width:700px){
-  .cl-bar{margin:8px 8px 0;padding:8px}
+  .cl-bar{padding:5px 10px}
   .cl-sep{display:none}
   .cl-tab{font-size:14px}
   .blocklyTreeLabel{font-size:14px}
