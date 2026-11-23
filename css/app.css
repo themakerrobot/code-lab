@@ -115,7 +115,7 @@
   header h1 img{height:20px}
   #engine{display:none}
   #camSel{max-width:none}
-  .steps{padding:10px 8px;overflow:visible;justify-content:space-between}
+  .steps{padding:6px 8px;overflow:visible;justify-content:space-between}
   .stpline{margin:0 4px;min-width:4px}
   .selinfo{font-size:14px;padding:10px}
   #capBtn,#trainBtn{font-size:15px;padding:13px}
