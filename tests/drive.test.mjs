@@ -7,7 +7,7 @@
 // 3. 곧게만 가르치면 곧 부딪힌다 — 수업에서 보여 주는 바로 그 현상
 // 4. 바퀴 수보다 좌우 균형, 그리고 급한 커브도 보여 줘야 한다 (화면의 "언제 배우기를 누르나" 안내)
 // 연습 트랙은 12개 × 두 방향 = 24코스. 트랙을 더하면 아래 검사가 모든 코스에서 다시 돈다.
-// 5. 고급 모드 · 대회 트랙 · AI 파일 (edge-lab 자동차 가르치기에서 되가져온 것)
+// 5. 고급 모드 · 대회 트랙 · AI 파일
 //    두 갈래 역전파 · 1배는 예전과 비트 단위로 같음 · 대회 트랙 조건 · 고급 흐름 · 드문 행동 무게 ·
 //    AI 파일 왕복 · 대회는 결정적
 
@@ -344,14 +344,14 @@ test('드문 행동 무게: 감속을 드물게 보여 주면 무게 없이는 �
   }
 });
 
-test('AI 파일: 저장 → 불러오기 왕복, edge-lab 파일도 읽힘, 망가진 파일은 알림', () => {
+test('AI 파일: 저장 → 불러오기 왕복, 망가진 파일은 알림', () => {
   const rnd = seeded(3), rec = [];
   for (const id of ['wavy']) rec.push(...proStudent(byId(id), rnd, thrTeacher).rec);
   const pro = fitPro(rec).pol, basic = new Policy();
   for (const [pol, mode] of [[pro, 'pro'], [basic, 'basic']]) {
     const o = JSON.parse(JSON.stringify(savePolicy(pol, { mode, scenes: rec.length, acc: 80 })));
-    assert.equal(o.kind, 'edge-lab-drive'); assert.equal(o.mode, mode);   // edge-lab 이 그대로 읽는 형식
-    for (const kind of ['edge-lab-drive']) {
+    assert.equal(o.kind, 'ai-lab-drive'); assert.equal(o.mode, mode);
+    for (const kind of ['ai-lab-drive']) {
       const back = loadPolicy({ ...o, kind });
       assert.deepEqual(back.heads, pol.heads);
       for (const [x] of rec.slice(0, 200)) {

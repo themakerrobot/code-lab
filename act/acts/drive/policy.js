@@ -4,7 +4,7 @@
 // 초급: 센서 7개 → Dense(24, tanh) → Dense(3) → softmax → 왼쪽 / 곧게 / 오른쪽
 // 고급: 센서 7개 + 빠르기 → Dense(24, tanh) → 출력 두 갈래(heads [3, 3]) — 방향 3 · 빠르기 3 을 따로 softmax.
 //       한 갈래 9개(방향 × 빠르기)로 하면 "감속하며 왼쪽" 같은 드문 짝을 따로 배워야 해서
-//       edge-lab 에서 대회 트랙을 거의 못 돌았다.
+//       대회 트랙을 거의 못 돌았다.
 // 답(Y)은 숫자 하나: 갈래가 둘이면 빠르기 × 3 + 방향.
 // 데이터가 수천 개 수준이라 한 번 학습에 1초도 안 걸린다 — 워커 없이 화면 스레드에서
 // 한 에폭씩 끊어 돌린다 (fitEpoch).
@@ -147,12 +147,12 @@ export class Policy {
 
 // ── AI 파일 ─────────────────────────────────────────────────
 // 배운 AI 를 JSON 으로. 계산에 난수가 없어 다른 PC 에서 불러와도 같은 운전을 한다.
-// edge-lab 자동차 가르치기와 형식까지 같게 저장한다 (kind 'edge-lab-drive') — edge-lab 이 고치지 않고 바로 읽는다.
+// 저장 형식 kind 'ai-lab-drive'.
 // 트랙 · 물리가 같아 같은 AI 면 두 서비스에서 같은 대회 기록이 나온다. 읽을 때는 예전 ml-lab 파일('ml-lab-drive')도 받는다.
-export const AI_KINDS = ['edge-lab-drive'];
+export const AI_KINDS = ['ai-lab-drive'];
 
 export function savePolicy(pol, info = {}) {
-  const o = { kind: 'edge-lab-drive', v: 1, nIn: pol.nIn, hid: pol.hid, heads: pol.heads.slice(), p: {} };
+  const o = { kind: 'ai-lab-drive', v: 1, nIn: pol.nIn, hid: pol.hid, heads: pol.heads.slice(), p: {} };
   for (const k in pol.p) o.p[k] = Array.from(pol.p[k], v => +v.toPrecision(7));
   return Object.assign(o, info);
 }

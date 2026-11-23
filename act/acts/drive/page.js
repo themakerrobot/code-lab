@@ -6,7 +6,7 @@
 // (고쳐 가르치기 — 모방학습의 DAgger 와 같은 생각). 대회 트랙에서는 끼어들 수 없다.
 //
 // 초급: 방향만 (센서 7개 → 왼쪽 · 곧게 · 오른쪽), 차는 늘 1배.
-// 고급: 방향 + 빠르기 (센서 7개 + 빠르기 → 방향 3 · 빠르기 3). edge-lab 자동차 가르치기와 같은 계산.
+// 고급: 방향 + 빠르기 (센서 7개 + 빠르기 → 방향 3 · 빠르기 3).
 // 두 모드는 AI 가 보는 숫자 개수가 달라(7 · 8) 모은 운전 · AI · 기록을 따로 가진다.
 
 import { TRACKS, CONTEST, WORLD_W, WORLD_H, buildTrack, centerline } from './track.js?v=8';
@@ -456,7 +456,7 @@ function drawChart() {
   line(hist.map(h => h.loss / maxL), css('--warn'));
 }
 
-// ── AI 파일 — 저장하면 다른 컴퓨터(edge-lab 포함)에서 불러와도 똑같이 운전한다 ──
+// ── AI 파일 — 저장하면 다른 컴퓨터에서 불러와도 똑같이 운전한다 ──
 // ── AI 저장 · 불러오기 — 보관함(같은 브라우저)이 먼저, 파일은 다른 컴퓨터로 옮길 때 ──
 function driveFile() {
   const now = new Date();
