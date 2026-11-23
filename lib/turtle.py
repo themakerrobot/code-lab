@@ -6,8 +6,10 @@
 바로 답하고, 그림은 화면 쪽에서 speed 에 맞춰 천천히 그려진다.
 
 지원: Turtle · Screen · Pen 의 자주 쓰는 동작 (이동·회전·펜·색·채우기·circle·
-dot·write·stamp·shape·speed·tracer·bgcolor·setup·colormode).
-아직 안 됨: onkey · onclick · ontimer 같은 이벤트, 여러 화면.
+dot·write·stamp·shape·speed·tracer·bgcolor·setup·colormode),
+이벤트 onkey · onkeypress · onkeyrelease · onclick · onscreenclick · ontimer.
+이벤트를 하나라도 걸면, 코드가 끝난 뒤에도 정지를 누를 때까지 이벤트를 기다린다.
+아직 안 됨: ondrag, 여러 화면.
 """
 
 import math as _math
@@ -27,6 +29,66 @@ _SHAPES = ('arrow', 'classic', 'turtle', 'circle', 'square', 'triangle', 'robot'
 
 def _send(*cmd):
     _codelab.turtle(_json.dumps(cmd))
+
+
+# ── 이벤트 ──
+# 화면(py-worker.js)이 키보드·마우스·타이머가 일어날 때 _dispatch 를 부른다.
+_keys = {'press': {}, 'release': {}}   # Tk 키 이름 → 함수
+_screen_click = [None]
+_turtle_clicks = []                    # (거북이, 함수)
+_timers = {}
+_next_timer = [0]
+_waiting = [False]                     # mainloop()/done() 을 불렀나
+
+
+def _set_key(kind, fun, key):
+    if key is None:
+        return
+    if fun is None:
+        _keys[kind].pop(key, None)
+    else:
+        _keys[kind][key] = fun
+
+
+def _ontimer(fun, t=0):
+    if fun is None:
+        return
+    _next_timer[0] += 1
+    tid = _next_timer[0]
+    _timers[tid] = fun
+    _codelab.timer(tid, int(t))
+
+
+def _alive():
+    return bool(_keys['press'] or _keys['release'] or _screen_click[0]
+                or _turtle_clicks or _timers)
+
+
+def _stop_events():
+    _keys['press'].clear()
+    _keys['release'].clear()
+    _screen_click[0] = None
+    _turtle_clicks.clear()
+    _timers.clear()
+
+
+def _dispatch(kind, key, x, y):
+    if kind == 'timer':
+        fun = _timers.pop(int(key), None)
+        if fun:
+            fun()
+    elif kind in ('press', 'release'):
+        fun = _keys[kind].get(key)
+        if fun:
+            fun()
+    elif kind == 'click':
+        hit = False
+        for t, fun in list(_turtle_clicks):
+            if t._visible and _math.hypot(t._x - x, t._y - y) <= 12:
+                fun(x, y)
+                hit = True
+        if not hit and _screen_click[0]:
+            _screen_click[0](x, y)
 
 
 def _not_supported(name):
@@ -299,8 +361,11 @@ class Turtle:
         return Screen()
 
     # 이벤트는 아직 없다
-    def onclick(self, *a, **k):
-        _not_supported('onclick')
+    def onclick(self, fun, btn=1, add=None):
+        """이 거북이를 누르면 fun(x, y) 를 부른다."""
+        _turtle_clicks[:] = [(t, f) for t, f in _turtle_clicks if t is not self]
+        if fun is not None:
+            _turtle_clicks.append((self, fun))
 
     def ondrag(self, *a, **k):
         _not_supported('ondrag')
@@ -385,22 +450,38 @@ class _Screen:
         return list(_S.turtles)
 
     def mainloop(self):
+        """브라우저에서는 막지 않는다 — 이벤트가 걸려 있으면 코드가 끝난 뒤 알아서 기다린다."""
         pass
 
-    done = exitonclick = bye = mainloop
+    done = mainloop
 
-    def onkey(self, *a, **k):
-        _not_supported('onkey')
+    def bye(self):
+        """이벤트 기다리기를 끝낸다 (창 닫기)."""
+        _stop_events()
 
-    onkeypress = onkeyrelease = onkey
+    def exitonclick(self):
+        """화면을 한 번 누르면 끝낸다."""
+        _screen_click[0] = lambda x, y: _stop_events()
 
-    def onclick(self, *a, **k):
-        _not_supported('onclick')
+    def onkeyrelease(self, fun, key=None):
+        """키를 뗄 때 fun() 을 부른다. 키 이름은 'Up' 'Down' 'Left' 'Right' 'space' 'a' 'Return' 처럼."""
+        _set_key('release', fun, key)
+
+    onkey = onkeyrelease
+
+    def onkeypress(self, fun, key=None):
+        """키를 누를 때(누르고 있으면 계속) fun() 을 부른다."""
+        _set_key('press', fun, key)
+
+    def onclick(self, fun, btn=1, add=None):
+        """화면을 누르면 fun(x, y) 를 부른다."""
+        _screen_click[0] = fun
 
     onscreenclick = onclick
 
-    def ontimer(self, *a, **k):
-        _not_supported('ontimer')
+    def ontimer(self, fun, t=0):
+        """t 밀리초 뒤에 fun() 을 한 번 부른다. 계속하려면 fun 안에서 다시 ontimer 를 건다."""
+        _ontimer(fun, t)
 
     def listen(self, *a, **k):
         pass
@@ -435,7 +516,7 @@ for _name in [n for n in dir(Turtle) if not n.startswith('_') and n not in ('get
     __all__.append(_name)
 
 for _name in ('bgcolor', 'setup', 'screensize', 'colormode', 'tracer', 'update', 'title',
-              'mainloop', 'done', 'exitonclick', 'bye', 'listen', 'onkey', 'onkeypress',
+              'mainloop', 'done', 'exitonclick', 'bye', 'listen', 'onkey', 'onkeypress', 'onkeyrelease',
               'onscreenclick', 'ontimer', 'window_width', 'window_height', 'turtles',
               'clearscreen', 'resetscreen'):
     globals()[_name] = getattr(_screen, _name)
