@@ -13,6 +13,8 @@
 - `act/` 활동 (운전 · AI 눈 · 색 로봇 · 글 · 공정 · 청소 · 진화) — 코드는 `act/acts/<활동>/`
 - `code/` 블록 · 파이썬 (서비스 워커 `code/sw.js`)
 - `shared/` 공통: `css/themaker-ui.css`(킷 복사본) · `ui/`(상단바 nav.js · menu.js · sheet.js · icons.js · lab.css) · 글꼴 · 그림 · MediaPipe(`vendor/`) · 모델(`models/`)
+- 보관함: 가르친 AI 는 `ai/lib/project.js` Store(IndexedDB 'ai-lab'), 운전 AI · 코딩 작품은 `shared/ui/box.js`(IndexedDB 'ai-lab-box'). 보관함 화면 `ai/storage.html` 이 셋 다 보여 준다
+- 코딩의 '내 AI' 는 `code/lib/my-ai.js` 가 보관함을 바로 읽고, 인식 · 분류는 `ai/lib/` 를 그대로 쓴다 (가르칠 때와 같은 계산)
 - `tests/` 활동 모델 시험 (`node --test tests/*.test.mjs`) · `tools/check-links.mjs` 깨진 경로 검사
 
 ## 화면을 더할 때
@@ -29,4 +31,5 @@
   - 메뉴 색: 체험 빨간 펜 · 가르치기 초록(ok) · 스스로 배우기 갈색(line-d) · 만들기 남색 펜. `body[data-menu]` 가 `--acc` 를 바꿔 킷 컴포넌트가 따라간다
   - 그라디언트 · 이모지 장식 · 아이콘 상자 · 알약 꼬리표 같은 흔한 장식 대신 학습지(괘선 · 펜 선 그림 · 빨간 펜 메모)
 - 옛 주소 안내 · 옛 파일 형식 지원 같은 하위 호환은 만들지 않는다. 지울 것은 지운다
+- 화면 말: 모델 → AI, 포즈 → 몸, 옛 방 이름(학습실 · 시험실 · 놀이실) 대신 '내 AI 만들기 · 시험하기 · 놀이'
 - UI 문구 한국어 우선, 새 문구는 영어도 같이 (menu.js 는 ko/en, 화면은 각 i18n.js)

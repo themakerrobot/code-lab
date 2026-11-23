@@ -6,7 +6,7 @@
 //    번역이 빠져도 화면이 깨지지 않는다.
 //  · HTML 은 손대지 않는다. 페이지가 뜨면 DOM 을 훑어서 텍스트를 바꾼다.
 //  · 언어 설정은 자매 서비스와 같은 localStorage 키 'language' 를 쓴다.
-//  · 학생이 입력한 종류·모델 이름은 사전에 없으므로 번역되지 않는다 (의도된 동작).
+//  · 학생이 입력한 종류·AI 이름은 사전에 없으므로 번역되지 않는다 (의도된 동작).
 
 const GL_LANG = (function () {
   try {
@@ -47,8 +47,8 @@ const GL_I18N = {
   ' 또는 ': ' or ',
   ' 그리고 ': ' and ',
   // ── 페이지 / 헤더 ──
-  '학습실': 'Teach',
-  '시험실': 'Test',
+  '내 AI 만들기': 'Teach',
+  '시험하기': 'Test',
   '보관함': 'Models',
   '전체화면': 'Full screen',
   '준비 중…': 'Getting ready…',
@@ -63,12 +63,12 @@ const GL_I18N = {
   '배우기': 'Teach',
   '저장하기': 'Save',
 
-  // ── 학습실: 소스 고르기 ──
+  // ── 내 AI 만들기: 소스 고르기 ──
   '무엇을 보고 배울까요?': 'What should the AI watch?',
   '이미지': 'Image',
   '손': 'Hand',
   '얼굴': 'Face',
-  '포즈': 'Body',
+  '몸': 'Body',
   '소리': 'Sound',
   '한 손': 'One hand',
   '두 손': 'Two hands',
@@ -80,7 +80,7 @@ const GL_I18N = {
     'Changing what it watches clears the examples. Change it?',
   '무엇을 보나요': 'Watches',
 
-  // ── 학습실: 종류 ──
+  // ── 내 AI 만들기: 종류 ──
   '종류': 'Kinds',
   '이름 (예: 사과)': 'Name (e.g. Apple)',
   '종류 더하기': 'Add a kind',
@@ -92,7 +92,7 @@ const GL_I18N = {
   '누르면 이 예시를 지워요': 'Click to remove this example',
   '장': '',
 
-  // ── 학습실: 카메라 · 예시 ──
+  // ── 내 AI 만들기: 카메라 · 예시 ──
   '카메라 & 예시': 'Camera & examples',
   '카메라': 'Camera',
   '카메라 켜기': 'Turn camera on',
@@ -113,7 +113,7 @@ const GL_I18N = {
   '찍은 영상은 이 컴퓨터 밖으로 나가지 않아요': 'Your video never leaves this computer',
   '아직 안 보여요. 카메라 앞에 서 보세요': 'Nothing yet. Try standing in front of the camera',
 
-  // ── 학습실: 마이크 (소리 소스) ──
+  // ── 내 AI 만들기: 마이크 (소리 소스) ──
   '마이크 & 예시': 'Microphone & examples',
   '마이크': 'Microphone',
   '마이크 켜기': 'Turn mic on',
@@ -142,7 +142,7 @@ const GL_I18N = {
   '값': 'Value',
   '점': 'Point',
 
-  // ── 학습실: 배우기 · 결과 ──
+  // ── 내 AI 만들기: 배우기 · 결과 ──
   '배우기 & 결과': 'Teaching & results',
   '배우기 시작': 'Start teaching',
   '종류 2개에 예시를 모은 뒤에 눌러요.': 'Collect examples for 2 kinds first.',
@@ -157,38 +157,38 @@ const GL_I18N = {
   '결과': 'Result',
   '헷갈린 표 — 왼쪽이 진짜, 위쪽이 AI의 답이에요.': 'Mix-up table — rows are the truth, columns the AI answer.',
   '숫자가 대각선에 모이면 잘 배운 거예요.': 'Numbers on the diagonal mean it learned well.',
-  '모델 이름 (예: 과일 맞히기)': 'Model name (e.g. Fruit guesser)',
+  'AI 이름 (예: 과일 맞히기)': 'Model name (e.g. Fruit guesser)',
   '저장': 'Save',
-  '저장한 모델은 시험실·보관함에서 볼 수 있어요.': 'Saved models appear in Test and Models.',
-  '모델 이름을 적어 주세요': 'Please type a model name',
+  '저장한 AI는 시험하기 · 보관함에서 볼 수 있어요.': 'Saved models appear in Test and Models.',
+  'AI 이름을 적어 주세요': 'Please type a model name',
   '같은 이름이 있어요. 바꿔 쓸까요?': 'That name exists. Replace it?',
   '저장했어요': 'Saved',
   '저장하지 못했어요': 'Could not save',
   '이어 할 예시가 없어요': 'There are no examples to continue with',
   '이어서 시작해요': 'Continuing',
-  '모델을 불러오지 못했어요': 'Could not load the model',
+  'AI를 불러오지 못했어요': 'Could not load the model',
 
-  // ── 시험실 ──
-  '내 모델': 'My models',
-  '어떤 모델로 시험할까요?': 'Which model should we test?',
-  '아직 저장한 모델이 없어요. 학습실에서 먼저 가르쳐 주세요.':
+  // ── 시험하기 ──
+  '내 AI': 'My models',
+  '어떤 AI로 시험할까요?': 'Which model should we test?',
+  '아직 저장한 AI가 없어요. 내 AI 만들기에서 먼저 가르쳐 주세요.':
     'No saved models yet. Teach one first in Teach.',
   'AI의 답': "The AI's answer",
-  '모델을 골라 주세요': 'Please pick a model',
+  'AI를 골라 주세요': 'Please pick a model',
   '카메라를 켜 주세요': 'Please turn the camera on',
   '아직 안 보여요': 'Nothing yet',
   '사진으로 맞혔어요': 'Guessed from the photo',
   '모르겠어요': "I'm not sure",
   '확신 정도': 'How sure',
   '이보다 덜 확실하면 모르겠어요 라고 답해요.': "Less sure than this, and it answers \"I'm not sure\".",
-  '모델 정보': 'Model info',
-  '모델을 고르면 여기에 나와요.': 'Pick a model to see it here.',
+  'AI 정보': 'Model info',
+  'AI를 고르면 여기에 나와요.': 'Pick a model to see it here.',
   '사진 파일로 시험하기': 'Test with an image file',
   '예시': 'Examples',
-  '이 모델은 지금 버전과 맞지 않아요': 'This model does not match the current version',
+  '이 AI는 지금 버전과 맞지 않아요': 'This model does not match the current version',
 
   // ── 보관함 ──
-  '저장한 모델': 'Saved models',
+  '저장한 AI': 'Saved models',
   '파일로 주고받기': 'Send and receive as files',
   '다시 불러오기': 'Bring one back',
   '내보낸 파일을 여기에 놓으면 다시 들어와요.': 'Drop an exported file here to bring it back.',
@@ -197,7 +197,7 @@ const GL_I18N = {
   '프로젝트 파일은 다른 컴퓨터의 AI Lab 에서 그대로 열려요. 예시까지 들어 있어 이어서 배울 수 있어요.':
     'A project file opens as-is in AI Lab on another computer. It keeps the examples, so you can keep teaching.',
   '알아 두기': 'Good to know',
-  '모델은 이 컴퓨터의 브라우저 안에만 저장돼요. 다른 곳으로 옮기거나 오래 보관할 때는 꼭 내보내기를 쓰세요.':
+  'AI는 이 컴퓨터의 브라우저 안에만 저장돼요. 다른 곳으로 옮기거나 오래 보관할 때는 꼭 내보내기를 쓰세요.':
     'Models live only in this browser. Use Export to move them or keep them for long.',
   '만든 날': 'Made on',
   '시험하기': 'Test it',
@@ -221,9 +221,9 @@ const GL_I18N = {
   '그만 볼래요': 'Skip',
   '다음': 'Next',
   '다 봤어요': 'Got it',
-  '안녕! 여기는 학습실이에요.\nAI에게 직접 가르쳐요.':
+  '안녕! 여기서 내 AI를 만들어요.\nAI에게 직접 가르쳐요.':
     'Hi! This is the Teach room.\nYou teach the AI yourself.',
-  '무엇을 보고 배울지 골라요.\n사진, 손, 얼굴, 포즈, 소리!':
+  '무엇을 보고 배울지 골라요.\n사진, 손, 얼굴, 몸, 소리!':
     'Pick what the AI watches.\nImage, hand, face, body or sound!',
   '맞히고 싶은 종류를 만들어요.\n예: 사과, 바나나':
     'Make a kind for each answer.\ne.g. Apple, Banana',
@@ -234,26 +234,26 @@ const GL_I18N = {
     'The AI learns from these numbers,\nnot from the picture itself.',
   '예시를 다 모으면\n배우기 시작을 눌러요.':
     'When you have enough examples,\npress Start teaching.',
-  '이름을 짓고 저장해요.\n시험실에서 만나요!':
+  '이름을 짓고 저장해요.\n시험하기에서 만나요!':
     'Name it and save.\nSee you in the Test room!',
-  '여기는 시험실이에요.\n배운 AI를 시험해요.':
+  '여기서 내 AI를 시험해요.\n배운 AI를 시험해요.':
     'This is the Test room.\nTry out what the AI learned.',
-  '시험할 모델을 골라요.': 'Pick a model to test.',
+  '시험할 AI를 골라요.': 'Pick a model to test.',
   '카메라를 켜고 보여 주면\n바로 맞혀요.':
     'Turn the camera on and show it\nsomething — it answers right away.',
   '덜 확실하면 모르겠다고\n답하게 할 수 있어요.':
     'You can make it say "not sure"\nwhen it is not confident.',
-  '여기는 보관함이에요.\n저장한 모델이 모여 있어요.':
+  '여기는 보관함이에요.\n저장한 AI가 모여 있어요.':
     'This is the Models room.\nEverything you saved lives here.',
   '내보낸 파일을 여기에 놓으면\n다시 들어와요.':
     'Drop an exported file here\nto bring it back.',
-  // ── 놀이실 ──
-  '놀이실': 'Play',
+  // ── 놀이 ──
+  '놀이': 'Play',
   '놀이': 'Play',
   '무엇을 볼까요?': 'What should it watch?',
   '눌러서 켜고 꺼요. 그냥 보기는 배우지 않아도 돼요.': 'Tap to turn on or off. "Just look" works without teaching.',
   '그냥 보기': 'Just look',
-  '이미지는 학습실에서 먼저 가르쳐 주세요': 'Teach an image model in the Teach room first',
+  '이미지는 내 AI 만들기에서 먼저 가르쳐 주세요': 'Teach an image model in the Teach room first',
   '찍은 영상과 소리는 이 컴퓨터 밖으로 나가지 않아요': 'Your video and sound never leave this computer',
   'AI가 지금 보는 것': 'What the AI sees now',
   '배경 놀이': 'Background fun',
@@ -328,7 +328,7 @@ const GL_I18N = {
   '박수': 'Clap',
   '휘파람': 'Whistle',
   '말소리': 'Talking',
-  '여기는 놀이실이에요.\n배운 AI로 놀아요!': 'This is the Play room.\nPlay with what the AI learned!',
+  '여기서 AI로 놀아요.\n배운 AI로 놀아요!': 'This is the Play room.\nPlay with what the AI learned!',
   '무엇을 볼지 눌러서 켜요.\n그냥 보기는 배우지 않아도 돼요.': 'Tap what it should watch.\n"Just look" needs no teaching.',
   '카메라를 켜요.': 'Turn the camera on.',
   'AI가 지금 보는 것이\n여기에 나와요.': 'What the AI sees right now\nshows up here.',

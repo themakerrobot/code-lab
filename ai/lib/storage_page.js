@@ -82,7 +82,7 @@ async function render() {
 // ── 동작 ──
 async function act(name, what, btn) {
   const rec = await Store.get(name);
-  if (!rec) { toast(T('모델을 불러오지 못했어요')); return; }
+  if (!rec) { toast(T('AI를 불러오지 못했어요')); return; }
 
   if (what === 'zip') {
     try { await exportZip(rec); toast(T('내보냈어요') + ': ' + rec.name + PROJECT_EXT); }

@@ -1,8 +1,8 @@
 // ═══════════════════════════════════════════════════════════
-// 시험실 — 가르친 모델로 바로 맞혀 보기
+// 시험하기 — 가르친 AI로 바로 맞혀 보기
 // ═══════════════════════════════════════════════════════════
 // TF.js 를 쓰지 않는다. 분류기는 lib/classifier.js 의 순수 JS 계산으로 돈다.
-// 고른 모델에 적힌 소스(이미지·손·얼굴·포즈·소리)에 맞춰 입력을 바꾼다.
+// 고른 AI에 적힌 소스(이미지·손·얼굴·몸·소리)에 맞춰 입력을 바꾼다.
 
 import { loadEmbedder, cropTo, EMBEDDER } from './embedder.js';
 import { loadLandmarker, drawResult } from './landmarker.js';
@@ -34,7 +34,7 @@ let lastSee = 0, lastVec = null, lastResult = null;
 let threshold = 0.6;
 let holdUntil = 0;              // 사진 파일로 맞힌 답을 잠시 붙들어 두는 시각
 let engineBusy = false;
-let soundTransform = 'raw';     // 고른 모델이 배운 방식 (옛 모델은 날것)
+let soundTransform = 'raw';     // 고른 AI가 배운 방식 (옛 AI는 날것)
 
 const camCv = $('camCv');
 const fileCv = document.createElement('canvas');
@@ -59,7 +59,7 @@ function srcLabel(id) {
   return m ? T(m.label) : id;
 }
 
-// ── 모델 목록 ──
+// ── AI 목록 ──
 async function renderModels() {
   const box = $('mdlList');
   box.innerHTML = '';
@@ -84,13 +84,13 @@ async function pickModel(name) {
   if (engineBusy) return;
   let rec = null;
   try { rec = await Store.get(name); } catch (e) { console.error(e); }
-  if (!rec) { toast(T('모델을 불러오지 못했어요')); return; }
+  if (!rec) { toast(T('AI를 불러오지 못했어요')); return; }
 
   const nextSource = rec.source || 'image';
   const nextVariant = rec.variant || null;
   const wantDim = rec.embedder ? rec.embedder.dim : dimOfSource(nextSource, nextVariant);
   if (wantDim !== dimOfSource(nextSource, nextVariant)) {
-    toast(T('이 모델은 지금 버전과 맞지 않아요'));
+    toast(T('이 AI는 지금 버전과 맞지 않아요'));
     return;
   }
 
@@ -103,7 +103,7 @@ async function pickModel(name) {
     clf = deserialize(rec.classifier.json, rec.classifier.bin);
   } catch (e) {
     console.error(e);
-    toast(T('모델을 불러오지 못했어요'));
+    toast(T('AI를 불러오지 못했어요'));
     return;
   }
   clfName = rec.name;
@@ -395,13 +395,13 @@ function renderAnswer(probs) {
   const ans = $('answer');
   const bars = $('exBars');
   if (!clf) {
-    ans.textContent = T('모델을 골라 주세요');
+    ans.textContent = T('AI를 골라 주세요');
     ans.className = 'answer idk';
     bars.innerHTML = '';
     return;
   }
   if (!probs) {
-    // 입력은 켜져 있는데 아직 아무것도 안 잡힌 것(손·얼굴·포즈)과, 꺼져 있는 것은 다르다
+    // 입력은 켜져 있는데 아직 아무것도 안 잡힌 것(손·얼굴·몸)과, 꺼져 있는 것은 다르다
     const mic = isSoundSource(source);
     const on = mic ? snd.running : camReady();
     ans.textContent = on ? T('아직 안 보여요') : (mic ? T('마이크를 켜 주세요') : T('카메라를 켜 주세요'));

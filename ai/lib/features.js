@@ -8,7 +8,7 @@
 //       손목~중지MCP(9) 거리로 스케일 정규화 → 63차원
 //  얼굴 blendshape 52개 값 그대로 (이미 0~1) → 52차원
 //       478점 좌표는 쓰지 않는다 — blendshape 가 표정 입력으로 훨씬 낫다
-//  포즈 worldLandmarks 상반신 0~24번만. 양 어깨(11,12) 중점을 원점으로,
+//  몸 worldLandmarks 상반신 0~24번만. 양 어깨(11,12) 중점을 원점으로,
 //       어깨 너비로 스케일 정규화 → 75차원
 //  소리 YAMNet 521개 점수 그대로 → 521차원 (lib/sound.js 가 만든다)
 //
@@ -18,7 +18,7 @@ export const FEATURE_DIMS = { hand: 63, face: 52, pose: 75, sound: 521 };
 
 // 갈래(variant): 같은 소스라도 무엇을 얼마나 볼지 고를 수 있다.
 //  손   one 한 손 63 / two 두 손 126 (왼손 자리 + 오른손 자리, 없는 손은 0)
-//  포즈 upper 상반신 75 / full 전신 99 (엉덩이 중점 원점 · 몸통 길이 스케일)
+//  몸 upper 상반신 75 / full 전신 99 (엉덩이 중점 원점 · 몸통 길이 스케일)
 export const VARIANTS = {
   hand: [['one', '한 손'], ['two', '두 손']],
   pose: [['upper', '상반신'], ['full', '전신']],

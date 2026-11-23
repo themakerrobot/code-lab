@@ -7,7 +7,7 @@
 //
 // 프로젝트 파일 구조 (.teachlab.zip)
 //   manifest.json     { format:"teachlab", version, kind, app, createdAt }
-//   project.json      이름·소스(이미지/손/얼굴/포즈/소리)·종류·정확도·특징 뽑는 법
+//   project.json      이름·소스(이미지/손/얼굴/몸/소리)·종류·정확도·특징 뽑는 법
 //   classifier.json   분류기 구조
 //   classifier.bin    분류기 가중치 (float32 little-endian)
 //   samples.json      예시 임베딩 (base64) — 다른 컴퓨터에서 이어서 배우기용

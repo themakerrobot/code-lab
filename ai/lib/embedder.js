@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════════
 // 임베더 — MediaPipe Tasks Vision ImageEmbedder
 // ═══════════════════════════════════════════════════════════
-// 전부 셀프호스팅이다: wasm 은 vendor/tasks-vision/, 모델은 models/.
+// 전부 셀프호스팅이다: wasm 은 vendor/tasks-vision/, AI는 models/.
 // 경로는 페이지 기준 상대경로만 쓴다 (하위 경로 배포 대비).
 //
-// 모델: mobilenet_v3_small (MediaPipe image_embedder float32/1)
+// AI: mobilenet_v3_small (MediaPipe image_embedder float32/1)
 //   입력 1×224×224×3 float32 · 출력 1×1024 float32
 //   l2Normalize: true — 길이가 1로 맞춰져 조명·거리 차이에 덜 흔들린다.
 //

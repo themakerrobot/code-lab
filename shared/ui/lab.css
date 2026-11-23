@@ -174,3 +174,9 @@ body.sheet-page{overflow:auto;height:auto;min-height:100vh;padding-bottom:0}
 
 /* 글 속 링크 */
 .hint a,.stnote a,.how a{color:var(--acc-ink);font-weight:700;text-underline-offset:2px}
+
+/* ── 7. 글자 — 킷 기본(11px)은 저학년에게 작다. 안내 · 이름표를 한 단계씩 키운다 ── */
+.hint{font-size:12.5px;line-height:1.55;color:var(--ink2)}
+.pb-label{font-size:12.5px}
+.sec2 .st,.st{font-size:13px}
+.pan > .pb{font-size:13.5px}

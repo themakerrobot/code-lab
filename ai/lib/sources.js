@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════
-// 입력 소스 — 무엇을 보고 배울지 (이미지 / 손 / 얼굴 / 포즈 / 소리)
+// 입력 소스 — 무엇을 보고 배울지 (이미지 / 손 / 얼굴 / 몸 / 소리)
 // ═══════════════════════════════════════════════════════════
 // 소스마다 "그림·소리 → 숫자(특징 벡터)" 를 만드는 방법이 다르다.
 // 그 뒤(분류기 학습·저장·내보내기)는 전부 같다 — 차원 수만 다를 뿐이다.
@@ -7,12 +7,12 @@
 //   이미지  사진 → MediaPipe ImageEmbedder → 1024
 //   손      웹캠 → HandLandmarker  → 정규화 좌표 63 (두 손 126)
 //   얼굴    웹캠 → FaceLandmarker  → blendshape 52
-//   포즈    웹캠 → PoseLandmarker  → 정규화 좌표 75 (전신 99)
+//   몸    웹캠 → PoseLandmarker  → 정규화 좌표 75 (전신 99)
 //   소리    마이크 → YAMNet        → 521
 //
 // 거울(좌우 반전) 규칙이 소스마다 다르다. 일부러 그렇게 두었다.
 //   · 이미지 : Teachable Machine 과 같이 웹캠 프레임 자체를 뒤집어 학습한다.
-//   · 손·얼굴·포즈 : 원본 프레임에서 좌표를 뽑는다.
+//   · 손·얼굴·몸 : 원본 프레임에서 좌표를 뽑는다.
 //     뒤집으면 MediaPipe 의 왼손/오른손 판별이 반대로 나와 학습이 망가진다.
 //     화면 미리보기만 CSS 로 뒤집어 보여 준다 — 좌표와 뼈대 그림은 같이 움직인다.
 
@@ -29,12 +29,12 @@ import { VARIANTS, dimOf } from './features.js';
 //   박수·휘파람·조용히 :  날것 67.5%  →  sqrt+L2 98.2%
 //   4종 전부           :  날것 70.0%  →  sqrt+L2 91.9%
 //
-// 옛 모델은 날것으로 배웠으므로 프로젝트 파일에 어느 쪽인지 적어 둔다.
+// 옛 AI는 날것으로 배웠으므로 프로젝트 파일에 어느 쪽인지 적어 둔다.
 // featureTransform 이 없으면 'raw' 로 본다.
 export const SOUND_TRANSFORM = 'sqrt-l2';
 
 export function applySoundTransform(vec, kind) {
-  if (kind !== 'sqrt-l2') return vec;              // 'raw' 또는 옛 모델
+  if (kind !== 'sqrt-l2') return vec;              // 'raw' 또는 옛 AI
   const out = new Float32Array(vec.length);
   let sum = 0;
   for (let i = 0; i < vec.length; i++) {
@@ -47,7 +47,7 @@ export function applySoundTransform(vec, kind) {
   return out;
 }
 
-// 저장된 모델이 어떤 방식으로 배웠는지 (옛 모델은 날것)
+// 저장된 AI가 어떤 방식으로 배웠는지 (옛 AI는 날것)
 export function soundTransformOf(spec) {
   return (spec && spec.featureTransform) || 'raw';
 }
@@ -56,7 +56,7 @@ export const SOURCE_LIST = [
   { id: 'image', label: '이미지', icon: 'fa-image', input: 'camera', files: true },
   { id: 'hand', label: '손', icon: 'fa-hand', input: 'camera' },
   { id: 'face', label: '얼굴', icon: 'fa-face-smile', input: 'camera' },
-  { id: 'pose', label: '포즈', icon: 'fa-person', input: 'camera' },
+  { id: 'pose', label: '몸', icon: 'fa-person', input: 'camera' },
   { id: 'sound', label: '소리', icon: 'fa-microphone', input: 'mic' },
 ];
 

@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════════
 // 그냥 보기 — 가르치지 않아도 AI가 이미 아는 것들
 // ═══════════════════════════════════════════════════════════
-// 놀이실에서 쓴다. 랜드마커·YAMNet 결과에서 학습 없이 바로 읽어 낸다.
+// 놀이에서 쓴다. 랜드마커·YAMNet 결과에서 학습 없이 바로 읽어 낸다.
 //  · 손   : 손가락 개수 (0~5)
 //  · 얼굴 : 거리(홍채 크기로 역산) · 고개 방향 · 입 벌리기 · 웃기
-//  · 포즈 : 한 손 · 두 손 들기
+//  · 몸 : 한 손 · 두 손 들기
 //  · 소리 : 박수 · 휘파람 · 말소리 · 조용함
 // 기준값은 옛 sense-lab 에서 아이들과 써 보며 맞춘 것을 그대로 옮겼다.
 
@@ -123,7 +123,7 @@ function faceSignals(result, vw, vh) {
   return { shown: true, distCm, yaw, pitch, mouth, smile };
 }
 
-// 포즈: 손목(15·16)이 코(0)보다 위에 있으면 든 것 (화면 좌표는 y 가 작을수록 위)
+// 몸: 손목(15·16)이 코(0)보다 위에 있으면 든 것 (화면 좌표는 y 가 작을수록 위)
 function poseSignals(result) {
   const lm = result && result.landmarks && result.landmarks[0];
   if (!lm || lm.length < 33) return { shown: false };
@@ -186,7 +186,7 @@ export function sigMatch(source, want, s) {
   return false;
 }
 
-// ── 지금 상태를 한 줄로 (놀이실 "지금 보이는 것") ──
+// ── 지금 상태를 한 줄로 (놀이 "지금 보이는 것") ──
 // 돌려주는 것: { text, icon, on }  on=false 면 흐리게 보여 준다
 export function describe(src, s) {
   if (src === 'sound') {

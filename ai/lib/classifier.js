@@ -14,7 +14,7 @@
 export const CLF_FORMAT = 'ailab-classifier';
 export const CLF_VERSION = 1;
 
-// ── TF.js 모델 → { json, bin } ──
+// ── TF.js AI → { json, bin } ──
 export async function serialize(model, classes, inputDim) {
   const layers = [];
   const chunks = [];

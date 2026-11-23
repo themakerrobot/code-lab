@@ -1,11 +1,11 @@
 // ═══════════════════════════════════════════════════════════
 // 랜드마커 — MediaPipe Tasks Vision 로드 / 전환 / 추론
 // ═══════════════════════════════════════════════════════════
-// 전부 셀프호스팅이다: wasm 은 vendor/tasks-vision/, 모델은 models/.
+// 전부 셀프호스팅이다: wasm 은 vendor/tasks-vision/, AI는 models/.
 // 경로는 페이지 기준 상대경로만 쓴다 (하위 경로 배포 대비).
 //
 //  · loadLandmarker('hand'|'face'|'pose') → { source, detect, close }
-//  · loadSegmenter() → 사람/배경 나누기 (놀이실의 배경 놀이)
+//  · loadSegmenter() → 사람/배경 나누기 (놀이 화면의 배경 놀이)
 //  · delegate GPU 실패 시 CPU 로 자동 폴백한다
 //  · 소스 전환 시 이전 인스턴스의 close() 를 반드시 부른다 (메모리 정리)
 
@@ -109,7 +109,7 @@ export function drawResult(ctx, source, result, variant) {
 }
 
 // ── 배경 놀이 — 셀피 세그멘테이션 (사람/배경 분리) ──
-// 모델은 selfie_segmenter.tflite (약 250KB). 켤 때 처음 한 번만 받는다.
+// AI는 selfie_segmenter.tflite (약 250KB). 켤 때 처음 한 번만 받는다.
 let segPromise = null;
 export function loadSegmenter() {
   if (!segPromise) {

@@ -1,12 +1,12 @@
 // ═══════════════════════════════════════════════════════════
-// 놀이실 — 가르친 것과 이미 아는 것을 엮어서 놀기
+// 놀이 — 가르친 것과 이미 아는 것을 엮어서 놀기
 // ═══════════════════════════════════════════════════════════
-// 하나의 생각 틀: 왼쪽에서 볼 것을 켜고(그냥 보기 또는 내 모델),
+// 하나의 생각 틀: 왼쪽에서 볼 것을 켜고(그냥 보기 또는 내 AI),
 // 오른쪽에서 "만약 ○○ 하면 △△ 라고 말해요" 규칙이나 순서를 만든다.
 //
 //  · 그냥 보기 = 학습 없이 바로 아는 것 (lib/signals.js)
-//  · 내 모델   = 학습실에서 가르친 종류 (확신 정도는 시험실 설정을 같이 쓴다)
-//  · 카메라 소스(이미지·손·얼굴·포즈)는 프레임마다 하나씩 돌아가며 본다
+//  · 내 AI   = 내 AI 만들기에서 가르친 종류 (확신 정도는 시험하기 설정을 같이 쓴다)
+//  · 카메라 소스(이미지·손·얼굴·몸)는 프레임마다 하나씩 돌아가며 본다
 //  · 소리는 마이크 쪽 타이머가 따로 돈다
 //  · 맞는 규칙은 소리 내어 말한다 (lib/speak.js — 기기 안 목소리만)
 //
@@ -35,7 +35,7 @@ const SRC = Object.fromEntries(SOURCE_LIST.map(s => [s.id, s]));
 const WATCH = '@watch';
 
 const STATE_KEY = 'ailab-play';
-const THR_KEY = 'ailab-threshold';   // 시험실과 같이 쓴다
+const THR_KEY = 'ailab-threshold';   // 시험하기와 같이 쓴다
 const MAX_RULES = 6, MAX_CONDS = 3, MAX_STEPS = 8;
 const SEQ_HOLD_MS = 800;      // 동작을 잠깐 유지해야 통과 — 스친 동작과 구분한다
 const SEQ_COOLDOWN = 700;
@@ -145,7 +145,7 @@ function syncEngines() {
   setEngine();
 }
 
-// ═══ 내 모델 ═══
+// ═══ 내 AI ═══
 function recsOf(src) { return allRecs.filter(r => (r.source || 'image') === src); }
 
 function classify(src, vec) {
@@ -183,7 +183,7 @@ async function setUse(src, value) {
     } catch (e) { console.error(e); }
     if (!ok) {
       use[src] = src === 'image' ? '' : WATCH;
-      if (!restoring) toast(T('모델을 불러오지 못했어요'));
+      if (!restoring) toast(T('AI를 불러오지 못했어요'));
     }
   }
   if (src === 'image' && use.image === WATCH) use.image = '';   // 이미지는 그냥 보기가 없다
@@ -233,7 +233,7 @@ function renderCards() {
     } else if (src === 'image' && !mine.length) {
       const h = document.createElement('div');
       h.className = 'sc-note';
-      h.textContent = T('이미지는 학습실에서 먼저 가르쳐 주세요');
+      h.textContent = T('이미지는 내 AI 만들기에서 먼저 가르쳐 주세요');
       card.appendChild(h);
     }
     box.appendChild(card);
@@ -245,7 +245,7 @@ async function toggleSrc(src) {
     await setUse(src, '');
   } else if (src === 'image') {
     const mine = recsOf('image');
-    if (!mine.length) { toast(T('이미지는 학습실에서 먼저 가르쳐 주세요')); return; }
+    if (!mine.length) { toast(T('이미지는 내 AI 만들기에서 먼저 가르쳐 주세요')); return; }
     await setUse('image', mine[0].name);
   } else {
     await setUse(src, WATCH);
@@ -378,7 +378,7 @@ function condMatch(c) {
   return false;
 }
 
-// 조건이 지금 쓸 수 없는가 (소스가 꺼졌거나, 그 종류를 아는 모델이 안 골라졌을 때)
+// 조건이 지금 쓸 수 없는가 (소스가 꺼졌거나, 그 종류를 아는 AI가 안 골라졌을 때)
 function condOff(c) {
   if (!use[c.src]) return true;
   if (c.v.startsWith('c:')) return !(slots[c.src] && slots[c.src].classes.includes(c.v.slice(2)));

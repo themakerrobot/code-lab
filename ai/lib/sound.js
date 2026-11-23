@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════
 // 소리 엔진 — 마이크 + YAMNet 분류 (MediaPipe Tasks Audio)
 // ═══════════════════════════════════════════════════════════
-// 전부 셀프호스팅이다: wasm 은 vendor/tasks-audio/, 모델은 models/yamnet.tflite.
+// 전부 셀프호스팅이다: wasm 은 vendor/tasks-audio/, AI는 models/yamnet.tflite.
 //
 //  · YAMNet 은 소리 한 창(0.975초)을 521가지 점수로 바꾼다 — 이 521차원이
 //    손의 63차원 좌표와 똑같은 "특징 벡터"가 되어 그대로 학습에 들어간다
@@ -57,7 +57,7 @@ export function createSoundEngine() {
   let ringPos = 0, ringFilled = 0;
   let level = 0;
   // 켜는 중에 또 켜라고 하면 같은 약속을 돌려준다. 안 그러면 마이크 두 개가
-  // 링 버퍼 하나에 번갈아 써서 소리가 뒤섞인다 (놀이실 새로고침에서 실제로 났다).
+  // 링 버퍼 하나에 번갈아 써서 소리가 뒤섞인다 (놀이 새로고침에서 실제로 났다).
   let starting = null;
   let stopAsked = false;
 

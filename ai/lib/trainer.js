@@ -4,7 +4,7 @@
 // 입력 1024차원(임베딩) → Dense(64, relu) → Dropout(0.2) → Dense(N, softmax)
 // adam(0.001) / categoricalCrossentropy / epochs 40 / batch 16 / validationSplit 0.2
 //
-// 입력이 1024차원이라 손·얼굴·포즈(63~75차원)보다 곱셈이 훨씬 많다.
+// 입력이 1024차원이라 손·얼굴·몸(63~75차원)보다 곱셈이 훨씬 많다.
 // 그래서 백엔드는 webgl 을 먼저 쓰고, 안 되면 cpu 로 내려간다.
 // MediaPipe 는 자체 delegate 로 따로 돌므로 서로 간섭하지 않는다.
 //

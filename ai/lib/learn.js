@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════
-// 학습실 — 예시 모으기 → 배우기 → 결과 → 저장
+// 내 AI 만들기 — 예시 모으기 → 배우기 → 결과 → 저장
 // ═══════════════════════════════════════════════════════════
-// 소스(이미지·손·얼굴·포즈·소리)마다 "숫자로 바꾸는 방법"만 다르고,
+// 소스(이미지·손·얼굴·몸·소리)마다 "숫자로 바꾸는 방법"만 다르고,
 // 그 뒤(모으기·배우기·저장)는 전부 같은 길을 쓴다.
 
 import { loadEmbedder, cropTo, thumbFrom, EMBEDDER } from './embedder.js';
@@ -404,7 +404,7 @@ function loop() {
     return;
   }
 
-  // 손 · 얼굴 · 포즈
+  // 손 · 얼굴 · 몸
   if (!lm) return;
   if (now - lastSee < SEE_INTERVAL) return;
   lastSee = now;
@@ -726,7 +726,7 @@ function drawChart(hist) {
 async function saveModel() {
   if (!trained) return;
   const name = $('mdlName').value.trim();
-  if (!name) { toast(T('모델 이름을 적어 주세요')); return; }
+  if (!name) { toast(T('AI 이름을 적어 주세요')); return; }
   try {
     const exists = await Store.get(name);
     if (exists && !confirm(T('같은 이름이 있어요. 바꿔 쓸까요?'))) return;
@@ -796,18 +796,18 @@ $('fileInput').addEventListener('change', async e => {
 $('trainBtn').addEventListener('click', train);
 $('mdlSave').addEventListener('click', saveModel);
 
-// ── 이어서 배우기 (?load=모델이름) ──
+// ── 이어서 배우기 (?load=AI가름) ──
 async function restoreWork(name) {
   try {
     const rec = await Store.get(name);
     if (!rec || !rec.examples || !rec.examples.length) { toast(T('이어 할 예시가 없어요')); return; }
     const dim = rec.embedder ? rec.embedder.dim : dimOfSource(source, variant);
     classes = examplesFromRecord(rec.examples, dim);
-    // 옛 소리 모델은 날것 점수로 모았다. 지금 방식으로 맞춰 둔다 —
+    // 옛 소리 AI는 날것 점수로 모았다. 지금 방식으로 맞춰 둔다 —
     // 안 그러면 이어서 모은 새 예시와 섞여서 학습이 망가진다.
     if (isSoundSource(source) && soundTransformOf(rec.embedder) !== SOUND_TRANSFORM) {
       classes.forEach(c => { c.vecs = c.vecs.map(v => applySoundTransform(v, SOUND_TRANSFORM)); });
-      console.log('옛 소리 모델의 예시를', SOUND_TRANSFORM, '로 맞췄습니다');
+      console.log('옛 소리 AI의 예시를', SOUND_TRANSFORM, '로 맞췄습니다');
     }
     selected = 0;
     $('mdlName').value = rec.name;
@@ -815,7 +815,7 @@ async function restoreWork(name) {
     toast(T('이어서 시작해요') + ': ' + name);
   } catch (e) {
     console.error(e);
-    toast(T('모델을 불러오지 못했어요'));
+    toast(T('AI를 불러오지 못했어요'));
   }
 }
 
