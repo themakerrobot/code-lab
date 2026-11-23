@@ -4,15 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Code Lab — 블록 · 파이썬</title>
-<meta name="description" content="블록과 파이썬으로 코딩하고, 브라우저나 piBrain 에서 바로 실행해요.">
+<meta name="description" content="블록과 파이썬으로 코딩하고, 브라우저에서 바로 실행해요. 설치가 필요 없어요.">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="assets/img/favicon.png">
 <meta name="theme-color" content="#FBF7EF">
-<link rel="stylesheet" href="assets/fonts/pretendard.css?v=1">
-<link rel="stylesheet" href="css/all.min.css?v=1">
-<link rel="stylesheet" href="css/themaker-ui.css?v=1">
-<link rel="stylesheet" href="vendor/codemirror/codemirror.css?v=1">
-<link rel="stylesheet" href="vendor/codemirror/cobalt.css?v=1">
-<link rel="stylesheet" href="css/app.css?v=1">
+<link rel="stylesheet" href="assets/fonts/pretendard.css">
+<link rel="stylesheet" href="css/all.min.css">
+<link rel="stylesheet" href="css/themaker-ui.css">
+<link rel="stylesheet" href="vendor/codemirror/codemirror.css">
+<link rel="stylesheet" href="vendor/codemirror/cobalt.css">
+<link rel="stylesheet" href="css/app.css">
 </head>
 <body>
 
@@ -21,20 +22,11 @@
   <button type="button" class="navlink" data-mode="block"><i class="fa-solid fa-cubes"></i>블록</button>
   <button type="button" class="navlink" data-mode="python"><i class="fa-brands fa-python"></i>파이썬</button>
   <span class="cl-flex"></span>
-  <span class="badge" id="devBadge">piBrain 연결 안 됨</span>
+  <span class="badge" id="pyBadge">파이썬 준비 중…</span>
   <button type="button" class="hbtn" id="fsBtn" title="전체화면"></button>
 </header>
 
 <div class="cl-bar">
-  <span class="cl-lb">실행 위치</span>
-  <div class="seg">
-    <button type="button" data-target="browser"><i class="fa-solid fa-globe"></i>브라우저</button>
-    <button type="button" data-target="device"><i class="fa-solid fa-microchip"></i>piBrain</button>
-  </div>
-  <button type="button" class="db cl-dev" id="connBtn"></button>
-  <button type="button" class="db cl-dev" id="dispBtn" title="piBrain 화면을 네트워크 정보로 돌려요"><i class="fa-solid fa-display"></i> 화면 처음으로</button>
-
-  <span class="cl-sep"></span>
   <button type="button" class="db go" id="runBtn" title="실행 (Ctrl+Enter)"><i class="fa-solid fa-play"></i> 실행</button>
   <button type="button" class="db" id="stopBtn" title="정지 (Esc)"><i class="fa-solid fa-stop"></i> 정지</button>
 
@@ -77,7 +69,7 @@
   <section class="pan pan-out" id="panOut">
     <div class="ph">
       <button type="button" class="cl-tab" data-tab="out"><i class="fa-solid fa-terminal"></i>결과</button>
-      <button type="button" class="cl-tab" data-tab="draw" id="tabDrawBtn"><i class="fa-solid fa-robot"></i>그림</button>
+      <button type="button" class="cl-tab" data-tab="draw"><i class="fa-solid fa-robot"></i>그림</button>
       <button type="button" class="cl-tab" data-tab="code" id="tabCodeBtn"><i class="fa-brands fa-python"></i>코드</button>
       <span class="cl-flex"></span>
       <button type="button" class="db danger cl-mini" id="clearBtn" title="결과 지우기"><i class="fa-solid fa-eraser"></i> 지우기</button>
@@ -112,27 +104,24 @@
 
 <div id="toast" class="toast"></div>
 
-<!-- 실행기 · 편집기 -->
-<script src="vendor/skulpt/skulpt.min.js?v=1"></script>
-<script src="vendor/skulpt/skulpt-stdlib.js?v=1"></script>
-<script src="vendor/codemirror/codemirror.min.js?v=1"></script>
-<script src="vendor/codemirror/python.js?v=1"></script>
+<!-- 편집기 -->
+<script src="vendor/codemirror/codemirror.min.js"></script>
+<script src="vendor/codemirror/python.js"></script>
 
 <!-- 블록 -->
-<script src="blocks/ko2en.js?v=1"></script>
-<script src="vendor/blockly/blockly_compressed.js?v=1"></script>
-<script src="vendor/blockly/blocks_compressed.js?v=1"></script>
-<script src="vendor/blockly/python_compressed.js?v=1"></script>
-<script src="vendor/blockly/ko.js?v=1"></script>
-<script src="blocks/field-bitmap.js?v=1"></script>
-<script src="blocks/customblock.js?v=1"></script>
-<script src="blocks/customblock_callback.js?v=1"></script>
-<script src="blocks/customblock_toolbox.js?v=1"></script>
-<script src="blocks/disable-top-blocks.js?v=1"></script>
+<script src="vendor/blockly/blockly_compressed.js"></script>
+<script src="vendor/blockly/blocks_compressed.js"></script>
+<script src="vendor/blockly/python_compressed.js"></script>
+<script src="vendor/blockly/ko.js"></script>
+<script src="blocks/customblock.js"></script>
+<script src="blocks/customblock_callback.js"></script>
+<script src="blocks/customblock_toolbox.js"></script>
+<script src="blocks/disable-top-blocks.js"></script>
 
 <!-- Code Lab -->
-<script src="lib/examples.js?v=1"></script>
-<script src="lib/pibrain-serial.js?v=1"></script>
-<script src="lib/app.js?v=1"></script>
+<script src="lib/examples.js"></script>
+<script src="lib/py-runner.js"></script>
+<script src="lib/turtle-canvas.js"></script>
+<script src="lib/app.js"></script>
 </body>
 </html>
