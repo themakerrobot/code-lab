@@ -1,7 +1,7 @@
 name: CI
 
 # 손으로 맞춰야 하는 것이 어긋났는지 본다.
-#   · 브라우저 JS 문법
+#   · 브라우저 JS · 파이썬 문법, 서비스 워커 캐시 목록
 #   · css/themaker-ui.css 가 공용 디자인 킷(themakerrobot/themaker-ui) 복사본과 같은지
 
 on:
@@ -20,7 +20,20 @@ jobs:
         with:
           node-version: '22'
       - name: 브라우저 JS
-        run: for f in lib/*.js blocks/*.js; do node --check "$f"; done
+        run: for f in lib/*.js blocks/*.js sw.js; do node --check "$f"; done
+      - name: 파이썬 (turtle 모듈)
+        run: python3 -m py_compile lib/turtle.py
+      - name: 서비스 워커 캐시 목록의 파일이 다 있는가
+        # 하나라도 없으면 서비스 워커 설치가 실패해 input() 과 오프라인이 같이 안 된다
+        run: |
+          node -e '
+            const fs = require("fs");
+            const src = fs.readFileSync("sw.js", "utf8");
+            const list = eval(src.match(/const PRECACHE = (\[[\s\S]*?\]);/)[1]);
+            const miss = list.filter(f => f !== "./" && !fs.existsSync(f));
+            if (miss.length) { console.error("::error::sw.js PRECACHE 에 없는 파일:", miss.join(", ")); process.exit(1); }
+            console.log(list.length + "개 모두 있어요");
+          '
 
   design-kit:
     name: 디자인 킷 복사본이 원본과 같은가
