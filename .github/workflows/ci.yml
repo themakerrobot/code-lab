@@ -23,7 +23,7 @@ jobs:
       - name: 브라우저 JS
         run: |
           for f in shared/ui/*.js ai/lib/*.js act/lib/*.js act/acts/*/*.js \
-                   code/lib/*.js code/lib/sense/*.js code/blocks/*.js code/sw.js; do
+                   code/lib/*.js code/blocks/*.js code/sw.js tools/*.mjs; do
             case "$f" in *.min.js) continue;; esac
             node --check "$f"
           done
