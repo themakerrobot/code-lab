@@ -15,11 +15,11 @@
 
 import { bytesToB64, b64ToBytes } from './classifier.js';
 
-export const PROJECT_FORMAT = 'teachlab';
+export const PROJECT_FORMAT = 'ailab';
 export const PROJECT_VERSION = 2;
-export const PROJECT_EXT = '.teachlab.zip';
+export const PROJECT_EXT = '.ailab.zip';
 
-const DB_NAME = 'teach-lab', STORE = 'projects', DB_VER = 1;
+const DB_NAME = 'ai-lab', STORE = 'projects', DB_VER = 1;
 
 let dbp = null;
 function open() {
@@ -96,7 +96,7 @@ export function buildZip(rec) {
     format: PROJECT_FORMAT,
     version: PROJECT_VERSION,
     kind: rec.source || rec.kind || 'image',
-    app: 'teach-lab',
+    app: 'ai-lab',
     createdAt: rec.createdAt || new Date().toISOString(),
   }, null, 2));
 
@@ -151,7 +151,7 @@ export async function readZip(file) {
   };
 
   const manifest = await readJson('manifest.json');
-  if (manifest.format !== PROJECT_FORMAT) throw new Error('not a teachlab project');
+  if (manifest.format !== PROJECT_FORMAT) throw new Error('not an ailab project');
   if ((manifest.version | 0) > PROJECT_VERSION) throw new Error('made by a newer version');
 
   const project = await readJson('project.json');
@@ -196,7 +196,7 @@ export async function readZip(file) {
 
 export async function importZip(file) {
   const rec = await readZip(file);
-  rec.name = await Store.freeName(rec.name || file.name.replace(/\.teachlab\.zip$/i, '').replace(/\.zip$/i, ''));
+  rec.name = await Store.freeName(rec.name || file.name.replace(/\.ailab\.zip$/i, '').replace(/\.zip$/i, ''));
   return Store.save(rec);
 }
 

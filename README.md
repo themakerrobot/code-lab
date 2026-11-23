@@ -21,7 +21,7 @@ node --test tests/*.test.mjs       # 활동 모델 시험
 node tools/check-links.mjs         # 화면이 부르는 파일이 다 있는지
 ```
 
-구조와 규칙은 [CLAUDE.md](CLAUDE.md). 세 도구(teach-lab · code-lab · ml-lab)의 옛 문서는 `docs/from/`.
+구조와 규칙은 [CLAUDE.md](CLAUDE.md).
 
 ## 라이선스
 코드 MIT. 글꼴 Pretendard · Gowun Batang 은 SIL OFL 1.1, 아이콘 Font Awesome Free, MediaPipe · Pyodide · Blockly · CodeMirror · TF.js 는 각 라이선스를 따른다.

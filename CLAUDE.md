@@ -1,7 +1,6 @@
 # ai-lab
 
-초등 저학년용 인공지능 학습 웹 도구. teach-lab · code-lab · ml-lab 세 도구의 기능을 쪼개 메뉴 넷으로 다시 묶었다.
-저장소 이름은 code-lab 에서 바꿨다 (커밋 기록은 code-lab 것 + teach-lab · ml-lab 기록을 합친 것).
+초등 저학년용 인공지능 학습 웹 도구. 신규 서비스 — 예전 도구 · 주소 · 파일과의 호환은 두지 않는다.
 
 ## 메뉴 (shared/ui/menu.js 한 곳에 정의)
 - 체험하기 (단순 체험, 배우지 않아도 되는 것) · 가르치기 (지도학습, 2차시씩) · 스스로 배우기 (강화 · 진화) · 만들기 (순서도 놀이 → 블록 → 파이썬)
@@ -10,12 +9,11 @@
 
 ## 폴더
 - `index.html` 첫 화면(학습지) · `try/` `teach/` `self/` `make/` 메뉴 화면 (+ `try/voice.html`)
-- `ai/` 옛 teach-lab 화면 (내 AI 만들기 · 시험 · 놀이 · 보관함) — `ai/lib/` 가 그 코드
-- `act/` 옛 ml-lab 활동 (운전 · AI 눈 · 색 로봇 · 글 · 공정 · 청소 · 진화) — `act/acts/<활동>/`
-- `code/` 옛 code-lab (블록 · 파이썬, 서비스 워커 `code/sw.js`)
+- `ai/` 내 AI 만들기 · 시험 · 놀이 · 보관함 — 코드는 `ai/lib/`
+- `act/` 활동 (운전 · AI 눈 · 색 로봇 · 글 · 공정 · 청소 · 진화) — 코드는 `act/acts/<활동>/`
+- `code/` 블록 · 파이썬 (서비스 워커 `code/sw.js`)
 - `shared/` 공통: `css/themaker-ui.css`(킷 복사본) · `ui/`(상단바 nav.js · menu.js · sheet.js · icons.js · lab.css) · 글꼴 · 그림 · MediaPipe(`vendor/`) · 모델(`models/`)
 - `tests/` 활동 모델 시험 (`node --test tests/*.test.mjs`) · `tools/check-links.mjs` 깨진 경로 검사
-- `docs/from/` 세 도구의 옛 문서 · 스크린샷 (참고용)
 
 ## 화면을 더할 때
 - 머리: `<header data-tab="고유이름" data-menu="메뉴" data-act="활동id"></header>`
@@ -30,5 +28,5 @@
 - 디자인: 킷 themakerrobot/themaker-ui 를 따른다. `shared/css/themaker-ui.css` 는 복사본 — 직접 고치지 말 것 (CI 가 v1.4.0 과 비교). 덮어쓰기는 `shared/ui/lab.css` 에, 킷 토큰 색만
   - 메뉴 색: 체험 빨간 펜 · 가르치기 초록(ok) · 스스로 배우기 갈색(line-d) · 만들기 남색 펜. `body[data-menu]` 가 `--acc` 를 바꿔 킷 컴포넌트가 따라간다
   - 그라디언트 · 이모지 장식 · 아이콘 상자 · 알약 꼬리표 같은 흔한 장식 대신 학습지(괘선 · 펜 선 그림 · 빨간 펜 메모)
-- 이전에 만든 모델 · 프로젝트 호환은 신경 쓰지 않는다 (출시 전)
+- 옛 주소 안내 · 옛 파일 형식 지원 같은 하위 호환은 만들지 않는다. 지울 것은 지운다
 - UI 문구 한국어 우선, 새 문구는 영어도 같이 (menu.js 는 ko/en, 화면은 각 i18n.js)

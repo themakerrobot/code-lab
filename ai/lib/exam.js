@@ -21,7 +21,7 @@ const T = s => (typeof GL_T === 'function' ? GL_T(s) : s);
 
 const SEE_INTERVAL = 90;        // 약 11Hz
 const SHOW_NUMS = 24;
-const THR_KEY = 'teachlab-threshold';
+const THR_KEY = 'ailab-threshold';
 
 let source = 'image', variant = null;
 let engineSource = null;        // 실제로 불러온 엔진 (아직 없으면 null)

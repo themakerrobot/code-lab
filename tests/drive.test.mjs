@@ -351,7 +351,7 @@ test('AI 파일: 저장 → 불러오기 왕복, edge-lab 파일도 읽힘, 망�
   for (const [pol, mode] of [[pro, 'pro'], [basic, 'basic']]) {
     const o = JSON.parse(JSON.stringify(savePolicy(pol, { mode, scenes: rec.length, acc: 80 })));
     assert.equal(o.kind, 'edge-lab-drive'); assert.equal(o.mode, mode);   // edge-lab 이 그대로 읽는 형식
-    for (const kind of ['ml-lab-drive', 'edge-lab-drive']) {
+    for (const kind of ['edge-lab-drive']) {
       const back = loadPolicy({ ...o, kind });
       assert.deepEqual(back.heads, pol.heads);
       for (const [x] of rec.slice(0, 200)) {

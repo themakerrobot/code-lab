@@ -34,8 +34,8 @@ const LANDMARK = ['hand', 'face', 'pose'];
 const SRC = Object.fromEntries(SOURCE_LIST.map(s => [s.id, s]));
 const WATCH = '@watch';
 
-const STATE_KEY = 'teachlab-play';
-const THR_KEY = 'teachlab-threshold';   // 시험실과 같이 쓴다
+const STATE_KEY = 'ailab-play';
+const THR_KEY = 'ailab-threshold';   // 시험실과 같이 쓴다
 const MAX_RULES = 6, MAX_CONDS = 3, MAX_STEPS = 8;
 const SEQ_HOLD_MS = 800;      // 동작을 잠깐 유지해야 통과 — 스친 동작과 구분한다
 const SEQ_COOLDOWN = 700;

@@ -18,12 +18,6 @@ const GL_LANG = (function () {
 
 const GL_I18N = {
   // ── 페이지 / 헤더 ──
-  'ML Lab — 홈': 'ML Lab — Home',
-  'ML Lab — 운전': 'ML Lab — Drive',
-  'ML Lab — 청소': 'ML Lab — Clean',
-  'ML Lab — 문장': 'ML Lab — Words',
-  'ML Lab — 공정': 'ML Lab — Fair',
-  'ML Lab — 진화': 'ML Lab — Evolve',
   '홈': 'Home',
   '운전': 'Drive',
   '청소': 'Clean',
@@ -77,7 +71,7 @@ const GL_I18N = {
   '그만 볼래요': 'Skip',
   '다음': 'Next',
   '다 봤어요': 'Done',
-  '안녕! 여기는 ML Lab이에요.\nAI가 배우는 방법을 놀면서 알아봐요.': 'Hi! This is ML Lab.\nLet’s play and see how AI learns.',
+  '안녕! 여기는 AI Lab이에요.\nAI가 배우는 방법을 놀면서 알아봐요.': 'Hi! This is AI Lab.\nLet’s play and see how AI learns.',
   '해 보고 싶은 활동을 골라요.\n위쪽 탭으로도 갈 수 있어요.': 'Pick an activity.\nThe tabs at the top work too.',
   '여기서는 AI에게 문장을 가르쳐요.\n다음 글자를 맞히는 AI예요.': 'Here you teach the AI sentences.\nIt guesses the next letter.',
   '가르칠 글을 넣어요.\n예시 글을 골라도 돼요.': 'Put in some text.\nOr pick an example.',
@@ -313,7 +307,6 @@ const GL_I18N = {
   '처음 보는 트랙에서도\n잘 달릴까요?': 'Can it drive a track\nit has never seen?',
 
   // ── AI 눈 ──
-  'ML Lab — AI 눈': 'ML Lab — AI Eye',
   'AI 눈': 'AI Eye',
   '합성곱 신경망': 'Convolutional network',
   '그림을 보여 주면 AI가 처음부터 눈을 만들어요.': 'Show pictures and the AI builds its eyes from scratch.',
@@ -386,7 +379,6 @@ const GL_I18N = {
   '흔들기를 켜고 다시 배우면\n속이기 시험이 어떻게 바뀔까요?': 'Turn on shaking and teach again.\nHow does the trick test change?',
 
   // ── 색 로봇 ──
-  'ML Lab — 색 로봇': 'ML Lab — Color Robot',
   '색 로봇': 'Color Robot',
   '결정 경계': 'Decision boundary',
   '색을 칠해 가르치면 AI가 픽셀마다 골라요.': 'Paint colors to teach, and the AI picks for every pixel.',

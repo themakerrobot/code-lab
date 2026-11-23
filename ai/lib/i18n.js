@@ -19,9 +19,6 @@ const GL_LANG = (function () {
 
 const GL_I18N = {
   // ── 페이지 / 헤더 ──
-  'Teach Lab — 학습실': 'Teach Lab — Teach',
-  'Teach Lab — 시험실': 'Teach Lab — Test',
-  'Teach Lab — 보관함': 'Teach Lab — Models',
   '학습실': 'Teach',
   '시험실': 'Test',
   '보관함': 'Models',
@@ -169,8 +166,8 @@ const GL_I18N = {
   '내보낸 파일을 여기에 놓으면 다시 들어와요.': 'Drop an exported file here to bring it back.',
   '(눌러서 고르기)': '(Or click to choose)',
   '내보내기': 'Export',
-  '프로젝트 파일은 다른 컴퓨터의 Teach Lab 에서 그대로 열려요. 예시까지 들어 있어 이어서 배울 수 있어요.':
-    'A project file opens as-is in Teach Lab on another computer. It keeps the examples, so you can keep teaching.',
+  '프로젝트 파일은 다른 컴퓨터의 AI Lab 에서 그대로 열려요. 예시까지 들어 있어 이어서 배울 수 있어요.':
+    'A project file opens as-is in AI Lab on another computer. It keeps the examples, so you can keep teaching.',
   '알아 두기': 'Good to know',
   '모델은 이 컴퓨터의 브라우저 안에만 저장돼요. 다른 곳으로 옮기거나 오래 보관할 때는 꼭 내보내기를 쓰세요.':
     'Models live only in this browser. Use Export to move them or keep them for long.',
@@ -224,7 +221,6 @@ const GL_I18N = {
     'Drop an exported file here\nto bring it back.',
   // ── 놀이실 ──
   '놀이실': 'Play',
-  'Teach Lab — 놀이실': 'Teach Lab — Play',
   '놀이': 'Play',
   '무엇을 볼까요?': 'What should it watch?',
   '눌러서 켜고 꺼요. 그냥 보기는 배우지 않아도 돼요.': 'Tap to turn on or off. "Just look" works without teaching.',
