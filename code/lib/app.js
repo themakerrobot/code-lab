@@ -464,6 +464,23 @@
     updateButtons();
   };
 
+  // TypeError 는 경우가 여럿이라 메시지를 보고 가른다 — 한 가지 설명으로 뭉뚱그리면 엉뚱한 답이 된다
+  const NONE_HINT = '값이 비어 있어요(None). 앞에서 그 변수에 값이 제대로 들어갔는지 봐요 — return 이 없는 함수의 결과는 None 이에요';
+  function typeHint(m) {
+    if (/'NoneType'/.test(m)) return NONE_HINT;
+    if (/can only concatenate str|unsupported operand type.*'(str|int|float)'.*'(str|int|float)'|must be str, not/.test(m))
+      return '글자와 숫자는 바로 더할 수 없어요. str(숫자) 나 int(글자) 로 바꿔요';
+    if (/does not support item assignment/.test(m)) return '글자 · 튜플은 한 칸만 바꿀 수 없어요. 목록(리스트)을 써요';
+    if (/is not subscriptable/.test(m)) return '[ ] 로 꺼낼 수 없는 값이에요. 목록 · 글자 · 사전에만 [ ] 를 써요';
+    if (/is not callable/.test(m)) return '함수가 아닌 것을 ( ) 로 불렀어요. 이름이 겹치지 않았는지 봐요';
+    if (/is not iterable/.test(m)) return 'for 로 하나씩 꺼낼 수 없는 값이에요. 숫자라면 range(숫자) 를 써요';
+    if (/positional argument|takes \d+ .*given|missing \d+ required|unexpected keyword/.test(m))
+      return '함수에 넣는 값의 개수가 맞지 않아요. ( ) 안의 값을 세어 봐요';
+    if (/object cannot be interpreted as an integer|indices must be integers/.test(m))
+      return '여기에는 정수(1, 2, 3 …)가 들어가야 해요. int( ) 로 바꿔요';
+    return '값의 종류가 맞지 않아요. print( ) 로 값을 먼저 찍어 봐요';
+  }
+
   // 쉬운 말 한 줄 + 원래 오류. 파이썬 편집기면 그 줄을 짚는다.
   function friendlyError(e) {
     const line = e.lineno ? `${e.lineno}번째 줄: ` : '';
@@ -474,11 +491,11 @@
       [/^NameError$/, () => { const n = m.match(/name '(.+?)'/); return `'${n ? n[1] : '?'}' 이(가) 아직 없어요. 이름이 맞는지, 먼저 만들었는지 확인해 주세요`; }],
       [/^ModuleNotFoundError$/, () => { const n = m.match(/'(.+?)'/); return `${n ? n[1] : '그 모듈'} 은(는) 브라우저 파이썬에 없어요`; }],
       [/^ZeroDivisionError$/, () => '0으로 나눌 수 없어요'],
-      [/^TypeError$/, () => '자료형이 맞지 않아요 (예: 글자 + 숫자)'],
+      [/^TypeError$/, () => typeHint(m)],
       [/^IndexError$/, () => '번호가 범위를 넘었어요'],
       [/^KeyError$/, () => `사전에 그 열쇠(${m})가 없어요`],
       [/^ValueError$/, () => '값이 알맞지 않아요'],
-      [/^AttributeError$/, () => '그런 기능(속성)이 없어요. 이름을 확인해 주세요'],
+      [/^AttributeError$/, () => /'NoneType'/.test(m) ? NONE_HINT : '그런 기능(속성)이 없어요. 이름을 확인해 주세요'],
       [/^RecursionError$/, () => '함수가 자기 자신을 너무 많이 불렀어요'],
       [/^NotImplementedError$/, () => m.split(' / ')[0]],
     ];
