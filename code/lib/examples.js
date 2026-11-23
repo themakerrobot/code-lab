@@ -227,6 +227,28 @@ window.CODELAB_EXAMPLES = [
     ].join('\n'),
   },
   {
+    id: 'myai', label: '내 AI 로 말하기 (가르치기에서 만든 AI)',
+    code: [
+      '# 가르치기에서 만든 AI 가 본 것을 20번 말해요',
+      '# (AI 는 보관함에서 바로 읽어요. 영상 · 소리는 이 컴퓨터 밖으로 나가지 않아요)',
+      'import sensor, time',
+      '',
+      '이름들 = sensor.models()',
+      'if not 이름들:',
+      '    print("아직 가르친 AI 가 없어요. 가르치기에서 먼저 만들어 주세요")',
+      'else:',
+      '    ai = 이름들[0]',
+      '    print(ai, "AI 로 볼게요")',
+      '    for i in range(20):',
+      '        본것 = sensor.model(ai)',
+      '        if 본것 is None:',
+      '            print("잘 모르겠어요")',
+      '        else:',
+      '            print(본것, "같아요!", round(sensor.model_confidence(ai) * 100), "%")',
+      '        time.sleep(0.5)',
+    ].join('\n'),
+  },
+  {
     id: 'game', label: '숫자 맞추기 게임',
     code: [
       '# 숫자 맞추기 게임',

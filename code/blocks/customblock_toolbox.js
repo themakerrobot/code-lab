@@ -972,8 +972,9 @@ const CODELAB_TOOLBOX = {
         { "kind": "label", "text": "소리 (마이크)" },
         { "kind": "block", "type": "sensor_loudness" },
         { "kind": "block", "type": "sensor_clap" },
-        { "kind": "label", "text": "내 모델 (sense-lab)" },
-        { "kind": "button", "text": "sense-lab 모델 불러오기 (.zip)", "callbackKey": "importModel" },
+        { "kind": "label", "text": "내 AI (가르치기에서 만든 것)" },
+        { "kind": "button", "text": "내 AI 다시 찾기", "callbackKey": "refreshAI" },
+        { "kind": "button", "text": "가르치기 열기", "callbackKey": "openTeach" },
         { "kind": "block", "type": "sensor_model_label" },
         { "kind": "block", "type": "sensor_model_is", "inputs": { "LABEL": { "shadow": { "type": "text", "fields": { "TEXT": "가위" } } } } },
         { "kind": "block", "type": "sensor_stop" }

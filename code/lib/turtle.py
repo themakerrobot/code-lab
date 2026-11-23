@@ -1,4 +1,4 @@
-"""Code Lab turtle — 브라우저용 turtle 모듈.
+"""AI Lab turtle — 브라우저용 turtle 모듈.
 
 표준 turtle 은 tkinter 가 있어야 해서 브라우저에서 돌지 않는다.
 이 모듈은 위치·방향 같은 상태를 파이썬 안에서 계산하고, 그릴 것만 명령으로

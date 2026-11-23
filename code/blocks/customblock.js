@@ -395,23 +395,24 @@ CODELAB_COLOURS.sensor = '#6E92B7';
       previousStatement: null, nextStatement: null, colour: C, tooltip: '프로그램이 끝나면 저절로 꺼져요' },
   ]);
 
-  // 내 모델(sense-lab) 블록: 불러온 모델 이름으로 고른다
+  // 내 AI 블록: 가르치기에서 만든 AI 이름으로 고른다 (보관함을 바로 읽는다 — my-ai.js)
+  const SRC_KO = { image: '사진', hand: '손', face: '얼굴', pose: '몸', sound: '소리' };
   function modelOptions() {
-    const list = (window.SenseModels ? SenseModels.list() : []).map(m => [m.name, m.name]);
-    return list.length ? list : [['(모델 없음)', '']];
+    const list = (window.MyAI ? MyAI.list() : []).map(m => [m.name + ' (' + (SRC_KO[m.source] || m.source) + ')', m.name]);
+    return list.length ? list : [['(아직 없어요)', '']];
   }
   Blockly.Blocks['sensor_model_label'] = {
     init() {
-      this.jsonInit({ message0: '%1 내 모델 %2 이 본 것', args0: [icon('brain-solid.svg'), { type: 'input_dummy', name: 'M' }],
-        output: null, colour: C, tooltip: 'sense-lab 에서 배운 종류 이름. 아무것도 안 보이면 None' });
+      this.jsonInit({ message0: '%1 내 AI %2 가 본 것', args0: [icon('brain-solid.svg'), { type: 'input_dummy', name: 'M' }],
+        output: null, colour: C, tooltip: '가르치기에서 만든 AI 가 지금 본 종류 이름. 확실하지 않으면 None' });
       this.getInput('M').appendField(new Blockly.FieldDropdown(modelOptions), 'NAME');
     },
   };
   Blockly.Blocks['sensor_model_is'] = {
     init() {
-      this.jsonInit({ message0: '%1 내 모델 %2 이 %3 을(를) 보나?',
+      this.jsonInit({ message0: '%1 내 AI %2 가 %3 을(를) 보나?',
         args0: [icon('brain-solid.svg'), { type: 'input_dummy', name: 'M' }, { type: 'input_value', name: 'LABEL', check: 'String' }],
-        inputsInline: true, output: 'Boolean', colour: C, tooltip: 'sense-lab 모델이 그 종류라고 보면 참' });
+        inputsInline: true, output: 'Boolean', colour: C, tooltip: '내 AI 가 그 종류라고 보면 참' });
       this.getInput('M').appendField(new Blockly.FieldDropdown(modelOptions), 'NAME');
     },
   };

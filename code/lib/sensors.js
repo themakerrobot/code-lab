@@ -1,14 +1,19 @@
 // ═══════════════════════════════════════════════════════════
-// 브라우저 센서 — 웹캠(손·얼굴·포즈) · 마이크(소리 크기·박수) · sense-lab 모델
+// 브라우저 센서 — 웹캠(손·얼굴·포즈) · 마이크(소리 크기·박수) · 내 AI
 // ═══════════════════════════════════════════════════════════
-// 파이썬(lib/sensor.py)이 처음 쓸 때 need(무엇) 으로 켠다. 판단은 sense-lab 과 같은
-// MediaPipe + lib/sense/features.js. 영상·소리는 이 컴퓨터 밖으로 나가지 않는다.
+// 파이썬(lib/sensor.py)이 처음 쓸 때 need(무엇) 으로 켠다.
+// 인식 · 특징 · 분류는 가르치기와 같은 코드(ai/lib/)를 쓴다 — 가르칠 때와 똑같이 계산해야 맞힌다.
+// 영상 · 소리는 이 컴퓨터 밖으로 나가지 않는다.
 //
 // 파이썬 워커는 돌고 있는 동안 메시지를 못 받으므로, 최신 값을 프레임마다 서비스
 // 워커에 올려 두고(postState) 파이썬이 동기 요청(__codelab__/sensor)으로 가져간다.
 
-import { loadLandmarker, drawResult } from './sense/landmarker.js';
-import { computeSignals, extract } from './sense/features.js';
+import { loadLandmarker, drawResult } from '../../ai/lib/landmarker.js';
+import { computeSignals } from '../../ai/lib/signals.js';
+import { extract } from '../../ai/lib/features.js';
+import { loadEmbedder, cropTo, EMBEDDER } from '../../ai/lib/embedder.js';
+import { createSoundEngine } from '../../ai/lib/sound.js';
+import { applySoundTransform } from '../../ai/lib/sources.js';
 
 const POST_MS = 50;              // 서비스 워커에 값 올리는 간격
 const CLAP_LEVEL = 0.18;         // 박수: 이 RMS 를 넘고
@@ -25,7 +30,10 @@ export class Sensors {
     this.stream = null;
     this.landmarkers = {};       // source → { detect, close }
     this.active = new Set();     // 지금 돌리는 소스 (hand · face · pose)
-    this.models = new Set();     // 지금 계산하는 sense-lab 모델 이름
+    this.models = new Map();     // 지금 계산하는 내 AI: 이름 → 계산 준비된 모델 (my-ai.js)
+    this.embedder = null;        // 사진 AI 용 (처음 쓸 때 불러온다)
+    this.imgCv = document.createElement('canvas');
+    this.snd = null;             // 소리 AI 용 (YAMNet — 가르치기와 같은 엔진)
     this.results = {};
     this.state = { ready: {}, error: {} };
     this.waitFirst = new Set();  // 켰지만 아직 첫 결과가 없는 것 — 결과가 나와야 '준비됨'
@@ -49,10 +57,16 @@ export class Sensors {
       if (what === 'sound') { await this._startMic(); this.waitFirst.add('sound'); return; }
       if (what.startsWith('model:')) {
         const name = what.slice(6);
-        const m = SenseModels.get(name);
-        if (!m) throw new Error(`'${name}' 모델이 없어요. sense-lab 에서 내보낸 zip 을 먼저 불러와 주세요`);
-        await this._startSource(m.source);
-        this.models.add(name);
+        const m = await MyAI.load(name);
+        if (m.source === 'image') {
+          await this._startCamera();
+          if (!this.embedder) this.embedder = await loadEmbedder();
+        } else if (m.source === 'sound') {
+          await this._startSoundAI();
+        } else {
+          await this._startSource(m.source);
+        }
+        this.models.set(name, m);
         this.waitFirst.add(what);
         return;
       }
@@ -99,6 +113,22 @@ export class Sensors {
     this.active.add(src);
   }
 
+  // 소리로 배운 AI: 가르칠 때와 같은 YAMNet 점수 → 같은 변환 → 분류
+  async _startSoundAI() {
+    if (!this.snd) {
+      this.snd = createSoundEngine();
+      this.snd.onTick = latest => {
+        const out = this.state.models || (this.state.models = {});
+        for (const [name, m] of this.models) {
+          if (m.source !== 'sound') continue;
+          out[name] = MyAI.predict(m, applySoundTransform(latest.vec, m.transform));
+          this._mark('model:' + name);
+        }
+      };
+    }
+    await this.snd.start();
+  }
+
   async _startMic() {
     if (this.audio) return;
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
@@ -114,15 +144,21 @@ export class Sensors {
   // ── 한 프레임: 소스를 하나씩 돌아가며 감지 (저사양 노트북 기준) ──
   _frame() {
     this.raf = 0;
-    if (!this.stream && !this.audio) return;
+    if (!this.stream && !this.audio && !this.snd) return;
     const v = this.video;
+    // 이번 프레임에 돌릴 것: 랜드마크 소스들 + (사진 AI 가 있으면) 'image' — 하나씩 돌아가며
     const srcs = [...this.active];
+    const hasImage = [...this.models.values()].some(m => m.source === 'image');
+    if (hasImage && this.embedder) srcs.push('image');
     if (this.stream && srcs.length && v.readyState >= 2) {
       const src = srcs[this.rr++ % srcs.length];
       try {
-        const res = this.landmarkers[src].detect(v, performance.now());
-        this.results[src] = res;
-        this._update(src, res);
+        if (src === 'image') this._image();
+        else {
+          const res = this.landmarkers[src].detect(v, performance.now());
+          this.results[src] = res;
+          this._update(src, res);
+        }
       } catch (e) { /* 한 프레임 실패는 넘어간다 */ }
       this._draw();
     }
@@ -142,14 +178,24 @@ export class Sensors {
     }
     this.state[src] = sig;
     this._mark(src);
-    // 이 소스로 배운 sense-lab 모델들
+    // 이 소스로 배운 내 AI 들
     const out = this.state.models || (this.state.models = {});
-    for (const name of this.models) {
-      const m = SenseModels.get(name);
-      if (!m || m.source !== src) continue;
+    for (const [name, m] of this.models) {
+      if (m.source !== src) continue;
       const vec = extract(src, res, m.variant || undefined);
-      const p = vec ? SenseModels.predict(name, vec, m) : null;
-      out[name] = p ? { label: p.label, conf: Math.round(p.conf * 1000) / 1000 } : { label: null, conf: 0 };
+      out[name] = MyAI.predict(m, vec);
+      this._mark('model:' + name);
+    }
+  }
+
+  // 사진으로 배운 AI: 가르칠 때처럼 가운데 정사각형 + 거울로 잘라 특징을 뽑는다
+  _image() {
+    if (!cropTo(this.video, this.imgCv, EMBEDDER.inputSize, EMBEDDER.mirror)) return;
+    const vec = this.embedder.embed(this.imgCv);
+    const out = this.state.models || (this.state.models = {});
+    for (const [name, m] of this.models) {
+      if (m.source !== 'image') continue;
+      out[name] = MyAI.predict(m, vec);
       this._mark('model:' + name);
     }
   }
@@ -195,6 +241,7 @@ export class Sensors {
     this.results = {};
     if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; this.video.srcObject = null; }
     if (this.audio) { this.audio.stream.getTracks().forEach(t => t.stop()); this.audio.ctx.close(); this.audio = null; }
+    if (this.snd) this.snd.stop();
     cancelAnimationFrame(this.raf);
     this.raf = 0;
     this.octx.clearRect(0, 0, this.overlay.width, this.overlay.height);

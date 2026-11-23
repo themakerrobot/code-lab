@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════
-// Code Lab — 블록 · 파이썬 편집기 + 브라우저 파이썬(Pyodide)
+// 코딩 화면 — 블록 · 파이썬 편집기 + 브라우저 파이썬(Pyodide)
 // ═══════════════════════════════════════════════════════════
 // 편집 방식 mode: 'block' | 'python'. 어느 쪽이든 파이썬 코드를 만들어
 // lib/py-runner.js(→ 워커의 Pyodide)로 실행한다.
@@ -362,23 +362,25 @@
     if (runner.running) setStatus(runner.waiting ? '계속 실행 중이에요 · 끝내려면 정지(Esc)' : '실행 중…', 'run');
   };
 
+  // 내 AI — 가르치기에서 만든 AI 는 보관함에서 바로 읽는다 (my-ai.js). 다른 기기에서 가져온 파일만 불러오기로.
   async function importModel(file) {
     try {
-      const name = await SenseModels.importZip(file);
-      toast(`모델 '${name}' 을(를) 불러왔어요`);
+      const name = await MyAI.importFile(file);
+      toast(`'${name}' AI 를 보관함에 넣었어요`);
+      workspace.refreshToolboxSelection();
       return name;
     } catch (e) {
-      toast(String(e.message || e));
+      toast('AI 파일(.ailab.zip)을 열지 못했어요');
       return null;
     }
   }
-  workspace.registerButtonCallback('importModel', () => {
-    const inp = document.createElement('input');
-    inp.type = 'file';
-    inp.accept = '.zip';
-    inp.onchange = () => { if (inp.files[0]) importModel(inp.files[0]).then(() => workspace.refreshToolboxSelection()); };
-    inp.click();
+  workspace.registerButtonCallback('refreshAI', async () => {
+    const list = await MyAI.refresh();
+    toast(list.length ? `내 AI ${list.length}개를 찾았어요` : '아직 가르친 AI 가 없어요. 가르치기에서 만들어 보세요');
+    workspace.refreshToolboxSelection();
   });
+  workspace.registerButtonCallback('openTeach', () => { window.open('../ai/index.html', '_blank'); });
+  MyAI.ready.then(() => workspace.refreshToolboxSelection());
 
   // ── turtle 이벤트: 코드는 끝났고 키보드·마우스를 기다린다 ──
   runner.onWaiting = () => {
@@ -498,7 +500,7 @@
     turtle.stop();
     turtle.reset();
     showTab(hasTurtle ? 'draw' : 'out');
-    if (!runner.run(code, { models: SenseModels.list().map(m => m.name) })) return;
+    if (!runner.run(code, { models: MyAI.list().map(m => m.name) })) return;
     if (sensors) sensors.begin();
     setStatus('실행 중…', 'run');
     updateButtons();

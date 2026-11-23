@@ -1,6 +1,6 @@
-"""Code Lab sensor — 웹캠·마이크로 손·얼굴·몸·소리를 읽는다.
+"""AI Lab sensor — 웹캠·마이크로 손·얼굴·몸·소리를 읽는다.
 
-sense-lab 과 같은 AI(MediaPipe)가 브라우저 안에서만 돈다. 영상·소리는 밖으로 나가지 않는다.
+가르치기와 같은 AI(MediaPipe)가 브라우저 안에서만 돈다. 영상·소리는 밖으로 나가지 않는다.
 처음 쓰는 순간 카메라(또는 마이크)를 켜고 준비될 때까지 잠깐 기다린다.
 
     import sensor
@@ -12,7 +12,7 @@ sense-lab 과 같은 AI(MediaPipe)가 브라우저 안에서만 돈다. 영상·
           mouth_open() · smiling()
 몸        body_visible() · hands_up()
 소리      loudness() · clap()
-내 모델   model(이름) · model_confidence(이름) · models()   (sense-lab 에서 내보낸 zip)
+내 AI     model(이름) · model_confidence(이름) · models()   (가르치기에서 만든 AI — 보관함에서 바로)
 끄기      stop()
 """
 
@@ -197,9 +197,9 @@ def clap():
     return False
 
 
-# ── sense-lab 에서 배운 내 모델 ──
+# ── 가르치기에서 만든 내 AI ──
 def models():
-    """불러온 sense-lab 모델 이름들."""
+    """보관함에 있는 내 AI 이름들."""
     try:
         return list(_json.loads(_codelab.model_list()))
     except ValueError:
@@ -207,12 +207,12 @@ def models():
 
 
 def _model(name):
-    st = _need('model:' + name, f"모델 '{name}'")
+    st = _need('model:' + name, f"내 AI '{name}'")
     return (st.get('models') or {}).get(name) or {}
 
 
 def model(name):
-    """sense-lab 모델이 지금 본 종류 이름. 아무것도 안 보이면 None."""
+    """내 AI 가 지금 본 종류 이름. 확실하지 않으면 None."""
     return _model(name).get('label')
 
 

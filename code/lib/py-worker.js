@@ -5,7 +5,7 @@
 // 메시지로만 이야기한다.
 //
 //   화면 → 워커  {type:'init', token, canSyncInput}
-//                {type:'run', id, code, models}       models: 불러온 sense-lab 모델 이름들
+//                {type:'run', id, code, models}       models: 보관함의 내 AI 이름들
 //                {type:'event', kind, key, x, y}      turtle 키보드·마우스
 //   워커 → 화면  {type:'ready', version} · {type:'status', text}
 //                {type:'out', text, cls} · {type:'image', src} · {type:'turtle', cmds}

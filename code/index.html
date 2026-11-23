@@ -34,7 +34,7 @@
     <button type="button" class="db" id="exBtn"><i class="fa-solid fa-book-open"></i> 예제 <i class="fa-solid fa-caret-down"></i></button>
     <span class="cl-menu" id="exMenu" hidden></span>
   </span>
-  <button type="button" class="db" id="importBtn" title=".json(블록) · .py(파이썬) · .zip(sense-lab 모델)"><i class="fa-solid fa-folder-open"></i> 불러오기</button>
+  <button type="button" class="db" id="importBtn" title=".json(블록) · .py(파이썬) · .ailab.zip(내 AI)"><i class="fa-solid fa-folder-open"></i> 불러오기</button>
   <button type="button" class="db" id="exportBtn" title="블록은 .json, 파이썬은 .py 로 내보내요"><i class="fa-solid fa-download"></i> 내보내기</button>
   <input type="file" id="importFile" accept=".json,.py,.txt,.zip">
 
@@ -128,8 +128,9 @@
 <script src="blocks/customblock_toolbox.js"></script>
 <script src="blocks/disable-top-blocks.js"></script>
 
-<!-- Code Lab -->
-<script src="lib/sense-models.js"></script>
+<!-- 코딩 화면 -->
+<script src="../ai/lib/jszip.min.js"></script>
+<script src="lib/my-ai.js"></script>
 <script src="lib/examples.js"></script>
 <script src="lib/py-runner.js"></script>
 <script src="lib/turtle-canvas.js"></script>
