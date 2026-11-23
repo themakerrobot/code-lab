@@ -6,7 +6,8 @@
 파이썬은 브라우저 안에서 **진짜 파이썬 3.14**([Pyodide](https://pyodide.org/))로 돌아갑니다 —
 코드가 서버로 가지 않고, 한 번 열면 **인터넷이 끊겨도** 다시 열립니다.
 
-**바로 쓰기 → https://themakerrobot.github.io/code-lab/** (시험판 · `main`)
+**바로 쓰기 → https://themakerrobot.github.io/code-lab/**
+· 인터넷이 없는 교실은 [Releases](https://github.com/themakerrobot/code-lab/releases/latest) 의 `CodeLab.exe` (Windows, 더블클릭)
 
 ![블록으로 코딩하고 실행](docs/block.png)
 
@@ -169,6 +170,8 @@ assets/fonts/         Pretendard (셀프호스팅)
 assets/img/           로고 · 파비콘 · turtle 로봇 그림
 webfonts/             Font Awesome 글꼴
 docs/                 README 화면 캡처
+tools/portable/       오프라인 exe 용 Go 서버 (main.go · 아이콘)
+CHANGELOG.md          버전 기록 (Release 본문)
 ```
 
 ### 블록 추가하기
@@ -190,27 +193,28 @@ docs/                 README 화면 캡처
 
 ### 배포 (자매 서비스 sense-lab · teach-lab 과 같은 방식)
 
-| 브랜치 | 어디로 | 용도 |
+| 무엇 | 어디로 | 언제 |
 |---|---|---|
-| `main` | GitHub Pages — https://themakerrobot.github.io/code-lab/ | 시험 |
-| `release` | Cloudflare Workers (자동 배포) | 학생이 쓰는 주소 |
+| 웹 사이트 | GitHub Pages — https://themakerrobot.github.io/code-lab/ | `main` 에 머지하면 1분 안팎 |
+| 오프라인 실행 파일 `CodeLab.exe` (Windows) | [GitHub Releases](https://github.com/themakerrobot/code-lab/releases) | `v*` 태그를 올릴 때 |
 
-1. `main` 에 작업을 머지하면 1분 안팎으로 GitHub Pages 에 올라갑니다 (`.nojekyll` 로 Jekyll 처리 없음). 여기서 확인합니다.
-2. 통과하면 `release` 에 같은 커밋을 푸시합니다 → Cloudflare 가 자동으로 배포합니다.
-   ```bash
-   git push origin main:release
-   ```
-3. 화면에 보이는 파일을 바꿨으면 `sw.js` 의 `VERSION` 을 올려 둡니다 — 학생 브라우저의 옛 캐시를 지웁니다.
-
-- Cloudflare 는 Workers 정적 배포입니다: `wrangler.toml` + `.assetsignore` + `_headers` (워커 코드 없음 — 자산만 서빙).
-  수동으로 올릴 때는 `npx wrangler deploy`.
-- `_headers` 는 `.wasm` · `.task` 같은 파일 형식과, `sw.js` 를 늘 새로 받게 하는 설정을 담습니다.
-- 파일 하나가 25MiB 를 넘으면 Cloudflare 가 받지 않습니다 (지금 가장 큰 것은 Pyodide 의 약 9.6MB).
+- 사이트: `main` 브랜치 루트를 그대로 올립니다 (`.nojekyll` 로 Jekyll 처리 없음).
+  화면에 보이는 파일을 바꿨으면 `sw.js` 의 `VERSION` 을 올려 두세요 — 학생 브라우저의 옛 캐시를 지웁니다.
+- exe: GitHub Actions(`.github/workflows/build-exe.yml`)가 사이트 전체를 Go 서버(`tools/portable/`)에 담아
+  `CodeLab.exe` 하나로 만들고 Release 에 붙입니다. 더블클릭하면 `localhost:50070` 으로 브라우저가 열려요.
+  `localhost` 라 서비스 워커가 동작해서 `input()` · 오프라인 캐시가 그대로 됩니다.
+  numpy 같은 추가 패키지는 exe 안에 없어서, 처음 한 번은 인터넷이 필요합니다.
 - 모든 경로가 상대경로라 하위 경로 배포에서도 동작합니다.
 
-**처음 한 번만 (Cloudflare 대시보드 — 메뉴 이름은 바뀔 수 있어요)**: Workers & Pages → Create → Import a repository →
-`themakerrobot/code-lab` 선택 → 프로덕션 브랜치를 **`release`** 로, 빌드 명령은 비우고
-배포 명령은 `npx wrangler deploy` 로 둡니다. 그 뒤로는 `release` 에 푸시할 때마다 자동으로 올라갑니다.
+### 릴리스 (exe 만들기)
+
+1. `CHANGELOG.md` 의 "아직 안 올린 것" 을 새 `### vX.Y.Z — 날짜` 절로 바꾸고 `main` 에 머지합니다.
+2. 둘 중 하나:
+   - `git tag vX.Y.Z && git push origin vX.Y.Z`
+   - Actions → **Build CodeLab.exe** → Run workflow → `tag` 에 `vX.Y.Z` 입력 (태그가 없으면 만들어 줍니다)
+3. Release 본문은 워크플로가 `CHANGELOG.md` 의 그 절을 잘라 넣습니다. 1번을 빼먹으면 본문이 빕니다.
+
+번호: 고치기만 했으면 PATCH, 기능이 늘었으면 MINOR, 저장 형식(`.json`)이 깨지면 MAJOR.
 
 ### CI
 
