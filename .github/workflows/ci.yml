@@ -41,7 +41,7 @@ jobs:
       - name: css/themaker-ui.css
         run: |
           # 태그로 고정한다 — 킷이 바뀌어도 이쪽 CI 가 갑자기 깨지지 않는다.
-          KIT=v1.0.0
+          KIT=v1.4.0
           curl -sSfL -o /tmp/kit.css \
             "https://raw.githubusercontent.com/themakerrobot/themaker-ui/$KIT/themaker-ui.css"
           if ! diff -u /tmp/kit.css css/themaker-ui.css; then

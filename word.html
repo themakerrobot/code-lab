@@ -10,8 +10,8 @@
 <meta name="theme-color" content="#FBF7EF">
 <link rel="stylesheet" href="assets/fonts/pretendard.css?v=1">
 <link rel="stylesheet" href="css/all.min.css?v=1">
-<link rel="stylesheet" href="css/themaker-ui.css?v=1">
-<link rel="stylesheet" href="css/app.css?v=17">
+<link rel="stylesheet" href="css/themaker-ui.css?v=14">
+<link rel="stylesheet" href="css/app.css?v=22">
 </head>
 <body>
 
@@ -35,7 +35,7 @@
     <div class="pb">
       <div class="pb-label">예시 글</div>
       <div class="row wrap" id="presetRow"></div>
-      <textarea class="inp" id="corpus" rows="7" spellcheck="false" placeholder="여기에 글을 써요. 줄마다 한 문장씩!"></textarea>
+      <textarea class="inp" id="corpus" rows="5" spellcheck="false" placeholder="여기에 글을 써요. 줄마다 한 문장씩!"></textarea>
       <div class="hint" id="corpusInfo"></div>
 
       <div class="sec2" id="modelPick">
@@ -66,7 +66,7 @@
           <div class="lb"><span id="prgLabel">아직 안 배웠어요</span><span class="num" id="prgPct"></span></div>
           <div class="track"><div class="fill" id="prgFill"></div></div>
         </div>
-        <canvas id="chart"></canvas>
+        <canvas id="chart" style="height:56px"></canvas>
         <div class="chart-legend"><span><i class="lg-acc"></i>틀린 정도 (낮을수록 잘 맞혀요)</span></div>
         <div class="hint" id="trainInfo"></div>
       </div>
@@ -130,8 +130,8 @@
 <div id="toast"></div>
 
 <script src="lib/nav.js?v=5"></script>
-<script src="lib/i18n.js?v=17"></script>
-<script src="lib/tour.js?v=8"></script>
+<script src="lib/i18n.js?v=19"></script>
+<script src="lib/tour.js?v=9"></script>
 <script type="module" src="acts/word/page.js?v=1"></script>
 </body>
 </html>

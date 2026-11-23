@@ -13,6 +13,7 @@
 - 디자인은 자매 서비스와 동일 — `css/themaker-ui.css` 는
   **[themakerrobot/themaker-ui](https://github.com/themakerrobot/themaker-ui)** 의 복사본이다. **직접 고치지 말 것.**
   고쳐야 하면 킷을 고치고 태그를 올린 뒤 여기로 다시 복사한다 (CI 가 어긋남을 잡는다)
+  지금 킷 v1.4.0 (테두리 없는 36px 헤더 · 얇은 단계 표시줄 — teach-lab 과 같은 판). CI 의 `KIT=` 와 함께 올린다.
 
 ## 실행
 

@@ -147,7 +147,7 @@ ALL.forEach((def, i) => {
   el.innerHTML = `<canvas width="160" height="104"></canvas>
     <div class="tn"><span>${T(def.label)}</span></div>
     <div class="tl${def.unseen || def.contest ? ' test' : ''}">${tag}${T(LEVEL_LABEL[def.level])}</div>`;
-  el.addEventListener('click', () => { if (!racing) pickTrack(i, reverse); });
+  el.addEventListener('click', () => { if (racing) return; pickTrack(i, reverse); $('trackMore').open = false; });
   $(def.contest ? 'contestPick' : 'trackPick').appendChild(el);
   drawThumb(el.querySelector('canvas'), def);
 });
@@ -156,6 +156,13 @@ $('dirSeg').querySelectorAll('button').forEach(b => b.addEventListener('click', 
   pickTrack(trackIdx, b.dataset.r === '1');
 }));
 const allCards = () => [...$('trackPick').children, ...$('contestPick').children];
+// 트랙 고르기는 접어 두고 지금 트랙만 작게 보여 준다 (왼쪽 패널이 스크롤되지 않게). "바꾸기" 를 누르면 15개가 펼쳐진다
+function paintCurTrack() {
+  const def = ALL[trackIdx];
+  drawThumb($('curThumb'), def);
+  $('curName').textContent = trackName();
+  $('curMeta').textContent = (def.contest ? T('대회') + ' · ' : def.unseen ? T('시험용') + ' · ' : '') + T(LEVEL_LABEL[def.level]);
+}
 // 대회 트랙은 기본 방향만 (거꾸로 없음 — 방향 고르기를 숨긴다). 연습 트랙에서 고른 방향은 기억해 둔다.
 function pickTrack(i, rev) {
   if (running) stop();
@@ -168,6 +175,7 @@ function pickTrack(i, rev) {
   $('dirSeg').querySelectorAll('button').forEach(o => o.classList.toggle('on', (o.dataset.r === '1') === reverse));
   $('dirBox').hidden = race();
   $('panTitle').textContent = trackName();
+  paintCurTrack();
   if ((track.def.unseen || race()) && M.policy) setStep(4);
   roadCache = null;
   overlay('');
@@ -207,18 +215,17 @@ function refreshCounts() {
   const { Y, L } = M.data, c = [0, 0, 0], v = [0, 0, 0];
   Y.forEach(y => { c[y % 3]++; v[(y / 3) | 0]++; });
   $('counts').innerHTML = pro()
-    ? `<div class="grp">${T('방향')}</div>${bars(c, ACT_LABEL, ACT_ICON)}<div class="grp">${T('빠르기')}</div>${bars(v, THR_LABEL, THR_ICON)}`
+    ? `<div class="cnt2"><div><div class="grp">${T('방향')}</div>${bars(c, ACT_LABEL, ACT_ICON)}</div><div><div class="grp">${T('빠르기')}</div>${bars(v, THR_LABEL, THR_ICON)}</div></div>`
     : bars(c, ACT_LABEL, ACT_ICON);
   $('totalCnt').textContent = T('모두 {n}장면').replace('{n}', Y.length);
   $('trainBtn').disabled = training || racing || Y.length < MIN_SAMPLES;
   // 언제 배우기를 누르면 되나 — 도는 장면이 양쪽 다 충분한지, (고급) 가속·감속도 있는지, 급한 커브도 보여 줬는지
-  const need = [0, 2].filter(k => c[k] < READY_TURNS).map(k => T('{dir}으로 도는 장면이 더 필요해요 ({n}/{need})')
-    .replace('{dir}', T(ACT_LABEL[k])).replace('{n}', c[k]).replace('{need}', READY_TURNS));
-  if (pro()) need.push(...[0, 2].filter(k => v[k] < READY_THR).map(k => T('{thr} 장면이 더 필요해요 ({n}/{need})')
-    .replace('{thr}', T(THR_LABEL[k])).replace('{n}', v[k]).replace('{need}', READY_THR)));
+  // 모자란 것만 한 줄로: "더 필요한 장면: 왼쪽 12/30 · 감속 3/20"
+  const need = [0, 2].filter(k => c[k] < READY_TURNS).map(k => `${T(ACT_LABEL[k])} ${c[k]}/${READY_TURNS}`);
+  if (pro()) need.push(...[0, 2].filter(k => v[k] < READY_THR).map(k => `${T(THR_LABEL[k])} ${v[k]}/${READY_THR}`));
   const r = $('readyHint');
   if (!Y.length) { r.className = 'ready'; r.textContent = T('운전을 시작하면 장면이 쌓여요.'); }
-  else if (need.length) { r.className = 'ready'; r.textContent = need.join(' '); }
+  else if (need.length) { r.className = 'ready'; r.textContent = `${T('더 필요한 장면')}: ${need.join(' · ')}`; }
   else if (Math.max(...L) < 2) {
     r.className = 'ready';
     r.textContent = T('양쪽 장면은 넉넉해요. 그런데 쉬운 트랙에서만 모았어요 — 커브가 급한 트랙(보통·어려움)에서도 조금 보여 주세요.');
@@ -675,5 +682,5 @@ addEventListener('resize', drawChart);
 // ── 시작 ────────────────────────────────────────────────────
 $('panTitle').textContent = trackName();
 $('engine').textContent = T('인터넷 없이 이 컴퓨터에서 배워요');
-paintMode(); paintTrain(); paintWho(); refreshCounts(); paintRuns(); paintRace();
+paintCurTrack(); paintMode(); paintTrain(); paintWho(); refreshCounts(); paintRuns(); paintRace();
 sizeCanvas(); refreshLive(); draw();

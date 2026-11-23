@@ -7,15 +7,13 @@
    ─────────────────────────────────────────────────────────────────── */
 
 /* 헤더 아이콘 버튼 — Sense Lab 과 같은 둥근 모양 */
-.hbtn{width:34px;height:34px;border-radius:999px}
+.hbtn{border-radius:999px}
 
 /* ── 공통 작은 도구 ── */
 .row.wrap{flex-wrap:wrap}
 .db.wide{width:100%;justify-content:center;padding:11px}
 .db.grow{flex:1;justify-content:center}
-#steps{overflow-x:auto;padding:5px 16px}
-#steps .stp{font-size:11.5px;gap:6px}
-#steps .stp .cir{width:18px;height:18px;font-size:10.5px}
+#steps{overflow-x:auto}
 #steps .stpline{flex-shrink:1}
 
 /* 고르는 카드 잠금 (학습 중) */
@@ -131,6 +129,14 @@ table.att tr.last th{color:var(--acc-ink);font-weight:800}
 .sensor .bt{flex:1;height:7px;border-radius:4px;background:var(--line-soft);overflow:hidden}
 .sensor .bf{height:100%;background:var(--ok)}
 .sensor .sv{width:30px;flex-shrink:0;color:var(--ink2);font-weight:700}
+details.trackmore{border:1px solid var(--line);border-radius:9px;padding:6px;background:var(--panel)}
+details.trackmore summary{display:flex;align-items:center;gap:9px;cursor:pointer;list-style:none}
+details.trackmore summary::-webkit-details-marker{display:none}
+details.trackmore #curThumb{width:72px;height:auto;border-radius:6px;flex-shrink:0}
+details.trackmore .cur{flex:1;min-width:0;display:flex;flex-direction:column;font-size:12px;color:var(--ink3);font-weight:600}
+details.trackmore .cur b{font-size:13px;color:var(--ink)}
+details.trackmore .chg{flex-shrink:0;font-size:11.5px;font-weight:700;color:var(--acc-ink)}
+details.trackmore[open] .chg i{transform:rotate(180deg)}
 #trackPick,#contestPick{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:6px}
 .seg.wide{display:flex;width:100%}
 .seg.wide button{flex:1;padding:8px 10px;font-size:13px}
@@ -139,6 +145,8 @@ table.att tr.last th{color:var(--acc-ink);font-weight:800}
 .pads2[hidden]{display:none}
 .pads2 .db.pad{height:30px;font-size:13px}
 .grp{margin:8px 0 2px;font-size:11px;font-weight:700;color:var(--ink3)}
+.cnt2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cnt2 .grp{margin-top:0}
 #runLog .saved,#raceBoard .saved{flex-wrap:wrap;margin-top:4px}
 #runLog .saved .mt,#raceBoard .saved .mt{flex-basis:100%;white-space:normal;padding-left:20px}
 .race-tot{margin-top:6px;font-size:12px;font-weight:700;color:var(--acc-ink)}
@@ -157,6 +165,9 @@ table.att tr.last th{color:var(--acc-ink);font-weight:800}
 
 /* ── AI 눈 ── */
 .thumbs{display:flex;flex-wrap:wrap;gap:3px;margin-top:7px;max-height:110px;overflow-y:auto;padding-right:2px}
+/* 왼쪽 종류 목록: 고른 종류만 두 줄, 나머지는 한 줄만 (왼쪽 패널이 스크롤되지 않게) */
+#clsList .cls .thumbs{max-height:31px;overflow:hidden}
+#clsList .cls.on .thumbs{max-height:65px;overflow-y:auto}
 .thumbs img{width:30px;height:30px;border-radius:3px;display:block;cursor:pointer;image-rendering:pixelated;
   outline:2px solid transparent;transition:transform .1s,outline-color .1s}
 .thumbs img:hover{transform:scale(2.2);outline-color:var(--warn);position:relative;z-index:5}
@@ -168,6 +179,7 @@ table.att tr.last th{color:var(--acc-ink);font-weight:800}
 /* 낮은 화면(1366×768 노트북)에서는 그림판을 조금 줄여 가운데 패널이 스크롤되지 않게 */
 @media (min-width:1101px) and (max-height:800px){
   .eye-src{max-width:270px}
+  #dataTip{display:none}      /* 운전: 낮은 화면에서는 같은 뜻의 모드 안내 · 준비 안내만 남긴다 */
 }
 #pad{display:block;width:100%;aspect-ratio:1;border:1.5px solid var(--line);border-radius:10px;
   background:#fff;touch-action:none;cursor:crosshair}
@@ -214,14 +226,6 @@ table.exam td.low{color:var(--warn);font-weight:700}
 #wheel{display:block;width:220px;max-width:100%;margin:4px auto 0}
 #belt{display:block;width:100%;height:auto;margin-top:8px;border:1px solid var(--line-soft);border-radius:8px}
 #beltSec .seg button{padding:5px 10px}
-
-/* ── 상단바: 테두리 · 그림자 없이 (themaker-ui.css 는 고치지 않고 덮어쓴다) ── */
-header{border:0;box-shadow:none;height:36px;margin:4px 8px 0}
-header h1 img{height:22px}
-header h1{font-size:14.5px}
-header .navlink{padding-top:4px;padding-bottom:3px}
-header .hbtn{width:26px;height:26px;font-size:11px}
-header #langToggle{padding:3px 8px;font-size:12px}
 
 /* ── 공통: 체크 줄 ── */
 .chk{display:flex;align-items:flex-start;gap:6px;font-size:12px;color:var(--ink2);font-weight:600;cursor:pointer;margin-top:6px;line-height:1.5}
@@ -342,15 +346,14 @@ table.exam td.ok{color:var(--ok);font-weight:700}
   .navlink.m-hide{display:none}
   header{margin:6px 6px 0;padding:0 8px;gap:4px}
   header h1{font-size:15px;padding-right:6px;letter-spacing:0}
-  header h1 img{height:24px}
+  header h1 img{height:20px}
   .navlink{padding:6px 8px 4px;font-size:13.5px}
   #engine{display:none}
-  #langToggle{font-size:13px !important;padding:6px 8px !important;min-width:38px !important}
-  .hbtn{width:30px;height:30px;font-size:12px}
+  #langToggle{font-size:13px !important;padding:4px 8px !important;min-width:38px !important}
+  .hbtn{width:26px;height:26px;font-size:12px}
   #steps{padding:5px 8px;overflow:visible;justify-content:space-between}
   #steps .stpline{min-width:4px;margin:0 4px}
-  #steps .stp{font-size:12px;gap:4px}
-  #steps .stp .cir{width:18px;height:18px;font-size:10.5px}
+  .stp{font-size:12px;gap:4px}
   .hero img{width:64px}
   .hero h2{font-size:19px}
   #actGrid{grid-template-columns:1fr}
@@ -378,11 +381,11 @@ table.exam td.ok{color:var(--ok);font-weight:700}
 }
 @media (max-width:420px){
   header{margin:4px 4px 0;padding:0 6px;gap:2px}
-  header h1 img{height:22px}
+  header h1 img{height:20px}
   header h1{font-size:13.5px;padding-right:3px;gap:5px}
   .navlink{padding:6px 4px 4px;font-size:13px}
-  #langToggle{min-width:34px !important;padding:6px 6px !important}
-  .hbtn{width:28px;height:28px}
+  #langToggle{min-width:34px !important;padding:4px 6px !important}
+  .hbtn{width:24px;height:24px}
 }
 @media (max-width:365px){
   header h1 .brand-txt{display:none}
