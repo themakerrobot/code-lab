@@ -2,6 +2,7 @@ name: CI
 
 # 손으로 맞춰야 하는 것이 어긋났는지 본다.
 #   · 브라우저 JS · 파이썬 문법, 서비스 워커 캐시 목록
+#   · Cloudflare 배포 크기 제한(파일당 25MiB)
 #   · css/themaker-ui.css 가 공용 디자인 킷(themakerrobot/themaker-ui) 복사본과 같은지
 
 on:
@@ -34,6 +35,18 @@ jobs:
             if (miss.length) { console.error("::error::sw.js PRECACHE 에 없는 파일:", miss.join(", ")); process.exit(1); }
             console.log(list.length + "개 모두 있어요");
           '
+
+  deploy-size:
+    name: Cloudflare 에 올릴 수 있는가
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 파일 하나가 25MiB 를 넘지 않는가
+        # Cloudflare Workers 정적 자산은 파일당 25MiB 까지만 받는다
+        run: |
+          big=$(find . -path ./.git -prune -o -type f -size +25M -print)
+          if [ -n "$big" ]; then echo "::error::25MiB 넘는 파일: $big"; exit 1; fi
+          echo "모두 25MiB 이하예요"
 
   design-kit:
     name: 디자인 킷 복사본이 원본과 같은가

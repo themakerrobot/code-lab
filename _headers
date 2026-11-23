@@ -1,0 +1,22 @@
+# 정적 자산 응답 헤더 (Cloudflare Workers/Pages 공용 형식)
+# .js/.css/.py 를 브라우저로 직접 열어도 한글이 깨지지 않게 charset 을 명시한다.
+/*.js
+  Content-Type: text/javascript; charset=utf-8
+/*.mjs
+  Content-Type: text/javascript; charset=utf-8
+/*.css
+  Content-Type: text/css; charset=utf-8
+/*.py
+  Content-Type: text/plain; charset=utf-8
+/*.webmanifest
+  Content-Type: application/manifest+json; charset=utf-8
+# 파이썬(Pyodide)·모델 파일 — 잘못된 타입이면 로드가 실패한다
+/*.wasm
+  Content-Type: application/wasm
+/*.task
+  Content-Type: application/octet-stream
+/*.tflite
+  Content-Type: application/octet-stream
+# 서비스 워커는 늘 새로 받게 한다 (새 버전이 바로 퍼지게)
+/sw.js
+  Cache-Control: no-cache

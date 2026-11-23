@@ -1,0 +1,11 @@
+wrangler.toml
+node_modules
+.git
+.github
+.gitignore
+.assetsignore
+.nojekyll
+README.md
+LICENSE
+docs
+.wrangler
