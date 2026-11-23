@@ -205,10 +205,12 @@ table.exam td.low{color:var(--warn);font-weight:700}
 #beltSec .seg button{padding:5px 10px}
 
 /* ── 상단바: 테두리 · 그림자 없이 (themaker-ui.css 는 고치지 않고 덮어쓴다) ── */
-header{border:0;box-shadow:none;height:42px;margin:6px 8px 0}
-header h1 img{height:24px}
-header .hbtn{width:28px;height:28px;font-size:12px}
-header #langToggle{padding:4px 9px}
+header{border:0;box-shadow:none;height:36px;margin:4px 8px 0}
+header h1 img{height:22px}
+header h1{font-size:14.5px}
+header .navlink{padding-top:4px;padding-bottom:3px}
+header .hbtn{width:26px;height:26px;font-size:11px}
+header #langToggle{padding:3px 8px;font-size:12px}
 
 /* ── 공통: 체크 줄 ── */
 .chk{display:flex;align-items:flex-start;gap:6px;font-size:12px;color:var(--ink2);font-weight:600;cursor:pointer;margin-top:6px;line-height:1.5}
