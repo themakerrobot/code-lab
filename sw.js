@@ -10,7 +10,7 @@
 //    '__codelab__/sensor' 로 물으면 그 값을 바로 준다.
 // 카메라 AI 모델·wasm(models/ · vendor/tasks-vision/)은 처음 쓸 때 받아 담는다 (약 29MB).
 
-const VERSION = 'codelab-5';
+const VERSION = 'codelab-6';
 const RUNTIME = 'codelab-runtime';
 const INPUT_WAIT_MS = 4 * 60 * 1000;   // 그 뒤엔 204 → 워커가 같은 id 로 다시 묻는다
 

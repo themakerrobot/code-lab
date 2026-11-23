@@ -14,7 +14,6 @@
 
 /* 헤더 탭을 button 으로 쓴다 */
 header .navlink{font-family:inherit}
-header .badge{flex-shrink:0}
 
 /* ── 도구 줄 — 자매 서비스의 단계 표시줄만큼 얇게 (킷 v1.4.0 헤더 36px 에 맞춤) ── */
 /* 킷의 단계 표시줄(#steps)과 같은 띠: 헤더 밑에 붙는 옅은 면 + 아래 괘선 */
@@ -40,7 +39,7 @@ header .badge{flex-shrink:0}
 /* ── 본문 2단: 편집기(넓게) + 결과 ── */
 #clMain{gap:0}
 #panOut{width:440px}
-.cl-splitter{width:12px;flex-shrink:0;cursor:col-resize;position:relative}
+.cl-splitter{width:6px;flex-shrink:0;cursor:col-resize;position:relative}
 .cl-splitter::after{content:'';position:absolute;top:50%;left:50%;width:4px;height:40px;
   transform:translate(-50%,-50%);border-radius:2px;background:var(--line-soft);transition:background .12s}
 .cl-splitter:hover::after,.cl-splitter.on::after{background:var(--acc)}
@@ -123,7 +122,7 @@ header .badge{flex-shrink:0}
 /* ── 반응형 ── */
 @media (max-width:1100px){
   /* 킷은 여기서 페이지 스크롤로 바꾼다. 편집기는 화면 높이를 잡아 둔다 */
-  #clMain{gap:8px}
+  #clMain{gap:6px}
   .cl-splitter{display:none}
   #panOut{width:100% !important}
   #panEdit{height:62vh;flex:none}
@@ -136,7 +135,35 @@ header .badge{flex-shrink:0}
   .blocklyTreeLabel{font-size:14px}
   #inField{font-size:16px}
 }
-@media (max-width:420px){
-  header h1 .brand-txt{display:none}
-  header .badge{font-size:10.5px;padding:3px 8px}
+
+/* ── 상단바 공통 — teach-lab · code-lab · ml-lab 에 글자 하나 다르지 않게 둔다 (바꾸면 셋 다) ── */
+/* 상단바는 화면 맨 위에 붙이고(바깥 여백 0), 작업 화면 여백 · 패널 사이도 6px 로 줄여 작업 칸을 넓게 */
+header{margin:0;border-radius:0;padding:0 10px}
+.mk-main{padding:6px;gap:6px}
+#engine{font-size:11px;color:var(--ink3);font-weight:600;white-space:nowrap}
+@media (max-width:700px){
+  header{padding:0 8px;gap:4px}
+  header h1{font-size:15px;padding-right:6px;letter-spacing:0}
+  header h1 img{height:20px}
+  #engine{display:none}
+  #steps,.steps{padding:6px 8px;overflow:visible;justify-content:space-between}
+  .stpline{margin:0 4px;min-width:4px}
+  .mk-main{padding:6px;gap:6px}
 }
+@media (max-width:520px){
+  header h1 .brand-txt{display:none}
+  .navlink{padding:5px 8px 3px;font-size:13.5px}
+}
+@media (max-width:420px){
+  header{padding:0 6px;gap:2px}
+  header h1 img{height:18px}
+  header h1{font-size:13.5px;padding-right:3px;gap:5px}
+}
+@media (max-width:365px){
+  .navlink{padding:5px 4px 3px;font-size:13px}
+  .hbtn{width:24px;height:24px}
+  #langToggle{min-width:32px !important;padding:4px 6px !important;margin-right:0 !important}
+  header{padding:0 4px}
+  header h1{padding-right:0}
+}
+/* ── 상단바 공통 끝 ── */
