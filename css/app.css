@@ -110,13 +110,7 @@
   .thumbs{max-height:96px}
 }
 @media (max-width:700px){
-  header{margin:6px 6px 0;padding:0 8px;gap:4px}
-  header h1{font-size:15px;padding-right:6px;letter-spacing:0}
-  header h1 img{height:20px}
-  #engine{display:none}
   #camSel{max-width:none}
-  .steps{padding:6px 8px;overflow:visible;justify-content:space-between}
-  .stpline{margin:0 4px;min-width:4px}
   .selinfo{font-size:14px;padding:10px}
   #capBtn,#trainBtn{font-size:15px;padding:13px}
   .privnote{font-size:12.5px}
@@ -130,15 +124,29 @@
   #cmWrap td{min-width:40px;height:30px}
   .cm-note{font-size:12px}
 }
-@media (max-width:420px){
-  header{margin:4px 4px 0;padding:0 6px;gap:2px}
-  header h1 img{height:18px}
-  header h1{font-size:13.5px;padding-right:3px;gap:5px}
+
+/* ── 상단바 공통 — teach-lab · code-lab · ml-lab 에 글자 하나 다르지 않게 둔다 (바꾸면 셋 다) ── */
+/* 상단바는 화면 맨 위에 붙이고(바깥 여백 0), 작업 화면 여백 · 패널 사이도 6px 로 줄여 작업 칸을 넓게 */
+header{margin:0;border-radius:0;padding:0 10px}
+.mk-main{padding:6px;gap:6px}
+#engine{font-size:11px;color:var(--ink3);font-weight:600;white-space:nowrap}
+@media (max-width:700px){
+  header{padding:0 8px;gap:4px}
+  header h1{font-size:15px;padding-right:6px;letter-spacing:0}
+  header h1 img{height:20px}
+  #engine{display:none}
+  #steps,.steps{padding:6px 8px;overflow:visible;justify-content:space-between}
+  .stpline{margin:0 4px;min-width:4px}
+  .mk-main{padding:6px;gap:6px}
 }
-/* 탭이 넷이라 폰에서는 서비스명 글자를 접고 탭 여백을 줄여 한 줄에 맞춘다 */
 @media (max-width:520px){
   header h1 .brand-txt{display:none}
   .navlink{padding:5px 8px 3px;font-size:13.5px}
+}
+@media (max-width:420px){
+  header{padding:0 6px;gap:2px}
+  header h1 img{height:18px}
+  header h1{font-size:13.5px;padding-right:3px;gap:5px}
 }
 @media (max-width:365px){
   .navlink{padding:5px 4px 3px;font-size:13px}
@@ -147,9 +155,7 @@
   header{padding:0 4px}
   header h1{padding-right:0}
 }
-
-/* ── 헤더 보조 (공통 규격에 없는 것) ── */
-#engine{font-size:11px;color:var(--ink3);font-weight:600;white-space:nowrap}
+/* ── 상단바 공통 끝 ── */
 
 /* 표 안의 링크형 버튼 — .db 를 <a> 에 쓸 때 밑줄을 없앤다 */
 a.db{text-decoration:none}
