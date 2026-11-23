@@ -18,6 +18,20 @@ const GL_LANG = (function () {
 })();
 
 const GL_I18N = {
+  // ── 순서도 (만들기 → 순서도 놀이) ──
+  '순서도': 'Flowchart',
+  '칩': 'Chips',
+  '위에서부터 차례로 물어봐요. 맞으면 말하고, 아니면 아래로.': 'Asks from the top. If yes, it speaks; if not, it goes down.',
+  '카메라 · 마이크로 봐요': 'Look with camera · mic',
+  '아니오': 'No',
+  '예': 'Yes',
+  '아무 말 안 해요': 'Says nothing',
+  '다시 봐요': 'Look again',
+  '말할 것을 정해요': 'Set what to say',
+  '눌러서 조건을 바꿔요': 'Click to change the condition',
+  '눌러서 할 말을 바꿔요': 'Click to change the words',
+  ' 또는 ': ' or ',
+  ' 그리고 ': ' and ',
   // ── 페이지 / 헤더 ──
   '학습실': 'Teach',
   '시험실': 'Test',

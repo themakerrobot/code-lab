@@ -265,3 +265,46 @@ button.slot.add{border-style:dashed;background:none;padding:7px 11px;font-size:1
 
 /* 체험하기에서 들어온 놀이 화면: 오른쪽 놀이(규칙 · 순서) 칸은 접고 카메라를 넓게 */
 body.try-mode #panR{display:none}
+
+/* ── 순서도 (만들기 → 순서도 놀이): 같은 규칙을 위에서 아래로 묻는 그림으로 ── */
+.viewseg{display:flex;border:1px solid var(--line-soft);border-radius:var(--r-s);overflow:hidden;margin-bottom:6px;background:#fff}
+.viewseg button{flex:1;border:0;background:none;padding:6px 8px;font:inherit;font-size:13px;font-weight:700;color:var(--ink3);cursor:pointer;display:flex;gap:6px;align-items:center;justify-content:center}
+.viewseg button + button{border-left:1px solid var(--line-soft)}
+.viewseg button.on{background:var(--acc-soft);color:var(--acc-ink)}
+.flowchart{position:relative;padding:4px 2px 30px 18px;font-size:13px}
+.fc-start{width:96px;margin:0 auto 0 34px;text-align:center;border:1.5px solid var(--ink2);border-radius:999px;padding:5px 0;font-weight:700;background:#fff}
+.fc-down{height:22px;width:0;margin-left:82px;border-left:1.5px solid var(--ink2);position:relative}
+.fc-down::after{content:"";position:absolute;left:-5px;bottom:-1px;border:4.5px solid transparent;border-top:6px solid var(--ink2);border-bottom:0}
+.fc-down span{position:absolute;left:7px;top:3px;font-size:11.5px;color:var(--ink3);font-weight:700;white-space:nowrap}
+.fc-box{border:1.5px solid var(--ink2);border-radius:var(--r-s);padding:7px 10px;background:#fff;width:150px;margin-left:8px;display:flex;gap:7px;align-items:center;font-weight:600;line-height:1.35;word-break:keep-all}
+.fc-box i{color:var(--acc)}
+.fc-row{display:grid;grid-template-columns:150px 30px 1fr;align-items:center;margin-left:8px}
+.fc-dia{position:relative;min-height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 22px;cursor:pointer;line-height:1.3;word-break:keep-all;font-weight:600}
+.fc-dia::before{content:"";position:absolute;inset:0;background:var(--ink2);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);z-index:0}
+.fc-dia::after{content:"";position:absolute;inset:2px 3px;background:#fff;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);z-index:0}
+.fc-dia > *{position:relative;z-index:1}
+.fc-dia b{font-family:var(--serif);color:var(--acc);font-size:13px}
+.fc-dia span{font-size:12.5px}
+.fc-dia:hover::after{background:var(--panel2)}
+.fc-yes{height:0;border-top:1.5px solid var(--ink2);position:relative}
+.fc-yes::after{content:"";position:absolute;right:-1px;top:-5.5px;border:4.5px solid transparent;border-left:6px solid var(--ink2);border-right:0}
+.fc-yes span{position:absolute;left:4px;top:-17px;font-size:11.5px;font-weight:700;color:var(--ink3)}
+.fc-say{border:1.5px solid var(--ink2);border-radius:var(--r-s);padding:7px 8px;background:#fff;font-weight:600;cursor:pointer;word-break:keep-all;line-height:1.35;display:flex;gap:6px;align-items:flex-start}
+.fc-say i{color:var(--acc);margin-top:2px}
+.fc-row.fired .fc-dia::after{background:var(--acc-soft)}
+.fc-row.fired .fc-dia::before{background:var(--acc)}
+.fc-row.fired .fc-say{border-color:var(--acc)}
+.fc-row.fired .fc-say{background:var(--acc-soft);color:var(--acc-ink);box-shadow:0 0 0 3px var(--acc-soft)}
+.fc-row.fired .fc-yes,.fc-row.fired .fc-yes::after{border-top-color:var(--acc);border-left-color:var(--acc)}
+.fc-none.fired{border-color:var(--acc);background:var(--acc-soft)}
+/* 되돌이: 맨 아래에서 왼쪽 선을 타고 '봐요' 칸으로 올라간다 */
+.fc-body{position:relative}
+.fc-loop{position:absolute;left:0;top:76px;bottom:6px;width:14px;border:1.5px solid var(--ink2);border-right:0;border-radius:8px 0 0 8px}
+.fc-loop::after{content:"";position:absolute;right:-6px;top:-5.5px;border:4.5px solid transparent;border-left:6px solid var(--ink2);border-right:0}
+.fc-loop span{position:absolute;left:-2px;bottom:-20px;font-size:11.5px;font-weight:700;color:var(--ink3);white-space:nowrap}
+/* 순서도로 볼 때는 오른쪽 칸을 넓힌다 (그림이 들어가게) */
+body.flow-view #panR{width:430px}
+body.flow-view .fc-row{grid-template-columns:190px 34px 1fr}
+body.flow-view .fc-box{width:190px}
+body.flow-view .fc-down{margin-left:102px}
+body.flow-view .fc-start{margin-left:54px}

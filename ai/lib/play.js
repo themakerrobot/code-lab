@@ -562,6 +562,66 @@ function renderRules() {
     box.appendChild(el);
   });
   $('ruleAdd').disabled = rules.length >= MAX_RULES;
+  renderRuleFlow();
+}
+
+// ═══ 순서도 — 같은 규칙을 순서도로 그린다 (만들기 → 순서도 놀이) ═══
+// 시작 → 카메라로 봐요 → [만약 ①?] 예→ 말해요 / 아니오↓ [만약 ②?] … → 아무 말 안 해요 → 다시 봐요 (되돌이 화살표)
+// 위에서부터 차례로 묻고, 처음 맞는 규칙 하나만 말한다 — evalRules 와 같은 순서.
+let ruleView = 'chip';
+function setRuleView(v) {
+  ruleView = v === 'flow' ? 'flow' : 'chip';
+  document.querySelectorAll('#ruleView button').forEach(b => b.classList.toggle('on', b.dataset.v === ruleView));
+  $('ruleFlow').hidden = ruleView !== 'flow';
+  document.body.classList.toggle('flow-view', ruleView === 'flow' && mode === 'rule');
+  $('ruleList').hidden = ruleView === 'flow';
+  $('ruleHint').textContent = ruleView === 'flow'
+    ? T('위에서부터 차례로 물어봐요. 맞으면 말하고, 아니면 아래로.')
+    : T('"만약 ○○ 하면" AI가 말해요.');
+  if (ruleView === 'flow') renderRuleFlow();
+}
+
+function condText(r) {
+  if (!r.conds.length) return T('무엇을 할까요?');
+  const join = r.op === 'OR' ? T(' 또는 ') : T(' 그리고 ');
+  return r.conds.map(c => condView(c).text).join(join);
+}
+
+function renderRuleFlow() {
+  const box = $('ruleFlow');
+  if (!box || ruleView !== 'flow') return;
+  box.innerHTML = '';
+  const node = (cls, html) => { const d = document.createElement('div'); d.className = 'fc-' + cls; d.innerHTML = html; return d; };
+  const down = label => node('down', label ? '<span>' + esc(label) + '</span>' : '');
+  box.appendChild(node('start', esc(T('시작'))));
+  box.appendChild(down(''));
+  const loopTop = node('box fc-look', '<i class="fa-solid fa-eye"></i>' + esc(T('카메라 · 마이크로 봐요')));
+  box.appendChild(loopTop);
+  const body = document.createElement('div');
+  body.className = 'fc-body';
+  rules.forEach((r, ri) => {
+    body.appendChild(down(ri === 0 ? '' : T('아니오')));
+    const row = document.createElement('div');
+    row.className = 'fc-row';
+    row.dataset.ri = ri;
+    const dia = node('dia', '<b>' + (ri + 1) + '</b><span>' + esc(T('만약')) + ' ' + esc(condText(r)) + '?</span>');
+    dia.title = T('눌러서 조건을 바꿔요');
+    dia.addEventListener('click', () => openPicker(T('무엇을 하면 될까요?'), pick => { r.conds = [pick]; renderRules(); }));
+    const yes = node('yes', '<span>' + esc(T('예')) + '</span>');
+    const say = node('say', '<i class="fa-solid fa-comment"></i>' + esc(r.say ? '"' + r.say + '"' : T('말할 것을 정해요')));
+    say.title = T('눌러서 할 말을 바꿔요');
+    say.addEventListener('click', () => {
+      setRuleView('chip');
+      const inp = document.querySelectorAll('#ruleList .say')[ri];
+      if (inp) inp.focus();
+    });
+    row.append(dia, yes, say);
+    body.appendChild(row);
+  });
+  body.appendChild(down(rules.length ? T('아니오') : ''));
+  body.appendChild(node('box fc-none', esc(T('아무 말 안 해요'))));
+  box.appendChild(body);
+  box.appendChild(node('loop', '<span>' + esc(T('다시 봐요')) + '</span>'));
 }
 
 function evalRules(now) {
@@ -584,7 +644,10 @@ function evalRules(now) {
   el.textContent = text;
   el.classList.add(sure ? 'sure' : 'idk');
 
-  // 지금 맞는 것에 불을 켠다
+  // 지금 맞는 것에 불을 켠다 (순서도도 같이)
+  document.querySelectorAll('#ruleFlow .fc-row').forEach(row => row.classList.toggle('fired', Number(row.dataset.ri) === fired));
+  const none = document.querySelector('#ruleFlow .fc-none');
+  if (none) none.classList.toggle('fired', fired < 0 && rules.length > 0 && !gateMessage());
   document.querySelectorAll('#ruleList .rule').forEach(re => {
     const ri = Number(re.dataset.ri);
     re.classList.toggle('fired', ri === fired);
@@ -820,6 +883,7 @@ function setMode(next) {
   document.querySelectorAll('#modeTabs button').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
   $('ruleOut').style.display = mode === 'rule' ? '' : 'none';
   $('seqOut').style.display = mode === 'seq' ? '' : 'none';
+  document.body.classList.toggle('flow-view', ruleView === 'flow' && mode === 'rule');
   stopSpeaking();
   ruleCand = -1; ruleSpoken = -1; ruleOffAt = 0;
   seqRestart();
@@ -888,6 +952,7 @@ $('seqAdd').addEventListener('click', () => {
   openPicker(T('다음에 무엇을 할까요?'), pick => { steps.push(pick); seqRestart(); renderSteps(); });
 });
 $('seqReset').addEventListener('click', () => { seqRestart(); updateSteps(); });
+document.querySelectorAll('#ruleView button').forEach(b => b.addEventListener('click', () => setRuleView(b.dataset.v)));
 $('voiceBtn').addEventListener('click', () => {
   voiceOn = !voiceOn;
   if (!voiceOn) stopSpeaking();
@@ -907,6 +972,7 @@ const bgfx = createBgFx($('camVid'), $('bgCv'));
 async function applyPreset() {
   const q = new URLSearchParams(location.search);
   const a = q.get('a');
+  setRuleView(a === 'flow' || (!a && q.get('m') !== 'try') ? 'flow' : 'chip');
   if (q.get('m') === 'try') document.body.classList.add('try-mode');   // 체험에서는 놀이(규칙 · 순서) 칸을 접는다
   if (a === 'look') {
     for (const s of SRCS) await setUse(s, (s === 'hand' || s === 'face') ? WATCH : '');

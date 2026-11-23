@@ -66,7 +66,12 @@
       <button type="button" class="voicebtn" id="voiceBtn"></button>
 
       <div id="ruleOut">
-        <div class="hint" style="margin-top:4px">"만약 ○○ 하면" AI가 말해요.</div>
+        <div class="viewseg" id="ruleView" role="tablist">
+          <button type="button" data-v="flow"><i class="fa-solid fa-diagram-project"></i>순서도</button>
+          <button type="button" data-v="chip"><i class="fa-solid fa-list"></i>칩</button>
+        </div>
+        <div class="hint" style="margin-top:4px" id="ruleHint">"만약 ○○ 하면" AI가 말해요.</div>
+        <div id="ruleFlow" class="flowchart" hidden></div>
         <div id="ruleList"></div>
         <button class="db bigadd" id="ruleAdd"><i class="fa-solid fa-plus"></i> 규칙 만들기</button>
       </div>
