@@ -285,6 +285,12 @@ function renderWrong(wrong) {
 }
 
 // ── 들여다보기: 필터 · 특징 지도 ────────────────────────────
+// 오른쪽 패널이 길어지지 않게 필터 / 특징 지도를 단추로 바꿔 본다 (둘 다 늘 그려 둔다)
+$('lookSeg').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+  $('lookSeg').querySelectorAll('button').forEach(o => o.classList.toggle('on', o === b));
+  $('lookFilters').hidden = b.dataset.v !== 'filters';
+  $('lookMaps').hidden = b.dataset.v !== 'maps';
+}));
 function renderFilters() {
   if (!model) return;
   const W = model.p.W, F = model.F;
@@ -303,11 +309,25 @@ function renderFilters() {
     g.putImageData(im, 0, 0);
   });
   // 해석 메모는 특징 지도 밑에 둔다 — 5×5 무늬보다 "어떤 그림에서 켜지나"가 훨씬 읽기 쉽다
+  // 지도 8장을 한 줄로 — 눌러서 고른 필터의 메모를 아래 한 칸에 적는다 (오른쪽 패널이 길어지지 않게)
   $('maps').innerHTML = Array.from({ length: F }, (_, f) => `
-    <div class="fcell"><canvas width="${OUT}" height="${OUT}" data-m="${f}"></canvas>
-      <input class="inp note" data-n="${f}" maxlength="12" placeholder="${f + 1}. ${T('무엇을 찾나?')}" value="${esc(notes[f] || '')}"></div>`).join('');
-  $('maps').querySelectorAll('.note').forEach(inp => inp.addEventListener('input', () => { notes[+inp.dataset.n] = inp.value; }));
+    <div class="fcell${f === noteSel ? ' sel' : ''}" data-n="${f}"><canvas width="${OUT}" height="${OUT}" data-m="${f}"></canvas><span class="fno num">${f + 1}</span></div>`).join('');
+  $('maps').querySelectorAll('.fcell').forEach(el => el.addEventListener('click', () => pickNote(+el.dataset.n)));
+  pickNote(Math.min(noteSel, F - 1));
 }
+let noteSel = 0;
+function pickNote(f) {
+  noteSel = f;
+  $('maps').querySelectorAll('.fcell').forEach(el => el.classList.toggle('sel', +el.dataset.n === f));
+  $('noteNo').textContent = T('{n}번 필터').replace('{n}', f + 1);
+  $('noteIn').value = notes[f] || '';
+  renderNoteList();
+}
+function renderNoteList() {
+  const list = notes.map((n, i) => (n ? `${i + 1}. ${n}` : '')).filter(Boolean);
+  $('noteList').textContent = list.length ? list.join(' · ') : '';
+}
+$('noteIn').addEventListener('input', () => { notes[noteSel] = $('noteIn').value; renderNoteList(); });
 
 function drawMaps(Z) {
   const cvs = $('maps').querySelectorAll('canvas');

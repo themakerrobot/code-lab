@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="assets/fonts/pretendard.css?v=1">
 <link rel="stylesheet" href="css/all.min.css?v=1">
 <link rel="stylesheet" href="css/themaker-ui.css?v=1">
-<link rel="stylesheet" href="css/app.css?v=15">
+<link rel="stylesheet" href="css/app.css?v=17">
 </head>
 <body>
 
@@ -112,7 +112,7 @@
         <div class="lb"><span id="prgLabel">아직 안 배웠어요</span><span class="num" id="prgPct"></span></div>
         <div class="track"><div class="fill" id="prgFill"></div></div>
       </div>
-      <canvas id="chart"></canvas>
+      <canvas id="chart" style="height:80px"></canvas>
       <div class="chart-legend"><span><i class="lg-acc"></i>맞힌 비율</span><span><i class="lg-warn"></i>틀린 정도</span></div>
 
       <div class="sec2" id="examSec">
@@ -122,23 +122,33 @@
       </div>
 
       <div class="sec2" id="lookSec">
-        <div class="st">AI가 배운 필터 8개</div>
-        <div class="grid4" id="filters"></div>
-        <div class="hint">AI가 스스로 만든 5×5 무늬예요. 파란 칸은 "여기가 밝으면", 빨간 칸은 "여기가 어두우면" 반응해요.</div>
-        <div class="st" style="margin-top:12px">필터를 거친 그림 (특징 지도)</div>
-        <div class="grid4" id="maps"></div>
-        <div class="hint">진한 곳이 필터가 찾은 곳이에요. 여러 그림을 보여 주며 각 필터가 무엇을 찾는지 적어 봐요.</div>
+        <div class="st">AI가 배운 것 들여다보기</div>
+        <div class="seg wide" id="lookSeg">
+          <button type="button" data-v="filters" class="on">필터 8개</button>
+          <button type="button" data-v="maps">특징 지도 · 메모</button>
+        </div>
+        <div id="lookFilters" style="margin-top:8px">
+          <div class="grid8" id="filters"></div>
+          <div class="hint">AI가 스스로 만든 5×5 무늬예요. 파란 칸은 "여기가 밝으면", 빨간 칸은 "여기가 어두우면" 반응해요.</div>
+        </div>
+        <div id="lookMaps" style="margin-top:8px" hidden>
+          <div class="grid8" id="maps"></div>
+          <div class="noterow"><span class="num" id="noteNo">1번 필터</span>
+            <input class="inp" id="noteIn" maxlength="12" placeholder="무엇을 찾나?"></div>
+          <div class="hint" id="noteList"></div>
+          <div class="hint">진한 곳이 필터가 찾은 곳이에요. 지도를 눌러 고르고, 여러 그림을 보여 주며 무엇을 찾는지 적어 봐요.</div>
+        </div>
       </div>
 
-      <div class="sec2">
-        <div class="st">모델 주고받기</div>
+      <details class="more" id="shareMore">
+        <summary><i class="fa-solid fa-right-left"></i> 모델 주고받기</summary>
         <div class="row">
           <button class="db grow" id="saveBtn" disabled><i class="fa-solid fa-download"></i> 내보내기</button>
           <button class="db grow" id="loadBtn"><i class="fa-solid fa-upload"></i> 불러오기</button>
         </div>
         <input type="file" id="loadFile" accept=".json,application/json">
         <div class="hint">다른 모둠의 모델을 불러와 내 그림으로 시험해 봐요.</div>
-      </div>
+      </details>
     </div>
   </div>
 
@@ -147,8 +157,8 @@
 <div id="toast"></div>
 
 <script src="lib/nav.js?v=5"></script>
-<script src="lib/i18n.js?v=15"></script>
-<script src="lib/tour.js?v=7"></script>
-<script type="module" src="acts/eye/page.js?v=2"></script>
+<script src="lib/i18n.js?v=17"></script>
+<script src="lib/tour.js?v=8"></script>
+<script type="module" src="acts/eye/page.js?v=4"></script>
 </body>
 </html>
