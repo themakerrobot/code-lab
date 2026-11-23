@@ -291,7 +291,7 @@ CHANGELOG.md          버전 기록 (Release 본문)
 화면은 공용 디자인 킷 [themaker-ui](https://github.com/themakerrobot/themaker-ui) 의 "학습지" 테마를 씁니다.
 sense-lab · teach-lab 과 같은 헤더 · 버튼 · 패널 · 배지 · 토스트입니다.
 
-- `css/themaker-ui.css` 는 킷 **v1.0.0** 의 복사본입니다. 여기서 고치지 않습니다.
+- `css/themaker-ui.css` 는 킷 **v1.4.0** 의 복사본입니다. 여기서 고치지 않습니다.
   고칠 것이 있으면 themaker-ui 를 고치고 태그를 올린 뒤 다시 복사하고, CI 의 `KIT=` 번호를 바꿉니다.
 - Code Lab 에만 있는 것(도구 줄 · 편집기 · 결과 탭 · 입력 줄 · turtle)은 `css/app.css` 에 둡니다. 색은 킷 토큰만 씁니다.
 - 예외: 코드 편집기 안쪽(cobalt 어두운 테마)과 블록 색은 눈에 익은 기존 색을 유지합니다.
