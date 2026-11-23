@@ -1,0 +1,293 @@
+/* ═══════════════════════════════════════════════════════════
+   Teach Lab 전용 스타일
+   ═══════════════════════════════════════════════════════════
+   공통 규격(색·버튼·패널·표·반응형)은 css/themaker-ui.css 가 전부 담당한다.
+   이 파일은 이미지 학습툴에만 있는 것(카메라 상자·예시 썸네일·
+   AI가 보는 그림·학습 그래프·헷갈린 표)만 얹는다. 새 색은 만들지 않는다. */
+
+/* ── 왼쪽 패널: 소스 고르기 ── */
+/* 2열 그리드. 첫 칸(이미지)만 한 줄을 다 쓴다 — 기본 소스라 눈에 먼저 들어오게. */
+.srcpick{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.srcpick .db{justify-content:center;padding:9px 6px;min-width:0}
+.srcpick .db:first-child{grid-column:1 / -1}
+.srcpick .db.on{background:var(--acc-soft);border-color:var(--acc);color:var(--acc-ink)}
+
+/* 갈래 토글 (한 손/두 손 · 상반신/전신) */
+#variantRow{display:flex;align-items:center;gap:8px;margin-top:7px;flex-wrap:wrap}
+#variantRow .lb2{font-size:11px;color:var(--ink3);font-weight:700;flex-shrink:0}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:4px 11px;font-size:12px;font-weight:700;
+  color:var(--ink2);cursor:pointer;display:flex;gap:5px;align-items:center;font-family:inherit}
+.seg button+button{border-left:1.5px solid var(--line)}
+.seg button.on{background:var(--acc-soft);color:var(--acc-ink)}
+
+/* ── 가운데 패널: 카메라 · 마이크 ──
+   이미지 소스는 Teachable Machine 처럼 정사각형 미리보기를 쓴다. 화면에 보이는
+   캔버스가 곧 AI에게 넣는 그림(224×224, 웹캠은 거울)이다.
+   손·얼굴·포즈는 영상 위에 뼈대를 겹쳐 보여 준다 (좌표는 원본 프레임에서 뽑고,
+   화면만 CSS 로 뒤집는다). 소리는 소리 크기 파형을 보여 준다. */
+#panC .pb{display:flex;flex-direction:column;min-height:0}
+#camSel{max-width:340px}
+#camBox{position:relative;background:#0C1114;border-radius:10px;overflow:hidden;
+  flex:0 0 auto;aspect-ratio:1/1;height:min(38vh,340px);width:auto;max-width:100%;margin:0 auto}
+#camVid{width:100%;height:100%;object-fit:contain;display:block;transform:scaleX(-1)}
+#camCv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#ovCv{position:absolute;inset:0;width:100%;height:100%;transform:scaleX(-1);pointer-events:none}
+#micCv{position:absolute;inset:0;width:100%;height:100%}
+#camBox.m-image #camVid,#camBox.m-image #ovCv,#camBox.m-image #micCv{display:none}
+#camBox.m-landmark #camCv,#camBox.m-landmark #micCv{display:none}
+#camBox.m-sound #camVid,#camBox.m-sound #camCv,#camBox.m-sound #ovCv{display:none}
+#camOff{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;color:#56646C;font-size:12px;font-weight:600}
+.privnote{flex-shrink:0;text-align:center;font-size:11px;color:var(--ink3);margin-top:8px;
+  font-weight:600;line-height:1.6}
+
+#capBtn,.selinfo,#panC .row{flex-shrink:0}
+.selinfo{margin-top:10px;padding:8px 10px;border-radius:8px;background:var(--panel2);
+  font-size:12px;color:var(--ink2);font-weight:600;text-align:center}
+.selinfo.on{background:var(--acc-soft);color:var(--acc-ink)}
+#capBtn{width:100%;margin-top:9px;justify-content:center;padding:11px}
+#addFiles{width:100%;margin-top:6px;justify-content:center}
+
+/* ── 예시 썸네일 (종류 카드 안) ── */
+.thumbs{display:flex;flex-wrap:wrap;gap:3px;margin-top:7px;max-height:150px;overflow-y:auto;padding-right:2px}
+.thumbs img{width:32px;height:32px;object-fit:cover;border-radius:4px;display:block;cursor:pointer;
+  transition:transform .1s,outline-color .1s;outline:2px solid transparent}
+.thumbs img:hover{transform:scale(2.4);outline-color:var(--warn);position:relative;z-index:5}
+
+/* ── AI가 보는 숫자 ── */
+#seeWrap{flex-shrink:0;margin-top:11px}
+#seeHead{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;color:var(--ink2)}
+#seeHead .st-badge{font-size:10.5px;font-weight:600;color:var(--ink3)}
+#seeBox{margin-top:6px;max-height:118px;overflow-y:auto;border:1px solid var(--line-soft);
+  border-radius:8px;background:var(--panel2);padding:6px 8px}
+#seeBox table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10.5px;color:var(--ink2)}
+#seeBox th{text-align:right;font-weight:600;color:var(--ink3);padding:1px 4px;
+  position:sticky;top:-6px;background:var(--panel2)}
+#seeBox th:first-child,#seeBox td:first-child{text-align:left;color:var(--ink3)}
+#seeBox td{text-align:right;padding:1px 4px;font-variant-numeric:tabular-nums;white-space:nowrap}
+#seeFlat{font-family:var(--mono);font-size:10.5px;color:var(--ink2);line-height:1.7;
+  font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#seeEmpty{font-size:11px;color:var(--ink3);text-align:center;padding:10px 0}
+
+/* ── 오른쪽 패널: 학습 그래프 ── */
+.prg{margin-bottom:12px}
+#chartBox{margin-top:10px}
+#chart{width:100%;height:110px;display:block;border:1px solid var(--line-soft);
+  border-radius:8px;background:var(--panel2)}
+.chart-legend{display:flex;gap:12px;margin-top:4px;font-size:10.5px;color:var(--ink3);font-weight:600}
+.chart-legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.chart-legend .lg-acc{background:var(--acc)}
+.chart-legend .lg-warn{background:var(--warn)}
+
+/* ── 결과 · 헷갈린 표 ── */
+.accbig{font-size:22px;font-weight:800;color:var(--acc-ink);font-variant-numeric:tabular-nums}
+.accbig small{font-size:12px;color:var(--ink3);font-weight:600;margin-left:6px}
+#cmWrap{overflow-x:auto;margin-top:8px}
+#cmWrap table{border-collapse:collapse;font-size:10.5px;margin:0 auto}
+#cmWrap th{font-weight:600;color:var(--ink3);padding:3px 6px;max-width:64px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+#cmWrap td{border:1px solid var(--line-soft);padding:0;text-align:center;min-width:34px;height:26px;
+  font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink2)}
+#cmWrap td.diag{color:#FFFFFF}
+.cm-note{font-size:10.5px;color:var(--ink3);margin-top:6px;line-height:1.5;text-align:center}
+
+/* ── 시험실 ── */
+.thr{margin-top:13px}
+.thr .lb{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--ink2);margin-bottom:5px}
+.answer{margin-top:4px;margin-bottom:11px}
+.mradio .mt{font-size:10.5px;color:var(--ink3);flex-shrink:0}
+#exBars{margin-top:4px}
+
+/* ── 보관함 ── */
+#stTable .db{padding:4px 9px;font-size:11.5px}
+#stTable .acts{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.stnote{font-size:11px;color:var(--ink3);margin-top:12px;line-height:1.7}
+
+/* ── 반응형 (공통 규격에 없는 것만) ── */
+@media (max-width:1100px){
+  #camBox{width:100%;height:auto;max-height:none}
+  .thumbs{max-height:96px}
+}
+@media (max-width:700px){
+  #camSel{max-width:none}
+  .selinfo{font-size:14px;padding:10px}
+  #capBtn,#trainBtn{font-size:15px;padding:13px}
+  .privnote{font-size:12.5px}
+  #seeHead{font-size:13px}
+  #seeBox table,#seeFlat{font-size:12px}
+  #seeEmpty{font-size:12.5px}
+  .srcpick .db{padding:11px 4px;font-size:14px}
+  .thumbs img{width:40px;height:40px}
+  .accbig{font-size:26px}
+  #cmWrap table{font-size:12.5px}
+  #cmWrap td{min-width:40px;height:30px}
+  .cm-note{font-size:12px}
+}
+
+/* ── 상단바 공통 — teach-lab · code-lab · ml-lab 에 글자 하나 다르지 않게 둔다 (바꾸면 셋 다) ── */
+/* 상단바는 화면 맨 위에 붙이고(바깥 여백 0), 작업 화면 여백 · 패널 사이도 6px 로 줄여 작업 칸을 넓게 */
+header{margin:0;border-radius:0;padding:0 10px}
+.mk-main{padding:6px;gap:6px}
+#engine{font-size:11px;color:var(--ink3);font-weight:600;white-space:nowrap}
+@media (max-width:700px){
+  header{padding:0 8px;gap:4px}
+  header h1{font-size:15px;padding-right:6px;letter-spacing:0}
+  header h1 img{height:20px}
+  #engine{display:none}
+  #steps,.steps{padding:6px 8px;overflow:visible;justify-content:space-between}
+  .stpline{margin:0 4px;min-width:4px}
+  .mk-main{padding:6px;gap:6px}
+}
+@media (max-width:520px){
+  header h1 .brand-txt{display:none}
+  .navlink{padding:5px 8px 3px;font-size:13.5px}
+}
+@media (max-width:420px){
+  header{padding:0 6px;gap:2px}
+  header h1 img{height:18px}
+  header h1{font-size:13.5px;padding-right:3px;gap:5px}
+}
+@media (max-width:365px){
+  .navlink{padding:5px 4px 3px;font-size:13px}
+  .hbtn{width:24px;height:24px}
+  #langToggle{min-width:32px !important;padding:4px 6px !important;margin-right:0 !important}
+  header{padding:0 4px}
+  header h1{padding-right:0}
+}
+/* ── 상단바 공통 끝 ── */
+
+/* 표 안의 링크형 버튼 — .db 를 <a> 에 쓸 때 밑줄을 없앤다 */
+a.db{text-decoration:none}
+
+/* ── 튜토리얼 (파이보 말풍선 안내) ── */
+.tour{position:fixed;inset:0;z-index:300}
+.tour-spot{position:fixed;border-radius:10px;pointer-events:none;
+  border:2px solid var(--acc);
+  box-shadow:0 0 0 9999px rgba(42,38,32,.45);   /* 구멍 뚫린 어두운 막 */
+  transition:all .25s ease}
+.tour-bubble{position:fixed;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;box-shadow:0 8px 24px rgba(42,38,32,.25);padding:13px 14px 11px;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;transition:all .25s ease}
+.tour-char{width:52px;height:auto;flex-shrink:0}
+.tour-text{flex:1;min-width:0;font-size:13.5px;font-weight:600;color:var(--ink);
+  line-height:1.65;white-space:pre-line;padding-top:2px}
+.tour-foot{width:100%;display:flex;align-items:center;gap:6px;margin-top:2px}
+.tour-dots{flex:1;display:flex;gap:4px;align-items:center}
+.tour-dots .dot{width:6px;height:6px;border-radius:50%;background:var(--line-soft)}
+.tour-dots .dot.on{background:var(--acc)}
+.tour-skip{font-size:11.5px;padding:5px 9px}
+.tour-next{font-size:12.5px;padding:5px 14px}
+
+/* ═══════════════════════════════════════════════════════════
+   놀이실 — 어린 학생이 쓰는 화면
+   ═══════════════════════════════════════════════════════════
+   고르기는 큰 카드·칩, 지금 맞는 것은 초록 불(--ok). 새 색은 쓰지 않는다. */
+
+/* 왼쪽: 무엇을 볼까요 (켜고 끄는 카드) */
+.srccard{border:1.5px solid var(--line-soft);border-radius:12px;margin-bottom:8px;background:var(--panel);transition:all .12s}
+.srccard.on{border-color:var(--acc);background:var(--acc-soft)}
+.sc-top{width:100%;display:flex;align-items:center;gap:10px;border:0;background:none;padding:11px 12px;
+  cursor:pointer;font-family:inherit;color:var(--ink2);font-size:15px;font-weight:700;text-align:left}
+.sc-top i{width:22px;text-align:center;font-size:18px;color:var(--ink3)}
+.srccard.on .sc-top,.srccard.on .sc-top i{color:var(--acc-ink)}
+.sc-nm{flex:1}
+.sc-sw{width:38px;height:22px;border-radius:11px;background:var(--line-soft);position:relative;flex-shrink:0;transition:background .15s}
+.sc-sw::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 2px rgba(42,38,32,.3);transition:left .15s}
+.srccard.on .sc-sw{background:var(--acc)}
+.srccard.on .sc-sw::after{left:19px}
+.sc-chips{padding:0 10px 11px}
+.sc-note{padding:0 12px 10px 44px;font-size:11.5px;color:var(--ink3);line-height:1.5}
+
+/* 칩 (고르기 단추) */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--panel);
+  color:var(--ink2);border-radius:10px;padding:6px 11px;font-size:13px;font-weight:700;cursor:pointer;
+  font-family:inherit;transition:all .12s;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip:hover{border-color:var(--acc);color:var(--acc-ink)}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.chip.big{padding:10px 14px;font-size:14.5px;border-radius:12px}
+.chip.big i{font-size:16px}
+.chip.now{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+
+/* 가운데: AI가 지금 보는 것 */
+#bgCv{position:absolute;inset:0;width:100%;height:100%;transform:scaleX(-1);pointer-events:none}
+.nowrow{display:flex;flex-wrap:wrap;gap:8px}
+.nowchip{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line-soft);border-radius:12px;
+  padding:9px 13px;background:var(--panel2);color:var(--ink3);font-weight:800;font-size:15px;transition:all .12s;min-width:0}
+.nowchip .nc-ic{font-size:19px}
+.nowchip .nc-src{font-size:11.5px;font-weight:700;color:var(--ink3)}
+.nowchip.lit{border-color:var(--acc);background:var(--acc-soft);color:var(--acc-ink)}
+
+/* 가운데: 배경 놀이 */
+.swatches{display:flex;flex-wrap:wrap;gap:10px}
+.swatch{display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:none;cursor:pointer;font-family:inherit;padding:2px}
+.sw-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--line-soft);background:var(--panel2);color:var(--ink2);font-size:16px;transition:all .12s}
+.sw-nm{font-size:11.5px;font-weight:700;color:var(--ink3)}
+.swatch.on .sw-dot{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft)}
+.swatch.on .sw-nm{color:var(--acc-ink)}
+
+/* 오른쪽: 놀이 탭 · 큰 답 · 목소리 */
+.playtabs{display:flex;gap:6px;margin-bottom:10px}
+.playtabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;border:1.5px solid var(--line);
+  background:var(--panel);color:var(--ink2);border-radius:10px;padding:10px 8px;font-size:14px;font-weight:800;
+  cursor:pointer;font-family:inherit;transition:all .12s}
+.playtabs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.answer.playans{font-size:24px;min-height:74px;margin-bottom:8px}
+.voicebtn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--line);
+  background:var(--panel2);color:var(--ink3);border-radius:10px;padding:8px;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;margin-bottom:4px}
+.voicebtn.on{border-style:solid;border-color:var(--acc);color:var(--acc-ink);background:var(--acc-soft)}
+.voicebtn:disabled{cursor:default;opacity:.75}
+.bigadd{width:100%;justify-content:center;padding:11px;font-size:14px;margin-top:10px}
+
+/* 규칙 카드: "만약 [조건] 그리고 [조건] → AI가 할 말" */
+.rule{position:relative;border:1.5px solid var(--line);border-radius:12px;padding:10px 38px 11px 11px;
+  margin-top:9px;background:var(--panel);transition:all .15s}
+.rule.fired{border-color:var(--ok);background:var(--ok-soft)}
+.rule > .del{position:absolute;top:8px;right:8px;border:0;background:none;color:var(--ink3);cursor:pointer;padding:4px;font-size:13px}
+.rule > .del:hover{color:var(--warn)}
+.r-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.r-word{font-size:13px;font-weight:800;color:var(--ink2);display:inline-flex;align-items:center;gap:5px;flex-shrink:0}
+.r-op{border:1.5px solid var(--line);background:var(--panel2);border-radius:8px;padding:3px 9px;font-size:12px;
+  font-weight:800;color:var(--acc-ink);cursor:pointer;font-family:inherit}
+.r-then{display:flex;align-items:center;gap:8px;margin-top:9px}
+.r-then .say{font-size:15px;font-weight:700}
+
+/* 조건 칸 (규칙·순서 공용) — 지금 맞으면 초록 */
+.slot{display:inline-flex;align-items:stretch;border:1.5px solid var(--line);border-radius:10px;background:var(--panel2);
+  overflow:hidden;max-width:100%;transition:all .12s}
+.slot-main{display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:7px 10px;font-size:14px;
+  font-weight:800;color:var(--ink);cursor:pointer;font-family:inherit;min-width:0;text-align:left}
+.slot-src{font-size:11px;font-weight:700;color:var(--ink3)}
+.slot-x{border:0;border-left:1px solid var(--line-soft);background:none;color:var(--ink3);cursor:pointer;padding:0 9px;font-size:12px}
+.slot-x:hover{color:var(--warn)}
+.slot.now{border-color:var(--ok);background:var(--ok-soft)}
+.slot.now .slot-main,.slot.now .slot-src{color:var(--ok)}
+.slot.off{opacity:.45}
+button.slot.add{border-style:dashed;background:none;padding:7px 11px;font-size:13px;font-weight:700;color:var(--acc-ink);
+  cursor:pointer;font-family:inherit;gap:6px;align-items:center}
+.seq-step .top .slot{flex:1}
+.seq-step .top .del{border:0;background:none;color:var(--ink3);cursor:pointer;padding:2px 4px;font-size:12px}
+.seq-step .top .del:hover{color:var(--warn)}
+
+/* 고르기 창 */
+.picker{position:fixed;inset:0;z-index:250;background:rgba(42,38,32,.45);display:flex;align-items:center;
+  justify-content:center;padding:16px}
+.picker[hidden]{display:none}
+.pk-box{background:var(--panel);border:2px solid var(--line-d);border-radius:12px;width:min(580px,100%);
+  max-height:min(82vh,660px);overflow-y:auto;padding:14px 16px 18px;box-shadow:0 10px 30px rgba(42,38,32,.3)}
+.pk-head{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:800;color:var(--ink)}
+.pk-head span{flex:1}
+.pk-tip{font-size:12px;color:var(--ink3);margin:4px 0 4px}
+.pk-group{margin-top:13px}
+.pk-src{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:var(--ink2);margin-bottom:7px}
+
+@media (max-width:700px){
+  .sc-top{font-size:16px;padding:12px}
+  .chip{font-size:14px;padding:8px 12px}
+  .answer.playans{font-size:22px}
+  .slot-main{font-size:15px}
+}

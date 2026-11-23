@@ -1,0 +1,8 @@
+# Cloudflare Workers 정적 배포 — 자매 서비스(sense-lab)와 같은 방식
+# 배포: npx wrangler deploy
+# 워커 코드가 없으므로 요청이 워커 호출 수를 쓰지 않는다.
+name = "teach-lab"
+compatibility_date = "2026-08-01"
+
+[assets]
+directory = "."
