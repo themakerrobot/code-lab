@@ -142,3 +142,16 @@
 
 /* 상단바 · 작업 화면 여백은 ../shared/ui/lab.css 가 정한다 (세 도구 공통) */
 
+
+/* 도움말 창 (상단바 ?) */
+.cl-help{margin:auto;width:min(560px,calc(100vw - 32px));max-height:min(80vh,680px);padding:0;
+  border:1px solid var(--line-soft);border-radius:var(--r-m);background:var(--panel);color:var(--ink);
+  box-shadow:0 12px 40px rgba(0,0,0,.18);font-family:var(--sans)}
+.cl-help::backdrop{background:rgba(42,38,32,.35)}
+.cl-help[open]{display:flex;flex-direction:column}
+.cl-help > .ph{display:flex;align-items:center;gap:7px;padding:10px 13px;font-size:14px;font-weight:700;border-bottom:1px solid var(--line-soft)}
+.cl-help > .ph i{color:var(--acc)}
+.cl-help > .pb{padding:4px 16px 14px;overflow-y:auto;font-size:13.5px;line-height:1.7;color:var(--ink2)}
+.cl-help .sec2.first{border-top:0;margin-top:8px;padding-top:0}
+.cl-help .mk-table td{padding:5px 8px}
+.cl-help code{font-family:var(--mono);font-size:12.5px;background:var(--panel2);padding:0 4px;border-radius:3px}

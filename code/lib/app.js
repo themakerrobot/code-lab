@@ -782,6 +782,19 @@
   });
   window.addEventListener('resize', () => Blockly.svgResize(workspace));
 
+  // 도움말 — 상단바 ? (다른 화면의 tour.js 와 같은 자리: 전체화면 앞)
+  {
+    const helpDlg = $('#helpDlg');
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'hbtn'; btn.id = 'helpBtn'; btn.title = '도움말';
+    btn.innerHTML = '<i class="fa-solid fa-question"></i>';
+    const fs = $('#fsBtn');
+    fs ? fs.parentNode.insertBefore(btn, fs) : document.querySelector('header').appendChild(btn);
+    btn.addEventListener('click', () => helpDlg.showModal());
+    $('#helpClose').addEventListener('click', () => helpDlg.close());
+    helpDlg.addEventListener('click', (e) => { if (e.target === helpDlg) helpDlg.close(); });
+  }
+
   buildExamples();
   initResize();
   initFullscreen();
