@@ -12,7 +12,8 @@
 ## 제약
 - 정적 웹(GitHub Pages), 서버·클라우드 API 없음, 외부 CDN 없음 (전부 셀프호스팅)
 - 저사양 교실 PC 기준: WebGL/WebGPU 전제 금지. 모델은 순수 JS + Web Worker
-- 디자인은 sense-lab 과 같다. `css/themaker-ui.css` 는 themakerrobot/themaker-ui 복사본 — 직접 수정 금지
+- 디자인은 공용 킷 themakerrobot/themaker-ui (v1.4.0) 를 따른다. `css/themaker-ui.css` 는 복사본 — 직접 수정 금지
+- teach-lab · code-lab · ml-lab 은 한 서비스의 세 종류다 — 상단바는 제목 · 탭 · 버튼만 다르고 모양은 같다. `css/app.css` 의 "상단바 공통" 묶음(상단바 · 작업 화면 여백)은 세 저장소에 글자 하나 다르지 않게 둔다 (바꾸면 셋 다)
 - UI 문구 한국어 우선(해요체, 초등 눈높이), 영어는 `lib/i18n.js` 사전 (한국어 원문이 키)
 - 새 모델·역전파는 `tests/` 에 수치 미분 검사를 붙인다
 

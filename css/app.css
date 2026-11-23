@@ -7,7 +7,6 @@
    ─────────────────────────────────────────────────────────────────── */
 
 /* 헤더 아이콘 버튼 — Sense Lab 과 같은 둥근 모양 */
-.hbtn{border-radius:999px}
 
 /* ── 공통 작은 도구 ── */
 .row.wrap{flex-wrap:wrap}
@@ -34,7 +33,7 @@
 
 /* 구분 버튼 (Sense Lab 의 갈래 토글과 같은 모양) */
 .seg{display:inline-flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
-.seg button{border:0;background:transparent;padding:5px 12px;font-size:12px;font-weight:700;
+.seg button{border:0;background:transparent;padding:4px 11px;font-size:12px;font-weight:700;
   color:var(--ink2);cursor:pointer;display:flex;gap:5px;align-items:center;font-family:inherit}
 .seg button+button{border-left:1.5px solid var(--line)}
 .seg button.on{background:var(--acc-soft);color:var(--acc-ink)}
@@ -340,20 +339,10 @@ table.exam td.ok{color:var(--ok);font-weight:700}
   .home{overflow:visible}
 }
 @media (max-width:1180px){
-  #engine{display:none}
+  #engine{display:none}         /* ml-lab 만: 탭이 여덟이라 상태 글은 넓은 화면에서만 */
 }
 @media (max-width:700px){
   .navlink.m-hide{display:none}
-  header{margin:6px 6px 0;padding:0 8px;gap:4px}
-  header h1{font-size:15px;padding-right:6px;letter-spacing:0}
-  header h1 img{height:20px}
-  .navlink{padding:6px 8px 4px;font-size:13.5px}
-  #engine{display:none}
-  #langToggle{font-size:13px !important;padding:4px 8px !important;min-width:38px !important}
-  .hbtn{width:26px;height:26px;font-size:12px}
-  #steps{padding:5px 8px;overflow:visible;justify-content:space-between}
-  #steps .stpline{min-width:4px;margin:0 4px}
-  .stp{font-size:12px;gap:4px}
   .hero img{width:64px}
   .hero h2{font-size:19px}
   #actGrid{grid-template-columns:1fr}
@@ -379,14 +368,35 @@ table.exam td.ok{color:var(--ok);font-weight:700}
   .sensor{font-size:12.5px}
   #overlay{font-size:15px}
 }
-@media (max-width:420px){
-  header{margin:4px 4px 0;padding:0 6px;gap:2px}
+
+/* ── 상단바 공통 — teach-lab · code-lab · ml-lab 에 글자 하나 다르지 않게 둔다 (바꾸면 셋 다) ── */
+/* 상단바는 화면 맨 위에 붙이고(바깥 여백 0), 작업 화면 여백 · 패널 사이도 6px 로 줄여 작업 칸을 넓게 */
+header{margin:0;border-radius:0;padding:0 10px}
+.mk-main{padding:6px;gap:6px}
+#engine{font-size:11px;color:var(--ink3);font-weight:600;white-space:nowrap}
+@media (max-width:700px){
+  header{padding:0 8px;gap:4px}
+  header h1{font-size:15px;padding-right:6px;letter-spacing:0}
   header h1 img{height:20px}
+  #engine{display:none}
+  #steps,.steps{padding:6px 8px;overflow:visible;justify-content:space-between}
+  .stpline{margin:0 4px;min-width:4px}
+  .mk-main{padding:6px;gap:6px}
+}
+@media (max-width:520px){
+  header h1 .brand-txt{display:none}
+  .navlink{padding:5px 8px 3px;font-size:13.5px}
+}
+@media (max-width:420px){
+  header{padding:0 6px;gap:2px}
+  header h1 img{height:18px}
   header h1{font-size:13.5px;padding-right:3px;gap:5px}
-  .navlink{padding:6px 4px 4px;font-size:13px}
-  #langToggle{min-width:34px !important;padding:4px 6px !important}
-  .hbtn{width:24px;height:24px}
 }
 @media (max-width:365px){
-  header h1 .brand-txt{display:none}
+  .navlink{padding:5px 4px 3px;font-size:13px}
+  .hbtn{width:24px;height:24px}
+  #langToggle{min-width:32px !important;padding:4px 6px !important;margin-right:0 !important}
+  header{padding:0 4px}
+  header h1{padding-right:0}
 }
+/* ── 상단바 공통 끝 ── */
