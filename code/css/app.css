@@ -13,7 +13,11 @@
 .cl-flex{flex:1}
 
 /* 헤더 탭을 button 으로 쓴다 */
-header .navlink{font-family:inherit}
+.cl-mode{display:inline-flex;gap:0}
+.cl-mode .db{border-radius:0}
+.cl-mode .db:first-child{border-radius:var(--r-s) 0 0 var(--r-s)}
+.cl-mode .db:last-child{border-radius:0 var(--r-s) var(--r-s) 0;margin-left:-1px}
+.cl-bar .actname{margin-right:6px}
 
 /* ── 도구 줄 — 자매 서비스의 단계 표시줄만큼 얇게 (킷 v1.4.0 헤더 36px 에 맞춤) ── */
 /* 킷의 단계 표시줄(#steps)과 같은 띠: 헤더 밑에 붙는 옅은 면 + 아래 괘선 */
@@ -136,34 +140,5 @@ header .navlink{font-family:inherit}
   #inField{font-size:16px}
 }
 
-/* ── 상단바 공통 — teach-lab · code-lab · ml-lab 에 글자 하나 다르지 않게 둔다 (바꾸면 셋 다) ── */
-/* 상단바는 화면 맨 위에 붙이고(바깥 여백 0), 작업 화면 여백 · 패널 사이도 6px 로 줄여 작업 칸을 넓게 */
-header{margin:0;border-radius:0;padding:0 10px}
-.mk-main{padding:6px;gap:6px}
-#engine{font-size:11px;color:var(--ink3);font-weight:600;white-space:nowrap}
-@media (max-width:700px){
-  header{padding:0 8px;gap:4px}
-  header h1{font-size:15px;padding-right:6px;letter-spacing:0}
-  header h1 img{height:20px}
-  #engine{display:none}
-  #steps,.steps{padding:6px 8px;overflow:visible;justify-content:space-between}
-  .stpline{margin:0 4px;min-width:4px}
-  .mk-main{padding:6px;gap:6px}
-}
-@media (max-width:520px){
-  header h1 .brand-txt{display:none}
-  .navlink{padding:5px 8px 3px;font-size:13.5px}
-}
-@media (max-width:420px){
-  header{padding:0 6px;gap:2px}
-  header h1 img{height:18px}
-  header h1{font-size:13.5px;padding-right:3px;gap:5px}
-}
-@media (max-width:365px){
-  .navlink{padding:5px 4px 3px;font-size:13px}
-  .hbtn{width:24px;height:24px}
-  #langToggle{min-width:32px !important;padding:4px 6px !important;margin-right:0 !important}
-  header{padding:0 4px}
-  header h1{padding-right:0}
-}
-/* ── 상단바 공통 끝 ── */
+/* 상단바 · 작업 화면 여백은 ../shared/ui/lab.css 가 정한다 (세 도구 공통) */
+

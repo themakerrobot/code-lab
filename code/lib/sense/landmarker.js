@@ -11,19 +11,19 @@
 import {
   FilesetResolver, HandLandmarker, FaceLandmarker, PoseLandmarker,
   ImageSegmenter, DrawingUtils,
-} from '../../vendor/tasks-vision/vision_bundle.mjs';
+} from '../../../shared/vendor/tasks-vision/vision_bundle.mjs';
 
-const WASM_DIR = './vendor/tasks-vision';
+const WASM_DIR = '../shared/vendor/tasks-vision';
 
 const SOURCES = {
   hand: {
-    model: './models/hand_landmarker.task',
+    model: '../shared/models/hand_landmarker.task',
     make: (vision, base) => HandLandmarker.createFromOptions(vision, {
       baseOptions: base, runningMode: 'VIDEO', numHands: 2,
     }),
   },
   face: {
-    model: './models/face_landmarker.task',
+    model: '../shared/models/face_landmarker.task',
     make: (vision, base) => FaceLandmarker.createFromOptions(vision, {
       baseOptions: base, runningMode: 'VIDEO', numFaces: 1,
       outputFaceBlendshapes: true,
@@ -31,7 +31,7 @@ const SOURCES = {
   },
   pose: {
     // lite 고정 — full/heavy 는 쓰지 않는다 (저사양 노트북 기준)
-    model: './models/pose_landmarker_lite.task',
+    model: '../shared/models/pose_landmarker_lite.task',
     make: (vision, base) => PoseLandmarker.createFromOptions(vision, {
       baseOptions: base, runningMode: 'VIDEO', numPoses: 1,
     }),
@@ -128,11 +128,11 @@ let segPromise = null;
 export function loadSegmenter() {
   if (!segPromise) {
     segPromise = fileset().then(vision => ImageSegmenter.createFromOptions(vision, {
-      baseOptions: { modelAssetPath: './models/selfie_segmenter.tflite', delegate: 'GPU' },
+      baseOptions: { modelAssetPath: '../shared/models/selfie_segmenter.tflite', delegate: 'GPU' },
       runningMode: 'VIDEO',
       outputConfidenceMasks: true,
     }).catch(() => ImageSegmenter.createFromOptions(vision, {
-      baseOptions: { modelAssetPath: './models/selfie_segmenter.tflite', delegate: 'CPU' },
+      baseOptions: { modelAssetPath: '../shared/models/selfie_segmenter.tflite', delegate: 'CPU' },
       runningMode: 'VIDEO',
       outputConfidenceMasks: true,
     })));

@@ -25,7 +25,7 @@ import { loadPyodide } from '../vendor/pyodide/pyodide.mjs';
 
 const CDN = 'https://cdn.jsdelivr.net/pyodide/v314.0.8/full/';   // numpy 같은 추가 패키지
 const FLUSH_MS = 40;
-const FONT_URL = new URL('../assets/fonts/Pretendard-Regular.otf', import.meta.url);
+const FONT_URL = new URL('../../shared/assets/fonts/Pretendard-Regular.otf', import.meta.url);
 const FONT_PATH = '/home/pyodide/Pretendard-Regular.otf';
 
 let py = null;

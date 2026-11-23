@@ -1,8 +1,9 @@
 name: CI
 
-# 손으로 맞춰야 하는 것이 어긋났는지 본다.
-#   · 브라우저 JS · 파이썬 문법, 서비스 워커 캐시 목록
-#   · css/themaker-ui.css 가 공용 디자인 킷(themakerrobot/themaker-ui) 복사본과 같은지
+# 손으로 맞춰야 하는 것이 어긋났는지 본다. 결과만 알려 주고 배포는 하지 않는다 (배포는 Pages 가 따로).
+#   · 브라우저 JS · 파이썬 문법, 화면이 부르는 파일이 다 있는지, 코딩 화면 서비스 워커 캐시 목록
+#   · 활동 모델 시험 (운전 · AI 눈 · 색 로봇 · 글 · 청소 · 공정 · 진화)
+#   · shared/css/themaker-ui.css 가 공용 디자인 킷(themakerrobot/themaker-ui) 복사본과 같은지
 
 on:
   push:
@@ -12,7 +13,7 @@ on:
 jobs:
 
   syntax:
-    name: 문법
+    name: 문법 · 링크
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,11 +21,19 @@ jobs:
         with:
           node-version: '22'
       - name: 브라우저 JS
-        run: for f in lib/*.js lib/sense/*.js blocks/*.js sw.js; do node --check "$f"; done
-      - name: 파이썬 (turtle · sensor 모듈)
-        run: python3 -m py_compile lib/turtle.py lib/sensor.py
-      - name: 서비스 워커 캐시 목록의 파일이 다 있는가
+        run: |
+          for f in shared/ui/*.js ai/lib/*.js act/lib/*.js act/acts/*/*.js \
+                   code/lib/*.js code/lib/sense/*.js code/blocks/*.js code/sw.js; do
+            case "$f" in *.min.js) continue;; esac
+            node --check "$f"
+          done
+      - name: 파이썬 (코딩 화면의 turtle · sensor 모듈)
+        run: python3 -m py_compile code/lib/turtle.py code/lib/sensor.py
+      - name: 화면이 부르는 파일이 다 있는가
+        run: node tools/check-links.mjs
+      - name: 코딩 화면 서비스 워커 캐시 목록의 파일이 다 있는가
         # 하나라도 없으면 서비스 워커 설치가 실패해 input() 과 오프라인이 같이 안 된다
+        working-directory: code
         run: |
           node -e '
             const fs = require("fs");
@@ -35,20 +44,30 @@ jobs:
             console.log(list.length + "개 모두 있어요");
           '
 
+  models:
+    name: 활동 모델 시험
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/*.test.mjs
+
   design-kit:
     name: 디자인 킷 복사본이 원본과 같은가
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: css/themaker-ui.css
+      - name: shared/css/themaker-ui.css
         run: |
           # 태그로 고정한다 — 킷이 바뀌어도 이쪽 CI 가 갑자기 깨지지 않는다.
           KIT=v1.4.0
           curl -sSfL -o /tmp/kit.css \
             "https://raw.githubusercontent.com/themakerrobot/themaker-ui/$KIT/themaker-ui.css"
-          if ! diff -u /tmp/kit.css css/themaker-ui.css; then
-            echo "::error::css/themaker-ui.css 가 디자인 킷 $KIT 과 다릅니다."
-            echo "고칠 것이 있으면 themakerrobot/themaker-ui 를 고치고 여기로 다시 복사하세요."
+          if ! diff -u /tmp/kit.css shared/css/themaker-ui.css; then
+            echo "::error::shared/css/themaker-ui.css 가 디자인 킷 $KIT 과 다릅니다."
+            echo "고칠 것이 있으면 themakerrobot/themaker-ui 를 고치고 여기로 다시 복사하세요. 덮어쓰기는 shared/ui/lab.css 에."
             exit 1
           fi
           echo "디자인 킷 $KIT 과 같습니다"

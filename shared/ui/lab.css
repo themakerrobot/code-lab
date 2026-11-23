@@ -1,0 +1,173 @@
+/* ═══════════════════════════════════════════════════════════
+   AI Lab 공통 층 — 디자인 킷(themaker-ui.css) 위에 얹는다
+   ═══════════════════════════════════════════════════════════
+   불러오는 차례: 킷 → 화면 전용 app.css → 이 파일 (마지막이라 이 파일이 이긴다)
+   지키는 것: 킷 토큰만 쓴다(새 색 없음) · 그라디언트 · 이모지 장식 없음 · 글꼴은 Pretendard + Gowun Batang
+   ─────────────────────────────────────────────────────────── */
+@import url(../assets/fonts/gowun/gowun.css);
+
+/* ── 1. 메뉴 색 — 지금 어느 메뉴인지 색으로. 킷 컴포넌트가 전부 --acc 를 따르므로 이것만 바꾼다 ── */
+:root{ --m:var(--pen-blue); --m-ink:var(--pen-blue-d); --m-soft:#E6EEF6 }   /* #E6EEF6 = 킷 --acc-soft 값 (순환 참조를 피하려고 값으로) */
+body[data-menu="try"]  { --m:var(--pen-red); --m-ink:var(--pen-red); --m-soft:color-mix(in srgb,var(--pen-red) 10%,#fff) }
+body[data-menu="teach"]{ --m:var(--ok);      --m-ink:var(--ok);      --m-soft:var(--ok-soft) }
+body[data-menu="self"] { --m:var(--line-d);  --m-ink:var(--line-d);  --m-soft:color-mix(in srgb,var(--line-d) 9%,#fff) }
+body[data-menu="make"] { --m:var(--pen-blue);--m-ink:var(--pen-blue-d);--m-soft:#E6EEF6 }
+body[data-menu="box"]  { --m:var(--ink2);    --m-ink:var(--ink);     --m-soft:var(--panel2) }
+body[data-menu]{ --acc:var(--m); --acc-ink:var(--m-ink); --acc-soft:var(--m-soft) }
+.c-red{--c:var(--pen-red)} .c-green{--c:var(--ok)} .c-brown{--c:var(--line-d)} .c-blue{--c:var(--pen-blue)}
+
+/* ── 2. 상단바 — 맨 위에 붙이고 바깥 여백 0. 서비스명은 명조 ── */
+header{margin:0;border-radius:0;padding:0 10px;height:40px;gap:2px;box-shadow:0 1px 0 var(--line-soft)}
+header h1{padding-right:14px}
+header h1 .brand{display:flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;font-family:var(--serif);font-size:17px}
+header h1 img{height:24px}
+.navlink{height:40px;padding:3px 13px 0;font-size:14.5px;font-weight:700;color:var(--ink3);border-bottom-width:3px}
+.navlink:hover{color:var(--ink);border-bottom-color:var(--line-soft)}
+.navlink.on{color:var(--c);border-bottom-color:var(--c)}
+.hsp{flex:1}
+#engine{font-size:12px;color:var(--ink3);font-weight:600;white-space:nowrap;margin-right:6px}
+.hbtn{width:30px;height:30px;margin-left:4px;border-color:var(--line-soft);font-weight:700}
+.hbtn.hbox{width:auto;padding:0 10px;gap:6px;font-size:13px;text-decoration:none}
+.hbtn.hbox.on{border-color:var(--ink2);color:var(--ink)}
+#langToggle{height:30px;margin-left:4px;border:1px solid var(--line-soft);font-weight:700;border-radius:var(--r-s)}
+.mk-main{padding:8px;gap:8px}
+
+/* ── 3. 단계 표시줄 — 맨 앞에 활동 이름 (명조, 메뉴 색) ── */
+#steps,.steps{border-bottom-color:var(--line-soft);padding:5px 12px;min-height:38px}
+.actname{display:inline-flex;align-items:center;gap:10px;margin-right:14px;flex-shrink:0}
+.actname > a{font-family:var(--serif);font-weight:700;font-size:16px;color:var(--m);text-decoration:none;white-space:nowrap}
+.actname > a:hover{text-decoration:underline;text-underline-offset:3px}
+.actpages{display:inline-flex;border:1px solid var(--line-soft);border-radius:var(--r-s);overflow:hidden;background:#fff}
+.actpages > *{padding:4px 11px;font-size:13px;font-weight:700;color:var(--ink3);text-decoration:none;white-space:nowrap}
+.actpages > * + *{border-left:1px solid var(--line-soft)}
+.actpages .on{background:var(--m-soft);color:var(--m-ink)}
+.stp{font-size:13px}
+.stp .cir{width:21px;height:21px;font-size:11px}
+.stp.on .cir{box-shadow:0 0 0 3px var(--m-soft)}
+.stpline{background:var(--line-soft)}
+
+/* ── 4. 위계 — 테두리는 옅게, 진한 선은 지금 누를 것에만 ── */
+.pan{border-color:var(--line-soft);border-radius:var(--r-m);box-shadow:var(--shadow)}
+.pan > .ph{font-size:14px;border-bottom:0;padding:11px 14px 4px}
+.pan > .ph > i:first-child{color:var(--m)}
+.db{border-color:var(--line-soft)}
+/* 아직 못 누르는 주 버튼: 흐린 색 덩어리 대신 점선 — "곧 켜질 단추" 로 보이게 */
+.db.go:disabled{opacity:1;background:#fff;color:var(--ink3);border:1.5px dashed var(--line)}
+
+/* 빨간 펜 메모 — 선생님이 활동지에 적어 준 것처럼 */
+.redpen{font-family:var(--serif);font-weight:700;color:var(--pen-red);font-size:15px;line-height:1.3;transform:rotate(-3deg)}
+
+/* ── 5. 학습지 (첫 화면 · 메뉴 화면) ── */
+body.sheet-page{overflow:auto;height:auto;min-height:100vh;padding-bottom:0}
+.sheet-wrap{flex:1 0 auto;padding:12px 18px 14px;display:flex}
+.sheet{flex:1;background:#fff;border:1px solid var(--line-soft);border-radius:var(--r-m);box-shadow:var(--shadow);
+  display:flex;flex-direction:column;padding:16px 22px 14px;min-height:0}
+.sheet-top{display:flex;align-items:flex-end;gap:14px;padding-bottom:10px;border-bottom:2px solid var(--line-d);flex-wrap:wrap}
+.sheet-top h2{font-family:var(--serif);font-size:26px;font-weight:700}
+.sheet-top p{font-size:14px;color:var(--ink2);padding-bottom:4px}
+.sheet-top .nm{margin-left:auto;display:flex;gap:18px;font-size:13.5px;color:var(--ink3);padding-bottom:4px}
+.sheet-top .nm span{display:inline-block;width:110px;border-bottom:1px solid var(--line);margin-left:6px;transform:translateY(-3px)}
+.rows{flex:1 0 auto;display:flex;flex-direction:column}
+.srow{flex:1 0 auto;display:grid;grid-template-columns:186px 1fr;border-bottom:1px solid var(--line);min-height:150px}
+.srow:last-child{border-bottom:2px solid var(--line-d)}
+.slab{padding:12px 14px 10px 4px;border-right:1px solid var(--line);display:flex;gap:10px;color:inherit;text-decoration:none}
+.slab .no{font-family:var(--serif);font-size:38px;line-height:.9;font-weight:700;color:var(--c)}
+.slab b{font-family:var(--serif);font-size:19px;display:block;margin-top:2px}
+.slab small{display:block;font-size:13px;color:var(--ink2);margin-top:5px;line-height:1.45}
+.slab em{display:inline-block;font-style:normal;font-size:12px;font-weight:700;color:var(--c);margin-top:7px;border-bottom:1.5px solid var(--c)}
+.cells{display:flex;min-width:0}
+.cell{flex:1;min-width:0;padding:12px 6px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  position:relative;color:var(--ink);text-decoration:none;border-radius:var(--r-s)}
+.cell + .cell{border-left:1px dashed var(--line-soft)}
+.cell:hover{background:var(--panel2)}
+.cell:hover .ill{transform:translateY(-2px)}
+.cell b{font-size:14.5px;font-weight:700;text-align:center}
+.cell small{font-size:12px;color:var(--ink3);margin-top:-3px;text-align:center}
+.cell .ring{position:absolute;left:8%;top:5%;width:84%;height:90%;pointer-events:none;overflow:visible}
+.cell .ring path{fill:none;stroke:var(--pen-red);stroke-width:1.6;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.cell .first-note{position:absolute;right:-30px;top:6px;z-index:1;text-align:left}
+.wide .cell{flex:none;width:250px}
+.aside{flex:1;display:flex;align-items:center;padding:0 22px;color:var(--ink3);font-size:13px;line-height:1.6;border-left:1px dashed var(--line-soft)}
+.aside b{color:var(--ink2)}
+.arrow{flex:none;width:34px;display:flex;align-items:center;justify-content:center;color:var(--line)}
+
+/* 그림 (icons.js) */
+.ill{width:76px;height:54px;overflow:visible;transition:transform .15s}
+.ill .ln{fill:none;stroke:var(--ink2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ill .ac{fill:none;stroke:var(--c);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ill .thin{stroke-width:1.5}
+.ill .dash{stroke-dasharray:4 4}
+.ill .dot-line{stroke-dasharray:2 4;stroke-width:1.4}
+.ill .dot{fill:var(--c)}
+.ill .dot.soft{opacity:.35}
+.ill .dot.soft2{opacity:.75}
+.ill .fl{fill:var(--c);opacity:.14}
+.ill .paper{fill:#fff}
+.ill .soft-fill{fill:color-mix(in srgb,var(--c) 12%,#fff)}
+.ill .pen-blue{fill:var(--pen-blue)} .ill .pen-red{fill:var(--pen-red)}
+.ill .ok-line{fill:none;stroke:var(--ok);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ill text{font-family:var(--serif);font-weight:700;font-size:22px}
+.ill .t-ink{fill:var(--ink2)} .ill .t-acc{fill:var(--c)}
+.ill .t-code{font-family:var(--mono);font-size:10px}
+.ill .t-code.small{font-size:8.3px;font-weight:400}
+
+/* 메뉴 화면: 한 줄을 크게 */
+.menu-sheet .srow{min-height:0}
+.menu-sheet .cells{flex-wrap:wrap;align-content:center}
+.menu-sheet .cell{flex:0 0 calc(33.33% - 1px);min-height:170px}
+.menu-sheet .cell .ill{width:110px;height:78px}
+.menu-sheet .cell b{font-size:17px}
+.menu-sheet .cell small{font-size:13px}
+
+@media (max-width:1100px){
+  .srow{grid-template-columns:140px 1fr}
+  .slab .no{font-size:30px}
+  .cells{flex-wrap:wrap}
+  .cell{flex:0 0 33.33%;min-height:120px}
+  .cell + .cell{border-left:0}
+  .wide .cell{width:auto;flex:0 0 50%}
+  .aside{flex:0 0 100%;padding:10px 12px;border-left:0}
+  .arrow{display:none}
+}
+
+/* ── 6. 좁은 화면 상단바 ── */
+@media (max-width:900px){ #engine{display:none} .hbtn.hbox span{display:none} .navlink{padding:3px 9px 0;font-size:13.5px} }
+@media (max-width:700px){
+  header{padding:0 6px;gap:0;overflow-x:auto}
+  header h1{padding-right:6px}
+  header h1 .brand-txt{display:none}
+  .navlink{padding:3px 7px 0;font-size:13px}
+  #steps,.steps{padding:6px 8px;overflow-x:auto}
+  .actname > a{font-size:14.5px}
+  .stpline{margin:0 4px;min-width:4px}
+  .sheet-wrap{padding:8px}
+  .sheet{padding:12px}
+  .srow{grid-template-columns:1fr}
+  .slab{border-right:0;border-bottom:1px dashed var(--line-soft)}
+  .cell{flex:0 0 50%}
+  .menu-sheet .cell{flex:0 0 50%}
+  .sheet-top .nm{display:none}
+}
+
+/* 한국어 줄바꿈은 낱말 단위로 */
+.slab small,.cell b,.cell small,.aside,.sheet-top p,.hint,.how{word-break:keep-all}
+
+/* 메뉴 화면: 위 제목이 이름이니 왼쪽 칸은 빼고, 카드 셋씩 크게 */
+.menu-sheet{align-self:flex-start}
+.menu-sheet .rows{flex:none;border-bottom:2px solid var(--line-d);margin-bottom:4px}
+.menu-sheet .srow{grid-template-columns:1fr;min-height:0;border-bottom:0}
+.menu-sheet .slab{display:none}
+.menu-sheet .cells{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.menu-sheet.ladder .cells{grid-template-columns:1fr 34px 1fr 34px 1fr}
+.menu-sheet .cell{min-height:236px;padding:22px 18px 18px;gap:6px;border-left:0;border-bottom:1px dashed var(--line-soft);justify-content:flex-start}
+.menu-sheet .cell + .cell{border-left:0}
+.menu-sheet .cells > :not(:nth-child(3n+1)){border-left:1px dashed var(--line-soft)}
+.menu-sheet.ladder .cells > *{border-left:0 !important}
+.menu-sheet .cell .ill{width:132px;height:94px;margin-bottom:8px}
+.menu-sheet .cell b{font-size:18px}
+.menu-sheet .cell .desc{font-size:14.5px;color:var(--ink2);text-align:center;line-height:1.5;word-break:keep-all;max-width:260px}
+.menu-sheet .cell small{margin-top:auto;padding-top:6px;font-size:12.5px}
+.menu-sheet .aside{border-left:1px dashed var(--line-soft);border-bottom:1px dashed var(--line-soft);font-size:14.5px;padding:22px}
+.menu-sheet .wide .cell{width:auto}
+.sheet-wrap:has(.menu-sheet){align-items:flex-start}
+@media (max-width:900px){ .menu-sheet .cells,.menu-sheet.ladder .cells{grid-template-columns:1fr 1fr} .menu-sheet .arrow{display:none} }

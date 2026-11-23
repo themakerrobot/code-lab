@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 목소리 — AI Lab</title>
+<meta name="description" content="쓴 글을 AI가 소리 내어 읽어요. 이 기기 안의 목소리만 써요.">
+<link rel="icon" type="image/png" href="../shared/assets/img/favicon.png">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#FBF7EF">
+<link rel="stylesheet" href="../shared/assets/fonts/pretendard.css">
+<link rel="stylesheet" href="../shared/css/all.min.css">
+<link rel="stylesheet" href="../shared/css/themaker-ui.css">
+<link rel="stylesheet" href="../shared/ui/lab.css">
+<style>
+  .vlist{display:flex;flex-direction:column;gap:6px}
+  .vlist .db{justify-content:flex-start;height:42px;font-size:14px;width:100%}
+  .vlist .db small{margin-left:auto;color:var(--ink3);font-weight:500;font-size:12px}
+  .knob{margin-top:16px}
+  .knob .lb{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:6px}
+  .knob .ends{display:flex;justify-content:space-between;font-size:12px;color:var(--ink3);margin-top:2px}
+  .knob input{width:100%;accent-color:var(--m)}
+  #say{width:100%;min-height:120px;resize:vertical;font:inherit;font-size:20px;line-height:1.6;padding:14px 16px;
+    border:1px solid var(--line-soft);border-radius:var(--r-m);background:var(--panel2);color:var(--ink)}
+  #say:focus{outline:none;border-color:var(--m)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .chips .db{font-size:13.5px}
+  .go-row{display:flex;gap:8px;margin-top:14px}
+  .go-row .db{height:50px;font-size:17px;padding:0 22px}
+  .go-row .db.go{flex:1}
+  .stage{margin-top:18px;display:flex;gap:16px;align-items:flex-start}
+  .stage img{width:86px;flex:none}
+  .bubble{flex:1;min-height:92px;background:#fff;border:1.5px solid var(--line-soft);border-radius:var(--r-m);padding:14px 16px;
+    font-size:22px;line-height:1.6;position:relative;word-break:keep-all}
+  .bubble::before{content:"";position:absolute;left:-9px;top:26px;width:14px;height:14px;background:#fff;
+    border-left:1.5px solid var(--line-soft);border-bottom:1.5px solid var(--line-soft);transform:rotate(45deg)}
+  .bubble .w{background:var(--m-soft);color:var(--m-ink);border-radius:3px;box-shadow:0 2px 0 var(--m)}
+  .bubble .muted{color:var(--ink3);font-size:15px}
+  .none{margin-top:6px;font-size:13.5px;color:var(--ink2);line-height:1.6}
+  .how{font-size:14px;line-height:1.7;color:var(--ink2)}
+  .how ol{padding-left:20px;margin-top:6px}
+  .how b{color:var(--ink)}
+  .tag-local{display:inline-flex;gap:6px;align-items:center;font-size:12.5px;color:var(--ink3);margin-top:14px}
+  @media (max-width:1000px){ .mk-main{flex-direction:column;overflow:auto} .pan-side,.pan-out{width:auto} }
+</style>
+</head>
+<body>
+
+<header data-tab="voice" data-menu="try" data-act="voice"></header>
+
+<div class="mk-main">
+  <section class="pan pan-side">
+    <div class="ph"><i class="fa-solid fa-user-astronaut"></i><span data-t="voices">누구 목소리로?</span></div>
+    <div class="pb">
+      <div class="vlist" id="vlist"></div>
+      <div class="none" id="noVoice" hidden></div>
+      <div class="knob">
+        <div class="lb"><span data-t="rate">빠르기</span><span class="num" id="rateV">1.0</span></div>
+        <input type="range" id="rate" min="0.5" max="1.8" step="0.1" value="1">
+        <div class="ends"><span data-t="slow">느릿느릿</span><span data-t="fast">빨리빨리</span></div>
+      </div>
+      <div class="knob">
+        <div class="lb"><span data-t="pitch">높낮이</span><span class="num" id="pitchV">1.1</span></div>
+        <input type="range" id="pitch" min="0.3" max="2" step="0.1" value="1.1">
+        <div class="ends"><span data-t="low">낮게</span><span data-t="high">높게</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pan pan-wide">
+    <div class="ph"><i class="fa-solid fa-pen"></i><span data-t="write">하고 싶은 말을 써요</span></div>
+    <div class="pb">
+      <textarea id="say" maxlength="200" spellcheck="false">안녕하세요! 나는 파이보예요. 오늘 같이 AI 공부해요.</textarea>
+      <div class="chips" id="chips"></div>
+      <div class="go-row">
+        <button type="button" class="db go" id="goBtn"><i class="fa-solid fa-volume-high"></i> <span data-t="go">읽어 줘요</span></button>
+        <button type="button" class="db" id="stopBtn"><i class="fa-solid fa-stop"></i> <span data-t="stop">멈춰</span></button>
+      </div>
+      <div class="stage">
+        <img src="../shared/assets/img/pibo-hello.png" alt="">
+        <div class="bubble" id="bubble"><span class="muted" data-t="wait">읽어 줘요를 누르면 여기서 말해요</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pan pan-out">
+    <div class="ph"><i class="fa-solid fa-lightbulb"></i><span data-t="howT">AI는 어떻게 말할까?</span></div>
+    <div class="pb how" id="how"></div>
+  </section>
+</div>
+
+<script src="../shared/ui/menu.js"></script>
+<script src="../shared/ui/nav.js"></script>
+<script type="module">
+import { localVoices, onVoicesChanged, speak, stopSpeaking } from '../ai/lib/speak.js';
+
+const L = (window.AILAB && window.AILAB.lang) || 'ko';
+const TXT = {
+  ko: { voices: '누구 목소리로?', rate: '빠르기', slow: '느릿느릿', fast: '빨리빨리', pitch: '높낮이', low: '낮게', high: '높게',
+        write: '하고 싶은 말을 써요', go: '읽어 줘요', stop: '멈춰', wait: '읽어 줘요를 누르면 여기서 말해요', howT: 'AI는 어떻게 말할까?',
+        empty: '먼저 말을 써 주세요',
+        none: '이 기기에는 한국어 목소리가 없어요.<br>Windows 는 설정 → 시간 및 언어 → 음성에서 한국어 음성을 더하면 돼요.',
+        local: '이 기기 안의 목소리만 써요. 쓴 글은 밖으로 나가지 않아요.',
+        chips: ['안녕하세요! 나는 파이보예요.', '가위바위보!', '오늘 급식 메뉴는 무엇일까요?', '천천히 또박또박 말해 볼게요.', '하나, 둘, 셋, 넷, 다섯!'],
+        how: '<b>글자를 소리로 바꾸는 AI</b> 예요. TTS 라고도 불러요.<ol><li>글을 낱말로 나눠요.</li><li>낱말마다 어떻게 읽는지 정해요.</li><li>목소리를 만들어 들려줘요.</li></ol><p style="margin-top:10px">빠르기와 높낮이를 바꿔 보세요. 같은 글도 느낌이 달라져요.</p><p style="margin-top:10px">"1학년" · "3:30" 처럼 숫자가 섞이면 어떻게 읽을까요?</p>' },
+  en: { voices: 'Whose voice?', rate: 'Speed', slow: 'Slow', fast: 'Fast', pitch: 'Pitch', low: 'Low', high: 'High',
+        write: 'Write something', go: 'Read it', stop: 'Stop', wait: 'Press Read it and I will talk here', howT: 'How does AI talk?',
+        empty: 'Write something first',
+        none: 'This device has no English voice.<br>On Windows: Settings → Time & language → Speech.',
+        local: 'Only voices inside this device. Your text stays here.',
+        chips: ['Hello! I am Pibo.', 'Rock, paper, scissors!', 'What is for lunch today?', 'I will talk slowly.', 'One, two, three, four, five!'],
+        how: '<b>An AI that turns text into sound</b> (TTS).<ol><li>It splits text into words.</li><li>It decides how each word sounds.</li><li>It makes a voice and plays it.</li></ol><p style="margin-top:10px">Change speed and pitch. Same words, different feeling.</p>' },
+}[L];
+document.querySelectorAll('[data-t]').forEach(e => { if (TXT[e.dataset.t]) e.textContent = TXT[e.dataset.t]; });
+document.getElementById('how').innerHTML = TXT.how + '<div class="tag-local"><i class="fa-solid fa-lock"></i>' + TXT.local + '</div>';
+if (L === 'en') document.getElementById('say').value = 'Hello! I am Pibo. Let us learn about AI today.';
+
+const $ = id => document.getElementById(id);
+let chosen = null;
+
+function drawVoices() {
+  const vs = localVoices(L);
+  const box = $('vlist');
+  box.textContent = '';
+  $('noVoice').hidden = vs.length > 0;
+  $('noVoice').innerHTML = vs.length ? '' : '<span class="redpen" style="display:inline-block;font-size:15px">' + TXT.none.split('<br>')[0] + '</span><br>' + (TXT.none.split('<br>')[1] || '');
+  $('goBtn').disabled = !vs.length;
+  if (!vs.length) return;
+  if (!chosen || !vs.includes(chosen)) chosen = vs.find(v => v.default) || vs[0];
+  vs.forEach(v => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'db' + (v === chosen ? ' on' : '');
+    b.innerHTML = '<i class="fa-solid fa-user"></i> ' + v.name.replace(/^Microsoft |Online.*$| - .*$/g, '').slice(0, 22) + '<small>' + v.lang + '</small>';
+    b.addEventListener('click', () => { chosen = v; drawVoices(); say(); });
+    box.appendChild(b);
+  });
+}
+onVoicesChanged(drawVoices);
+drawVoices();
+
+TXT.chips.forEach(t => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'db'; b.textContent = t;
+  b.addEventListener('click', () => { $('say').value = t; say(); });
+  $('chips').appendChild(b);
+});
+
+['rate', 'pitch'].forEach(k => $(k).addEventListener('input', () => { $(k + 'V').textContent = (+$(k).value).toFixed(1); }));
+
+function esc(s) { return s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
+function say() {
+  const text = $('say').value.trim();
+  const bub = $('bubble');
+  if (!text) { bub.innerHTML = '<span class="muted">' + TXT.empty + '</span>'; return; }
+  bub.textContent = text;
+  speak(text, L, {
+    voice: chosen, rate: +$('rate').value, pitch: +$('pitch').value, max: 200,
+    // 지금 읽는 낱말에 밑줄 — 브라우저가 낱말 위치를 알려 줄 때만 (안 알려 주는 목소리도 있다)
+    onWord: (i, n) => {
+      if (!n) { const m = text.slice(i).match(/^\S+/); n = m ? m[0].length : 0; }
+      bub.innerHTML = esc(text.slice(0, i)) + '<span class="w">' + esc(text.slice(i, i + n)) + '</span>' + esc(text.slice(i + n));
+    },
+    onEnd: () => { bub.textContent = text; },
+  });
+}
+$('goBtn').addEventListener('click', say);
+$('stopBtn').addEventListener('click', () => { stopSpeaking(); });
+$('say').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) say(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "AI Lab — 인공지능 학습지",
+  "short_name": "AI Lab",
+  "description": "보고, 가르치고, 만들어 보는 인공지능 학습 도구. 사진과 소리는 기기 밖으로 나가지 않아요.",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FBF7EF",
+  "theme_color": "#FBF7EF",
+  "icons": [
+    { "src": "shared/assets/img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "shared/assets/img/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

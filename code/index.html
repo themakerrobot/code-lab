@@ -3,30 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Code Lab — 블록 · 파이썬</title>
+<title>블록 코딩 — AI Lab</title>
 <meta name="description" content="블록과 파이썬으로 코딩하고, 브라우저에서 바로 실행해요. 설치가 필요 없어요.">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" type="image/png" href="../shared/assets/img/favicon.png">
 <meta name="theme-color" content="#FBF7EF">
-<link rel="stylesheet" href="assets/fonts/pretendard.css">
-<link rel="stylesheet" href="css/all.min.css">
-<link rel="stylesheet" href="css/themaker-ui.css">
+<link rel="stylesheet" href="../shared/assets/fonts/pretendard.css">
+<link rel="stylesheet" href="../shared/css/all.min.css">
+<link rel="stylesheet" href="../shared/css/themaker-ui.css">
 <link rel="stylesheet" href="vendor/codemirror/codemirror.css">
 <link rel="stylesheet" href="vendor/codemirror/cobalt.css">
 <link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="../shared/ui/lab.css">
 </head>
 <body>
 
-<header>
-  <h1><img src="assets/img/pibo-logo.png" alt=""><span class="brand-txt">Code Lab</span></h1>
-  <button type="button" class="navlink" data-mode="block">블록</button>
-  <button type="button" class="navlink" data-mode="python">파이썬</button>
-  <span class="cl-flex"></span>
-  <span id="engine">파이썬 준비 중…</span>
-  <button type="button" class="hbtn" id="fsBtn" title="전체화면"></button>
-</header>
+<header data-tab="code" data-menu="make" data-act="block" data-fs="own"></header>
 
-<div class="cl-bar">
+<div class="cl-bar" data-act-slot>
+  <span class="cl-mode" role="tablist">
+    <button type="button" class="db" data-mode="block"><i class="fa-solid fa-cubes"></i> 블록</button>
+    <button type="button" class="db" data-mode="python"><i class="fa-brands fa-python"></i> 파이썬</button>
+  </span>
+  <span class="cl-sep"></span>
   <button type="button" class="db go" id="runBtn" title="실행 (Ctrl+Enter)"><i class="fa-solid fa-play"></i> 실행</button>
   <button type="button" class="db" id="stopBtn" title="정지 (Esc)"><i class="fa-solid fa-stop"></i> 정지</button>
 
@@ -114,6 +113,8 @@
 <div id="toast" class="toast"></div>
 
 <!-- 편집기 -->
+<script src="../shared/ui/menu.js"></script>
+<script src="../shared/ui/nav.js"></script>
 <script src="vendor/codemirror/codemirror.min.js"></script>
 <script src="vendor/codemirror/python.js"></script>
 

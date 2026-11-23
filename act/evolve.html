@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ML Lab — 진화</title>
+<meta name="description" content="가상 생물이 세대를 거듭하며 걷는 법을 스스로 찾아요. 무엇에 상을 줄지 내가 정해요.">
+<link rel="icon" type="image/png" href="../shared/assets/img/favicon.png">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#FBF7EF">
+<link rel="stylesheet" href="../shared/assets/fonts/pretendard.css">
+<link rel="stylesheet" href="../shared/css/all.min.css">
+<link rel="stylesheet" href="../shared/css/themaker-ui.css">
+<link rel="stylesheet" href="css/app.css?v=23">
+<link rel="stylesheet" href="../shared/ui/lab.css">
+</head>
+<body>
+
+<header data-tab="evolve.html" data-menu="self" data-act="evolve"></header>
+
+<div id="steps">
+  <div class="stp on" id="s1"><span class="cir">1</span>진화시키기</div>
+  <div class="stpline"></div>
+  <div class="stp" id="s2"><span class="cir">2</span>상 바꾸기</div>
+  <div class="stpline"></div>
+  <div class="stp" id="s3"><span class="cir">3</span>새 땅 · 돌연변이</div>
+</div>
+
+<div class="mk-main" id="mlMain">
+
+  <!-- 왼쪽: 몸 · 상 · 땅 -->
+  <div class="pan pan-side" id="panL">
+    <div class="ph"><i class="fa-solid fa-dna"></i>진화 설정</div>
+    <div class="pb">
+      <div class="pb-label">몸</div>
+      <div id="bodyPick"></div>
+
+      <div class="sec2" id="rewardSec">
+        <div class="st">무엇을 잘하면 상을 줄까요?</div>
+        <div id="rewardPick"></div>
+      </div>
+
+      <div class="sec2">
+        <div class="st">진화하는 땅</div>
+        <div class="seg" id="terrainSeg"></div>
+        <div class="thr"><div class="lb"><span>돌연변이 크기</span><span class="num" id="sigmaVal">보통</span></div>
+          <input type="range" id="sigma" min="0" max="2" step="1" value="1"></div>
+        <div class="hint">한 세대 24마리 중 잘한 6마리를 남기고, 그 유전자를 조금씩 바꿔 다음 세대를 만들어요.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 가운데: 무대 -->
+  <div class="pan pan-wide" id="panC">
+    <div class="ph"><i class="fa-solid fa-person-walking"></i><span id="panTitle">무대</span></div>
+    <div class="pb">
+      <div class="row" style="margin-bottom:10px;align-items:center;flex-wrap:wrap">
+        <button class="db go" id="goBtn"><i class="fa-solid fa-play"></i> 진화 (30세대)</button>
+        <button class="db" id="stopBtn" disabled><i class="fa-solid fa-stop"></i> 멈춤</button>
+        <button class="db danger" id="resetBtn"><i class="fa-solid fa-rotate-left"></i> 처음부터</button>
+        <span style="flex:1"></span>
+        <span class="badge num" id="genBadge">0세대</span>
+      </div>
+      <div id="stageBox"><canvas id="stage"></canvas></div>
+      <div class="row" style="margin-top:8px;align-items:center;flex-wrap:wrap;gap:8px">
+        <span class="pb-label" style="margin:0">가장 잘한 생물을 다른 땅에서 걸려 보기</span>
+        <div class="seg" id="testSeg"></div>
+      </div>
+      <div class="row" style="margin-top:8px;align-items:center;flex-wrap:wrap;gap:8px">
+        <span class="pb-label" style="margin:0">다시 보기 속도</span>
+        <div class="seg" id="playSeg">
+          <button type="button" data-s="0.25">0.25배</button>
+          <button type="button" data-s="0.5" class="on">0.5배</button>
+          <button type="button" data-s="1">1배 (실제)</button>
+        </div>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="hint">점 색이 진할수록 잘 안 미끄러지는 발이에요. 파란 막대가 근육이에요.</div>
+    </div>
+  </div>
+
+  <!-- 오른쪽: 그래프 · 기록 -->
+  <div class="pan pan-out" id="panR">
+    <div class="ph"><i class="fa-solid fa-chart-line"></i>세대마다 점수</div>
+    <div class="pb">
+      <canvas id="chart"></canvas>
+      <div class="chart-legend"><span><i class="lg-acc"></i>가장 잘한 생물</span><span><i class="lg-warn"></i>평균</span></div>
+
+      <div class="sec2">
+        <div class="st">기록</div>
+        <div id="log"><div class="hint" style="margin-top:0">진화를 마칠 때마다 한 줄씩 쌓여요</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script src="../shared/ui/menu.js"></script>
+<script src="../shared/ui/nav.js"></script>
+<script src="lib/i18n.js?v=19"></script>
+<script src="lib/tour.js?v=9"></script>
+<script type="module" src="acts/evolve/page.js?v=2"></script>
+</body>
+</html>

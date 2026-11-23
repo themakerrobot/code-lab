@@ -10,18 +10,18 @@
 //    '__codelab__/sensor' 로 물으면 그 값을 바로 준다.
 // 카메라 AI 모델·wasm(models/ · vendor/tasks-vision/)은 처음 쓸 때 받아 담는다 (약 29MB).
 
-const VERSION = 'codelab-6';
+const VERSION = 'ailab-code-1';
 const RUNTIME = 'codelab-runtime';
 const INPUT_WAIT_MS = 4 * 60 * 1000;   // 그 뒤엔 204 → 워커가 같은 id 로 다시 묻는다
 
 const PRECACHE = [
   './',
   'index.html',
-  'css/themaker-ui.css', 'css/app.css', 'css/all.min.css',
-  'assets/fonts/pretendard.css',
-  'assets/img/favicon.png', 'assets/img/pibo-logo.png',
-  'manifest.webmanifest',
-  'webfonts/fa-solid-900.woff2', 'webfonts/fa-brands-400.woff2',
+  '../shared/css/themaker-ui.css', 'css/app.css', '../shared/css/all.min.css',
+  '../shared/assets/fonts/pretendard.css',
+  '../shared/assets/img/favicon.png', '../shared/assets/img/pibo-logo.png',
+  '../manifest.webmanifest',
+  '../shared/webfonts/fa-solid-900.woff2', '../shared/webfonts/fa-brands-400.woff2',
   'vendor/codemirror/codemirror.css', 'vendor/codemirror/cobalt.css',
   'vendor/codemirror/codemirror.min.js', 'vendor/codemirror/python.js',
   'vendor/blockly/blockly_compressed.js', 'vendor/blockly/blocks_compressed.js',

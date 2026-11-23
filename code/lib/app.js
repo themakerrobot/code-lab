@@ -23,7 +23,8 @@
   };
 
   const state = {
-    mode: store.get(KEY.mode, 'block') === 'python' ? 'python' : 'block',
+    // 주소의 ?mode= 가 먼저 (메뉴의 '블록 코딩' · '파이썬' 카드), 없으면 지난번 방식
+    mode: (new URLSearchParams(location.search).get('mode') || store.get(KEY.mode, 'block')) === 'python' ? 'python' : 'block',
     fontSize: Math.min(28, Math.max(12, parseInt(store.get(KEY.font, '16'), 10) || 16)),
   };
 
@@ -543,6 +544,13 @@
     $('#editTitle').textContent = isBlock ? '블록 편집기' : '파이썬 편집기';
     $('#editIcon').className = isBlock ? 'fa-solid fa-cubes' : 'fa-brands fa-python';
     $('#tabCodeBtn').hidden = !isBlock;
+    // 단계 줄 맨 앞 활동 이름도 함께 (상단바 공통 nav.js 가 만든 것)
+    const nm = document.querySelector('.actname > a');
+    if (nm && window.AILAB) {
+      const make = (window.AILAB_MENU || []).find(m => m.id === 'make');
+      const act = make && make.acts.find(a => a.id === mode);
+      if (act) { nm.textContent = window.AILAB.T(act); document.title = nm.textContent + ' — AI Lab'; }
+    }
     $('#exBtnWrap').hidden = isBlock;
     $('#cursorPos').hidden = isBlock;
     if (isBlock) {
