@@ -92,6 +92,15 @@ header .badge{flex-shrink:0}
 .tc-wrap{position:relative;border:1px solid var(--line-soft);border-radius:8px;overflow:hidden;background:#fff}
 .tc-wrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
+/* 카메라 (센서) — 거울처럼 좌우를 뒤집어 보여 준다 */
+#tab-cam{background:var(--panel2);padding:10px;align-items:center;justify-content:center;gap:8px}
+.cl-cam{position:relative;width:100%;max-width:520px;aspect-ratio:4/3;background:#0C1114;border-radius:10px;overflow:hidden}
+.cl-cam video,.cl-cam canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:scaleX(-1)}
+.cl-camnote{margin-top:0;text-align:center}
+
+/* 그래프 (matplotlib) */
+#outText .cl-plot{display:block;max-width:100%;height:auto;margin:8px 0;border:1px solid var(--line-soft);border-radius:8px;background:#fff}
+
 /* 오류 난 줄 */
 .cl-errline{background:rgba(180,69,28,.35)}
 

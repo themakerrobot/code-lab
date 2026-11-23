@@ -78,3 +78,28 @@
     return [`${type}(${val(block, 'value', PY.ORDER_NONE) || 0})`, PY.ORDER_FUNCTION_CALL];
   };
 })();
+
+// ── 센서 (lib/sensor.py) ──
+(function () {
+  const PY = Blockly.Python;
+  const imp = () => { PY.definitions_['import_sensor'] = 'import sensor'; };
+  const call = (fn, order) => () => { imp(); return [`sensor.${fn}()`, order || PY.ORDER_FUNCTION_CALL]; };
+  const q = (s) => "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
+
+  PY.forBlock['sensor_hand_visible'] = call('hand_visible');
+  PY.forBlock['sensor_finger_count'] = call('finger_count');
+  PY.forBlock['sensor_hand_pos'] = (b) => { imp(); return [`sensor.${b.getFieldValue('AXIS')}()`, PY.ORDER_FUNCTION_CALL]; };
+  PY.forBlock['sensor_face_check'] = (b) => { imp(); return [`sensor.${b.getFieldValue('WHAT')}()`, PY.ORDER_FUNCTION_CALL]; };
+  PY.forBlock['sensor_face_looking'] = (b) => { imp(); return [`sensor.looking(${q(b.getFieldValue('DIR'))})`, PY.ORDER_FUNCTION_CALL]; };
+  PY.forBlock['sensor_face_distance'] = call('face_distance');
+  PY.forBlock['sensor_hands_up'] = call('hands_up');
+  PY.forBlock['sensor_loudness'] = call('loudness');
+  PY.forBlock['sensor_clap'] = call('clap');
+  PY.forBlock['sensor_stop'] = () => { imp(); return 'sensor.stop()\n'; };
+  PY.forBlock['sensor_model_label'] = (b) => { imp(); return [`sensor.model(${q(b.getFieldValue('NAME'))})`, PY.ORDER_FUNCTION_CALL]; };
+  PY.forBlock['sensor_model_is'] = (b) => {
+    imp();
+    const label = PY.valueToCode(b, 'LABEL', PY.ORDER_RELATIONAL) || "''";
+    return [`sensor.model(${q(b.getFieldValue('NAME'))}) == ${label}`, PY.ORDER_RELATIONAL];
+  };
+})();

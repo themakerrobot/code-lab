@@ -951,6 +951,33 @@ const CODELAB_TOOLBOX = {
       "cssConfig": {
         "icon": "customIcon fa-solid fa-toolbox"
       }
+    },
+    {
+      "kind": "sep"
+    },
+    {
+      "kind": "category",
+      "name": "센서",
+      "colour": "#6E92B7",
+      "cssConfig": { "icon": "customIcon fa-solid fa-video" },
+      "contents": [
+        { "kind": "label", "text": "손 · 얼굴 · 몸 (웹캠)" },
+        { "kind": "block", "type": "sensor_hand_visible" },
+        { "kind": "block", "type": "sensor_finger_count" },
+        { "kind": "block", "type": "sensor_hand_pos" },
+        { "kind": "block", "type": "sensor_face_check" },
+        { "kind": "block", "type": "sensor_face_looking" },
+        { "kind": "block", "type": "sensor_face_distance" },
+        { "kind": "block", "type": "sensor_hands_up" },
+        { "kind": "label", "text": "소리 (마이크)" },
+        { "kind": "block", "type": "sensor_loudness" },
+        { "kind": "block", "type": "sensor_clap" },
+        { "kind": "label", "text": "내 모델 (sense-lab)" },
+        { "kind": "button", "text": "sense-lab 모델 불러오기 (.zip)", "callbackKey": "importModel" },
+        { "kind": "block", "type": "sensor_model_label" },
+        { "kind": "block", "type": "sensor_model_is", "inputs": { "LABEL": { "shadow": { "type": "text", "fields": { "TEXT": "가위" } } } } },
+        { "kind": "block", "type": "sensor_stop" }
+      ]
     }
   ],
 };

@@ -20,9 +20,9 @@ jobs:
         with:
           node-version: '22'
       - name: 브라우저 JS
-        run: for f in lib/*.js blocks/*.js sw.js; do node --check "$f"; done
-      - name: 파이썬 (turtle 모듈)
-        run: python3 -m py_compile lib/turtle.py
+        run: for f in lib/*.js lib/sense/*.js blocks/*.js sw.js; do node --check "$f"; done
+      - name: 파이썬 (turtle · sensor 모듈)
+        run: python3 -m py_compile lib/turtle.py lib/sensor.py
       - name: 서비스 워커 캐시 목록의 파일이 다 있는가
         # 하나라도 없으면 서비스 워커 설치가 실패해 input() 과 오프라인이 같이 안 된다
         run: |

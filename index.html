@@ -35,9 +35,9 @@
     <button type="button" class="db" id="exBtn"><i class="fa-solid fa-book-open"></i> 예제 <i class="fa-solid fa-caret-down"></i></button>
     <span class="cl-menu" id="exMenu" hidden></span>
   </span>
-  <button type="button" class="db" id="importBtn" title=".json(블록) 또는 .py(파이썬) 파일"><i class="fa-solid fa-folder-open"></i> 불러오기</button>
+  <button type="button" class="db" id="importBtn" title=".json(블록) · .py(파이썬) · .zip(sense-lab 모델)"><i class="fa-solid fa-folder-open"></i> 불러오기</button>
   <button type="button" class="db" id="exportBtn" title="블록은 .json, 파이썬은 .py 로 내보내요"><i class="fa-solid fa-download"></i> 내보내기</button>
-  <input type="file" id="importFile" accept=".json,.py,.txt">
+  <input type="file" id="importFile" accept=".json,.py,.txt,.zip">
 
   <span class="cl-flex"></span>
   <span class="cl-font">
@@ -70,6 +70,7 @@
     <div class="ph">
       <button type="button" class="cl-tab" data-tab="out"><i class="fa-solid fa-terminal"></i>결과</button>
       <button type="button" class="cl-tab" data-tab="draw"><i class="fa-solid fa-robot"></i>그림</button>
+      <button type="button" class="cl-tab" data-tab="cam" id="tabCamBtn" hidden><i class="fa-solid fa-video"></i>카메라</button>
       <button type="button" class="cl-tab" data-tab="code" id="tabCodeBtn"><i class="fa-brands fa-python"></i>코드</button>
       <span class="cl-flex"></span>
       <button type="button" class="db danger cl-mini" id="clearBtn" title="결과 지우기"><i class="fa-solid fa-eraser"></i> 지우기</button>
@@ -87,6 +88,14 @@
 
     <div class="cl-tabpane" id="tab-draw">
       <div id="turtle"></div>
+    </div>
+
+    <div class="cl-tabpane" id="tab-cam">
+      <div class="cl-cam">
+        <video id="camVideo" playsinline muted></video>
+        <canvas id="camOverlay"></canvas>
+      </div>
+      <div class="hint cl-camnote">영상과 소리는 이 컴퓨터 밖으로 나가지 않아요</div>
     </div>
 
     <div class="cl-tabpane" id="tab-code">
@@ -119,6 +128,7 @@
 <script src="blocks/disable-top-blocks.js"></script>
 
 <!-- Code Lab -->
+<script src="lib/sense-models.js"></script>
 <script src="lib/examples.js"></script>
 <script src="lib/py-runner.js"></script>
 <script src="lib/turtle-canvas.js"></script>

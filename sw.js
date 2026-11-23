@@ -1,13 +1,16 @@
 // ═══════════════════════════════════════════════════════════
-// 서비스 워커 — 오프라인 캐시 + input() 다리
+// 서비스 워커 — 오프라인 캐시 + input() · 센서 다리
 // ═══════════════════════════════════════════════════════════
 // 1) 오프라인: 한 번 열면 페이지 · 파이썬 · 블록 파일을 이 브라우저에 담아 두고,
 //    인터넷이 끊겨도 다시 열린다. numpy 같은 추가 패키지는 처음 쓸 때 담는다.
 //    새 버전을 올리면 VERSION 을 바꾼다 — 옛 캐시는 지워진다.
 // 2) input(): 파이썬 워커가 '__codelab__/input?id=…' 로 동기 요청을 보내면
 //    화면에 물어보고, 화면이 답을 주면 그 글자로 응답한다.
+// 3) 센서: 화면이 최신 센서 값을 계속 올려 두고(sensor-state), 파이썬 워커가
+//    '__codelab__/sensor' 로 물으면 그 값을 바로 준다.
+// 카메라 AI 모델·wasm(models/ · vendor/tasks-vision/)은 처음 쓸 때 받아 담는다 (약 29MB).
 
-const VERSION = 'codelab-2';
+const VERSION = 'codelab-3';
 const RUNTIME = 'codelab-runtime';
 const INPUT_WAIT_MS = 4 * 60 * 1000;   // 그 뒤엔 204 → 워커가 같은 id 로 다시 묻는다
 
@@ -33,7 +36,10 @@ const PRECACHE = [
   'blocks/svg/flag-solid.svg', 'blocks/svg/list-check-solid.svg', 'blocks/svg/right-left-solid.svg',
   'blocks/svg/square-check-solid.svg', 'blocks/svg/stopwatch-solid.svg',
   'lib/app.js', 'lib/examples.js', 'lib/py-runner.js', 'lib/py-worker.js',
-  'lib/turtle.py', 'lib/turtle-canvas.js',
+  'lib/turtle.py', 'lib/turtle-canvas.js', 'lib/sensor.py',
+  'lib/sense-models.js', 'lib/sensors.js', 'lib/sense/landmarker.js', 'lib/sense/features.js',
+  'blocks/svg/hand-solid.svg', 'blocks/svg/face-smile-solid.svg', 'blocks/svg/person-solid.svg',
+  'blocks/svg/microphone-solid.svg', 'blocks/svg/brain-solid.svg',
 ];
 
 self.addEventListener('install', (e) => {
@@ -51,9 +57,13 @@ self.addEventListener('activate', (e) => {
 const pending = new Map();    // id → resolve
 const answered = new Map();   // 화면이 답했는데 받을 요청이 끊겨 있던 것
 
+let sensorJson = '{}';
+
 self.addEventListener('message', (e) => {
   const m = e.data || {};
-  if (m.type === 'input-response') {
+  if (m.type === 'sensor-state') {
+    sensorJson = m.json || '{}';
+  } else if (m.type === 'input-response') {
     const r = pending.get(m.id);
     if (r) { pending.delete(m.id); r(m.value); } else answered.set(m.id, m.value);
   } else if (m.type === 'input-cancel') {
@@ -113,9 +123,18 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(inputResponse(url));
     return;
   }
+  if (url.origin === self.location.origin && url.pathname.endsWith('/__codelab__/sensor')) {
+    e.respondWith(new Response(sensorJson, {
+      status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },
+    }));
+    return;
+  }
   if (url.origin === self.location.origin) {
-    // 큰 파일은 바뀌지 않는다 (버전을 올리면 경로째 바뀐다)
-    if (url.pathname.includes('/vendor/pyodide/')) e.respondWith(cacheFirst(req, VERSION));
+    // 큰 파일(파이썬 · 카메라 AI · 글꼴)은 한 번 받으면 다시 받지 않는다.
+    // 이 파일들을 바꿀 때는 파일 이름을 바꾼다 (VERSION 을 올려도 RUNTIME 캐시는 남는다)
+    if (/\/(vendor\/(pyodide|tasks-vision)|models)\//.test(url.pathname) || url.pathname.endsWith('.otf')) {
+      e.respondWith(cacheFirst(req, RUNTIME));
+    }
     else e.respondWith(staleWhileRevalidate(e));
     return;
   }

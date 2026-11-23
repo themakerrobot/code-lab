@@ -21,7 +21,7 @@
 
 - 헤더의 **블록 / 파이썬** 탭으로 편집 방식을 바꿉니다.
 - **실행** `Ctrl+Enter` · **정지** `Esc` · **바로 저장** `Ctrl+S`
-- 결과는 오른쪽 **결과** 탭(글자)과 **그림** 탭(turtle)에 나옵니다.
+- 결과는 오른쪽 **결과** 탭(글자 · 그래프), **그림** 탭(turtle), **카메라** 탭(센서를 쓸 때)에 나옵니다.
 
 ## 블록으로 코딩하기
 
@@ -40,6 +40,7 @@
 | 논리 · 반복 · 수학 · 문자 · 목록 · 색상 | 파이썬 기본 |
 | 변수 · 함수 | 이름 짓기, 함수 만들기 |
 | 도구 | 기다리기 · 시간 · 사전 · 형 변환 · 파일 확인 |
+| 센서 | 웹캠 · 마이크로 손 · 얼굴 · 몸 · 소리 읽기, sense-lab 에서 배운 내 모델 쓰기 (아래 "센서") |
 
 ## 파이썬으로 코딩하기
 
@@ -51,6 +52,9 @@
 
 - `input()` 을 쓰면 결과 탭 아래에 입력 칸이 나옵니다. 입력하고 Enter.
 - `import turtle` 이 있으면 **그림** 탭이 열립니다. `t.shape("robot")` 으로 파이보 모양 거북이를 쓸 수 있어요.
+  `onkeypress` · `onclick` · `ontimer` 로 키보드 · 마우스 · 타이머 게임도 만들 수 있어요 — 코드가 끝난 뒤에도
+  정지(`Esc`)를 누를 때까지 계속 기다립니다. 방향키를 쓰려면 그림 판을 한 번 누르고 시작하세요.
+- `matplotlib` 그래프는 `plt.show()` 를 부르거나 코드가 끝나면 결과 탭에 그림으로 나옵니다 (한글 글꼴 포함).
 - 오류가 나면 **몇 번째 줄 · 무슨 뜻**을 쉬운 말로 먼저 알려 주고, 편집기에서 그 줄을 빨갛게 짚어 줍니다.
   그 아래에 원래 파이썬 오류 메시지가 나옵니다.
 - **정지**(`Esc`)는 무한 반복도 바로 멈춥니다. 멈춘 뒤 1~2초 동안 파이썬을 다시 준비해요.
@@ -68,6 +72,10 @@
 | 한글 이름 쓰기 | 한글 변수 · 함수 이름 |
 | 숫자 표 (numpy) | `numpy` 배열 · 평균 · 최댓값 |
 | 로봇 그림 — 도형 / 나선 | `turtle` |
+| 그래프 그리기 (matplotlib) | `plt.plot` · 한글 제목 |
+| 방향키로 거북이 움직이기 | turtle 키보드 · 마우스 이벤트 |
+| 손가락 세기 (카메라) | `sensor.finger_count()` |
+| 손으로 거북이 움직이기 (카메라) | 센서 + turtle + `ontimer` |
 | 숫자 맞추기 게임 | `while` · `random` · `break` |
 
 예제를 추가하려면 `lib/examples.js` 에 항목 하나를 더하면 됩니다 (`turtle: true` 면 그림 탭이 열려요).
@@ -79,13 +87,46 @@
   그 뒤엔 브라우저에 담아 두어 오프라인에서도 됩니다. 받을 수 있는 목록은 `vendor/pyodide/pyodide-lock.json`.
 - **turtle** — Code Lab 이 브라우저용으로 따로 만든 모듈입니다 (`lib/turtle.py`).
   이동 · 회전 · 펜 · 색 · 채우기 · `circle` · `dot` · `write` · `stamp` · `shape` · `speed` · `tracer` ·
-  `bgcolor` · `setup` · `colormode`, `turtle.forward(100)` 같은 모듈 함수까지 됩니다.
+  `bgcolor` · `setup` · `colormode`, `turtle.forward(100)` 같은 모듈 함수, 이벤트
+  (`onkey` · `onkeypress` · `onkeyrelease` · `onclick` · `onscreenclick` · `ontimer` · `exitonclick`) 까지 됩니다.
+- **matplotlib** — 그래프가 결과 탭에 그림으로 나옵니다 (처음 한 번은 인터넷에서 받아요).
+- **sensor** — 웹캠 · 마이크 (아래 "센서").
 
 ### 아직 안 되는 것
 
-- turtle 의 **키보드 · 마우스 이벤트** (`onkey`, `onclick`, `ontimer`) — 부르면 "아직 지원하지 않아요" 라고 알려 줍니다.
+- turtle 의 `ondrag` (끌기), 여러 화면.
 - `tkinter` 같은 창(GUI), 실제 파일 시스템 · 네트워크 소켓.
-- `matplotlib` 그래프를 화면에 보이기 (그림을 띄울 곳이 아직 없어요).
+- turtle 키 이벤트에 `Escape` 는 쓸 수 없어요 (정지 키예요).
+
+## 센서 — 웹캠 · 마이크
+
+sense-lab 과 같은 AI(MediaPipe)로 손 · 얼굴 · 몸 · 소리를 읽습니다. **모두 브라우저 안에서 돌고,
+영상과 소리는 컴퓨터 밖으로 나가지 않습니다.** 블록은 **센서** 분류에, 파이썬은 `import sensor` 로 씁니다.
+
+```python
+import sensor, time
+for i in range(10):
+    print(sensor.finger_count())   # 편 손가락 수 (손이 안 보이면 None)
+    time.sleep(1)
+```
+
+| 무엇 | 파이썬 |
+|---|---|
+| 손 | `hand_visible()` · `finger_count()` · `hand_x()` · `hand_y()` (-100~100, 거울 방향) · `hand_count()` |
+| 얼굴 | `face_visible()` · `face_distance()` (cm, 대략) · `face_direction()` · `face_up_down()` · `looking('left')` · `mouth_open()` · `smiling()` |
+| 몸 | `body_visible()` · `hands_up()` (머리 위로 든 손 수) |
+| 소리 | `loudness()` (0~100) · `clap()` (갑자기 큰 소리가 났나) |
+| 내 모델 | `model('이름')` · `model_confidence('이름')` · `models()` |
+| 끄기 | `stop()` — 프로그램이 끝나면 저절로 꺼져요 |
+
+- 처음 쓰는 순간 카메라(또는 마이크)를 켜고, 브라우저가 허락을 물어봅니다. 준비에 몇 초 걸려요.
+  켜져 있는 동안 **카메라** 탭에 영상과 AI 가 본 손 · 얼굴 · 몸 선이 보입니다.
+- **sense-lab 모델**: sense-lab 보관함에서 **내보내기** 한 `.zip` 을 **불러오기**(또는 센서 분류의
+  "sense-lab 모델 불러오기")로 넣으면, 그 모델이 지금 무엇을 보는지 알려 줍니다.
+  손 · 얼굴 · 포즈 모델을 쓸 수 있고, **소리 모델은 아직 못 씁니다**. 모델은 이 브라우저에 저장돼요.
+- 박수는 소리 크기가 갑자기 커지는 것으로 판단하는 간단한 방법이라, 다른 큰 소리에도 반응할 수 있어요
+  (sense-lab 의 소리 AI 와 다릅니다).
+- 카메라 AI 파일(약 29MB)은 센서를 처음 쓸 때 받아서 브라우저에 담아 둡니다. 그 뒤엔 오프라인에서도 돼요.
 
 ## 저장 · 불러오기 · 내보내기
 
@@ -101,6 +142,7 @@
 ## 오프라인 · 처음 열 때
 
 - 처음 열면 파이썬(약 13MB)을 받아 와서 1~3초쯤 걸립니다. 헤더 배지가 **파이썬 3.14** 로 바뀌면 준비 끝.
+  센서를 처음 쓸 때 카메라 AI(약 29MB), 그래프를 처음 그릴 때 matplotlib · 한글 글꼴을 더 받습니다.
 - 한 번 열고 나면 페이지 · 파이썬 · 블록이 브라우저에 담겨, **인터넷 없이** 다시 열고 실행할 수 있어요.
   홈 화면에 추가(앱 설치)도 됩니다.
 - 새 버전을 올린 뒤에는 **두 번째로 열 때** 새 버전이 보입니다 (처음엔 담아 둔 것을 보여 주고 뒤에서 받아요).
@@ -126,18 +168,25 @@ python3 -m http.server 8080      # 그리고 http://localhost:8080/
   ├─ 파이썬 편집기 (CodeMirror) ┴→ 파이썬 코드
   │                               │ run
   ├─ lib/py-runner.js ────────────┴─→ lib/py-worker.js (Web Worker · Pyodide)
-  │     정지 = 워커를 끝내고 새로 띄움        │ print → 결과 탭
+  │     정지 = 워커를 끝내고 새로 띄움        │ print · 그래프 → 결과 탭
   │                                         │ turtle → lib/turtle-canvas.js
-  └─ sw.js (서비스 워커)  ←── input() 동기 요청 ┘
+  │     키보드 · 마우스 · 타이머 ──────────→ │ (코드가 끝나도 이벤트를 기다림)
+  ├─ lib/sensors.js (웹캠 · 마이크 · MediaPipe · sense-lab 모델)
+  │     최신 센서 값을 계속 올림 ─┐
+  └─ sw.js (서비스 워커)  ←──────┴── input() · 센서 동기 요청 ┘
         · 오프라인 캐시
         · input(): 워커의 요청을 붙잡고 있다가 화면이 준 답으로 응답
+        · 센서: 화면이 올려 둔 최신 값을 바로 응답
 ```
 
 - **왜 워커인가**: 파이썬이 오래 돌아도 화면이 멈추지 않고, 정지를 누르면 워커째 끝내서 무한 반복도 바로 멈춥니다.
   (Pyodide 를 중간에 멈추는 `SharedArrayBuffer` 방식은 서버 응답 헤더를 바꿔야 해서 GitHub Pages 에서 못 씁니다.)
-- **왜 input() 이 서비스 워커를 거치나**: 워커 안의 파이썬은 답을 "기다리며 멈춰" 있어야 합니다.
-  워커가 동기 요청(`__codelab__/input`)을 보내면 서비스 워커가 그 요청을 붙잡고 있다가,
-  화면에서 입력이 오면 그 글자로 응답합니다. 서비스 워커가 없는 환경에서는 `input()` 이 빈 글자를 받습니다.
+- **왜 input() · 센서가 서비스 워커를 거치나**: 워커 안의 파이썬이 돌고 있는 동안에는 메시지를 받을 수 없습니다.
+  그래서 워커가 동기 요청을 보냅니다 — `__codelab__/input` 은 서비스 워커가 붙잡고 있다가 화면에서 입력이 오면
+  응답하고, `__codelab__/sensor` 는 화면이 계속 올려 두는 최신 센서 값을 바로 응답합니다.
+  서비스 워커가 없는 환경에서는 `input()` 이 빈 글자를 받고, 센서는 "새로고침해 주세요" 오류를 냅니다.
+- **turtle 이벤트**: 코드가 끝났을 때 이벤트 처리기가 걸려 있으면 워커가 "기다림" 상태가 되고,
+  화면이 키보드 · 마우스를, 워커가 타이머를 받아 파이썬 처리기를 부릅니다. 처리기가 다 풀리면 끝납니다.
 
 ### 파일 구성
 
@@ -153,11 +202,15 @@ lib/
   app.js                 화면 · 편집기 · 실행 흐름 · 결과 창
   py-runner.js           파이썬 워커 띄우기 · 정지 · input 연결
   py-worker.js           Pyodide 실행 (Web Worker, ES 모듈)
-  turtle.py              브라우저용 turtle 모듈 (파이썬)
+  turtle.py              브라우저용 turtle 모듈 (파이썬) — 이벤트 포함
   turtle-canvas.js       turtle 그림 그리기 (캔버스)
+  sensor.py              센서 모듈 (파이썬, `import sensor`)
+  sensors.js             웹캠 · 마이크 · MediaPipe 돌리기 (화면 쪽)
+  sense-models.js        sense-lab 모델 zip 읽기 · 저장 · 계산 (tfjs 없이)
+  sense/                 sense-lab 에서 가져온 랜드마커 · 특징 계산 (landmarker.js · features.js)
   examples.js            파이썬 예제
 blocks/
-  customblock.js           시작 · 도구 블록 모양
+  customblock.js           시작 · 도구 · 센서 블록 모양
   customblock_callback.js  블록 → 파이썬 코드
   customblock_toolbox.js   분류(툴박스) 구성
   disable-top-blocks.js    시작 블록에 붙지 않은 블록 비활성화
@@ -166,7 +219,9 @@ vendor/
   pyodide/            Pyodide 314.0.8 핵심 파일 (Python 3.14)
   blockly/            Blockly + 한국어 메시지(ko.js) + media
   codemirror/         CodeMirror 5 + python 모드 + cobalt 테마
-assets/fonts/         Pretendard (셀프호스팅)
+  tasks-vision/       MediaPipe Tasks Vision (SIMD wasm 만 — Pyodide 가 도는 브라우저는 모두 SIMD 지원)
+models/               손 · 얼굴 · 포즈 랜드마커 모델 (sense-lab 과 같은 파일)
+assets/fonts/         Pretendard (셀프호스팅 · 그래프용 OTF 포함)
 assets/img/           로고 · 파비콘 · turtle 로봇 그림
 webfonts/             Font Awesome 글꼴
 docs/                 README 화면 캡처
@@ -203,7 +258,8 @@ CHANGELOG.md          버전 기록 (Release 본문)
 - exe: GitHub Actions(`.github/workflows/build-exe.yml`)가 사이트 전체를 Go 서버(`tools/portable/`)에 담아
   `CodeLab.exe` 하나로 만들고 Release 에 붙입니다. 더블클릭하면 `localhost:50070` 으로 브라우저가 열려요.
   `localhost` 라 서비스 워커가 동작해서 `input()` · 오프라인 캐시가 그대로 됩니다.
-  numpy 같은 추가 패키지는 exe 안에 없어서, 처음 한 번은 인터넷이 필요합니다.
+  카메라 AI 파일도 exe 안에 들어 있습니다. numpy · matplotlib 같은 추가 패키지는 exe 안에 없어서,
+  처음 한 번은 인터넷이 필요합니다.
 - 모든 경로가 상대경로라 하위 경로 배포에서도 동작합니다.
 
 ### 릴리스 (exe 만들기)
@@ -227,8 +283,7 @@ CHANGELOG.md          버전 기록 (Release 본문)
 ### 앞으로 붙일 수 있는 것
 
 - **보드 연결** — Web Serial 로 ESP32-S3 같은 보드(MicroPython)에 코드를 보내고 결과 받기
-- **브라우저 센서** — 웹캠 · 마이크를 블록/파이썬에서 쓰기 (sense-lab 처럼 기기 없이 AI · 센서 체험)
-- turtle 키보드 · 마우스 이벤트, matplotlib 그림 보이기, 영어 화면
+- sense-lab **소리 모델** (YAMNet), turtle `ondrag`, 영어 화면
 
 ## 디자인 킷
 
@@ -249,9 +304,11 @@ Code Lab 코드는 [MIT](LICENSE) 입니다.
 | 구성 요소 | 라이선스 |
 |---|---|
 | [Pyodide](https://github.com/pyodide/pyodide) (CPython 포함) | MPL 2.0 (CPython 은 PSF License) |
+| [MediaPipe Tasks Vision](https://github.com/google-ai-edge/mediapipe) · 랜드마커 모델 | Apache 2.0 |
 | [Blockly](https://github.com/google/blockly) | Apache 2.0 |
 | [CodeMirror 5](https://codemirror.net/5/) | MIT |
 | [Font Awesome Free 6.2](https://fontawesome.com/) | 아이콘 CC BY 4.0 · 글꼴 SIL OFL 1.1 · 코드 MIT |
 | [Pretendard](https://github.com/orioncactus/pretendard) | SIL OFL 1.1 |
 
-각 구성 요소는 자기 라이선스를 따릅니다 (`vendor/`, `assets/fonts/`, `css/all.min.css`, `webfonts/`).
+각 구성 요소는 자기 라이선스를 따릅니다 (`vendor/`, `models/`, `assets/fonts/`, `css/all.min.css`, `webfonts/`).
+`lib/sense/` 는 같은 회사의 sense-lab 에서 가져온 코드입니다.
