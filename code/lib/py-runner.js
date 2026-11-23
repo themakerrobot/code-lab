@@ -28,6 +28,7 @@
       this.onImage = () => {};
       this.onWaiting = () => {};
       this.onSensorNeed = () => {};
+      this.onSay = () => {};
       this.waiting = false;
       this.onInput = () => {};
       this.onDone = () => {};
@@ -73,6 +74,7 @@
         case 'image': this.onImage(m.src); break;
         case 'waiting': this.waiting = true; this.onWaiting(); break;
         case 'sensor-need': this.onSensorNeed(m.what); break;
+        case 'say': this.onSay(m.text); break;
         case 'input': this.pendingInput = m.id; this.onInput(m.id); break;
         case 'done':
           if (m.id !== this.runId) return;

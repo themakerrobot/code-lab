@@ -134,6 +134,7 @@ async function init() {
     },
     image(b64) { flush(); postMessage({ type: 'image', src: 'data:image/png;base64,' + b64 }); },
     sensor_need(what) { flush(); postMessage({ type: 'sensor-need', what }); },
+    say(text) { flush(); postMessage({ type: 'say', text: String(text).slice(0, 200) }); },
     sensor_read() {
       if (!canSyncInput) return '';
       try { const x = syncGet('sensor'); return x.status === 200 ? x.responseText : ''; }

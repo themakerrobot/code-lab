@@ -391,6 +391,8 @@ CODELAB_COLOURS.sensor = '#6E92B7';
       output: null, colour: C, tooltip: '0 ~ 100' },
     { type: 'sensor_clap', message0: '%1 박수 소리가 났나?', args0: [icon('microphone-solid.svg')],
       output: 'Boolean', colour: C, tooltip: '지난번에 물은 뒤로 갑자기 큰 소리가 났으면 참' },
+    { type: 'sensor_say', message0: '%1 AI 목소리로 말하기 %2', args0: [icon('microphone-solid.svg'), { type: 'input_value', name: 'TEXT' }],
+      previousStatement: null, nextStatement: null, colour: C, tooltip: '이 기기 안의 목소리로 읽어요. 글은 밖으로 나가지 않아요' },
     { type: 'sensor_stop', message0: '%1 카메라·마이크 끄기', args0: [icon('microphone-solid.svg')],
       previousStatement: null, nextStatement: null, colour: C, tooltip: '프로그램이 끝나면 저절로 꺼져요' },
   ]);

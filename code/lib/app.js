@@ -355,6 +355,19 @@
     }
     return sensors;
   }
+  // AI 목소리 — 가르치기 · 체험과 같은 기기 안 목소리(ai/lib/speak.js). 목소리가 없으면 한 번 알려 준다
+  const speakMod = import(new URL('../ai/lib/speak.js', location.href).href);
+  let noVoiceTold = false;
+  runner.onSay = async (text) => {
+    try {
+      const S = await speakMod;
+      if (!S.speak(text, 'ko', { max: 200 }) && !noVoiceTold) {
+        noVoiceTold = true;
+        out('[이 기기에는 쓸 수 있는 한국어 목소리가 없어요 — 글로만 보여요]\n', 'err');
+      }
+    } catch (e) { /* 목소리가 안 돼도 프로그램은 계속 */ }
+  };
+
   runner.onSensorNeed = async (what) => {
     setStatus(what === 'sound' ? '마이크를 켜는 중…' : (what === 'off' ? '센서 끄는 중…' : '카메라·AI 를 준비하는 중…'), 'run');
     const s = await getSensors();

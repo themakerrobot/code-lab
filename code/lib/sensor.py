@@ -221,6 +221,11 @@ def model_confidence(name):
     return float(_model(name).get('conf') or 0)
 
 
+def say(text):
+    """AI 목소리로 말한다 (이 기기 안 목소리만 — 글은 밖으로 나가지 않는다)."""
+    _codelab.say(str(text))
+
+
 def stop():
     """카메라·마이크를 끈다 (프로그램이 끝나면 저절로 꺼진다)."""
     _codelab.sensor_need('off')

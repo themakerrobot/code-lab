@@ -96,6 +96,7 @@
   PY.forBlock['sensor_loudness'] = call('loudness');
   PY.forBlock['sensor_clap'] = call('clap');
   PY.forBlock['sensor_stop'] = () => { imp(); return 'sensor.stop()\n'; };
+  PY.forBlock['sensor_say'] = (b, g) => { imp(); return `sensor.say(${(g || PY).valueToCode(b, 'TEXT', PY.ORDER_NONE) || "''"})\n`; };
   PY.forBlock['sensor_model_label'] = (b) => { imp(); return [`sensor.model(${q(b.getFieldValue('NAME'))})`, PY.ORDER_FUNCTION_CALL]; };
   PY.forBlock['sensor_model_is'] = (b) => {
     imp();

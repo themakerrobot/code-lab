@@ -972,6 +972,8 @@ const CODELAB_TOOLBOX = {
         { "kind": "label", "text": "소리 (마이크)" },
         { "kind": "block", "type": "sensor_loudness" },
         { "kind": "block", "type": "sensor_clap" },
+        { "kind": "label", "text": "말하기 (스피커)" },
+        { "kind": "block", "type": "sensor_say", "inputs": { "TEXT": { "shadow": { "type": "text", "fields": { "TEXT": "안녕!" } } } } },
         { "kind": "label", "text": "내 AI (가르치기에서 만든 것)" },
         { "kind": "button", "text": "내 AI 다시 찾기", "callbackKey": "refreshAI" },
         { "kind": "button", "text": "가르치기 열기", "callbackKey": "openTeach" },
