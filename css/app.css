@@ -112,7 +112,7 @@
 @media (max-width:700px){
   header{margin:6px 6px 0;padding:0 8px;gap:4px}
   header h1{font-size:15px;padding-right:6px;letter-spacing:0}
-  header h1 img{height:22px}
+  header h1 img{height:20px}
   #engine{display:none}
   #camSel{max-width:none}
   .steps{padding:10px 8px;overflow:visible;justify-content:space-between}
@@ -132,18 +132,18 @@
 }
 @media (max-width:420px){
   header{margin:4px 4px 0;padding:0 6px;gap:2px}
-  header h1 img{height:20px}
+  header h1 img{height:18px}
   header h1{font-size:13.5px;padding-right:3px;gap:5px}
 }
 /* 탭이 넷이라 폰에서는 서비스명 글자를 접고 탭 여백을 줄여 한 줄에 맞춘다 */
 @media (max-width:520px){
   header h1 .brand-txt{display:none}
-  .navlink{padding:7px 8px;font-size:13.5px}
+  .navlink{padding:5px 8px 3px;font-size:13.5px}
 }
 @media (max-width:365px){
-  .navlink{padding:7px 4px;font-size:13px}
-  .hbtn{width:26px;height:26px}
-  #langToggle{min-width:32px !important;padding:5px 6px !important;margin-right:0 !important}
+  .navlink{padding:5px 4px 3px;font-size:13px}
+  .hbtn{width:24px;height:24px}
+  #langToggle{min-width:32px !important;padding:4px 6px !important;margin-right:0 !important}
   header{padding:0 4px}
   header h1{padding-right:0}
 }
