@@ -27,7 +27,7 @@ jobs:
           mkdir -p build/site
           rsync -a \
             --exclude='.git' --exclude='.github' --exclude='tools' --exclude='build' \
-            --exclude='docs' --exclude='python' \
+            --exclude='docs' \
             --exclude='README.md' --exclude='DEVELOP.md' --exclude='CLAUDE.md' --exclude='CHANGELOG.md' \
             --exclude='wrangler.toml' --exclude='.assetsignore' --exclude='_headers' \
             --exclude='.gitignore' --exclude='*.zip' --exclude='*.exe' \

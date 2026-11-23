@@ -1,7 +1,7 @@
 {
   "name": "Teach Lab",
   "short_name": "Teach Lab",
-  "description": "웹캠·마이크로 예시를 모아 AI를 직접 가르쳐 보는 수업용 웹앱 — 이미지·손·얼굴·포즈·소리",
+  "description": "웹캠·마이크로 AI를 직접 가르치고, 규칙·순서 놀이로 노는 수업용 웹앱 — 이미지·손·얼굴·포즈·소리",
   "start_url": "./index.html",
   "scope": "./",
   "display": "fullscreen",

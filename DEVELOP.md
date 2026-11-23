@@ -6,20 +6,34 @@
 
 - 백엔드 없음 — 전부 정적 파일. 외부 CDN 금지, 라이브러리·모델 전부 셀프호스팅
 - 최초 로드 후 오프라인 동작
+- 사진·소리·영상은 기기 밖으로 보내지 않는다. 목소리(TTS)도 기기 안 목소리만 쓴다
 - 코드에 계정명·절대 URL 하드코딩 금지 (조직 이전 대비, 전부 상대경로).
   예외는 README 의 사이트 링크·배지뿐이다 — 이전할 때 그곳만 고친다
 - 디자인은 자매 서비스와 동일 — 공용 규격은 **[themakerrobot/themaker-ui](https://github.com/themakerrobot/themaker-ui)** 한 곳에 있다.
   `css/themaker-ui.css` 는 그 저장소 `themaker-ui.css` 의 **복사본이다. 직접 고치지 말 것.**
   고쳐야 하면 킷을 고치고 태그를 올린 뒤 여기로 다시 복사한다 (CI 가 어긋남을 잡는다).
   이 서비스 전용 스타일만 `css/app.css` 에 얹는다. `assets/fonts/` 도 킷과 같은 파일이다.
+- 쓰는 사람은 초등 저학년이다. 고르기는 드롭다운보다 큰 카드·칩, 지금 맞는 것은
+  불이 들어오게, 한 화면에 할 일 하나. 문구 규칙은 킷 README 를 따른다.
 
 ## 지금 범위
 
-다섯 소스(이미지 · 손 · 얼굴 · 포즈 · 소리)가 전부 end-to-end 로 돈다
-(수집 → 학습 → 추론 → 프로젝트/파이썬 내보내기 → 파이썬 실행).
-소스마다 다른 것은 `lib/sources.js` 의 스펙과 "숫자로 바꾸는" 모듈
-(`embedder.js` · `landmarker.js`+`features.js` · `sound.js`)뿐이고,
-수집·학습·저장·시험은 한 길을 같이 쓴다. 소스를 더할 때도 그 자리에만 끼운다.
+방이 넷이다.
+
+| 방 | 페이지 | 하는 일 |
+|---|---|---|
+| 학습실 | `index.html` · `lib/learn.js` | 다섯 소스로 예시 모으기 → 학습 → 저장 |
+| 시험실 | `test.html` · `lib/exam.js` | 모델 하나를 골라 바로 맞혀 보기 |
+| 놀이실 | `play.html` · `lib/play.js` | 그냥 보기 · 규칙 놀이 · 순서 놀이 · 배경 놀이 · 목소리 |
+| 보관함 | `storage.html` · `lib/storage_page.js` | 이름 바꾸기 · 지우기 · 이어서 배우기 · 프로젝트 파일 |
+
+소스(이미지 · 손 · 얼굴 · 포즈 · 소리)마다 다른 것은 `lib/sources.js` 의 스펙과
+"숫자로 바꾸는" 모듈(`embedder.js` · `landmarker.js`+`features.js` · `sound.js`)뿐이고,
+수집·학습·저장·시험·놀이는 한 길을 같이 쓴다. 소스를 더할 때도 그 자리에만 끼운다.
+
+놀이실은 sense-lab 의 시험실을 옮겨 온 것이다 (sense-lab 은 teach-lab 으로 합쳤다).
+파이썬 내보내기와 PyPI 패키지 `teachlab` 은 v0.2.0 에서 걷어냈다. PyPI 에 올린
+0.4.0 까지는 그대로 남아 있고 더 올리지 않는다.
 
 ## 실행
 
@@ -37,7 +51,7 @@ python3 -m http.server 8080
 | 확장자 | MIME |
 |---|---|
 | `.wasm` | `application/wasm` |
-| `.tflite` | `application/octet-stream` |
+| `.tflite` `.task` | `application/octet-stream` |
 | `.mjs` | `text/javascript` |
 
 Go 서버(`pibo-server` 계열) 사용 시 `mime.AddExtensionType` 로 명시 등록하세요.
@@ -46,10 +60,10 @@ Cloudflare 배포용 헤더는 `_headers` 에 있습니다.
 ## 구조
 
 ```
-index.html / test.html / storage.html
+index.html / test.html / play.html / storage.html
 css/
   themaker-ui.css    공용 디자인 킷 복사본 (themakerrobot/themaker-ui — 수정 금지)
-  app.css            이 서비스 전용
+  app.css            이 서비스 전용 (놀이실 카드·칩·규칙 카드 포함)
   all.min.css        Font Awesome
 lib/
   nav.js             헤더/탭/전체화면
@@ -58,24 +72,27 @@ lib/
   tour.js            첫 방문 튜토리얼 (캐릭터 안내)
   sources.js         소스 5종 정의 · 갈래 · 차원 · 추출기 스펙 · 소리 특징 다듬기
   embedder.js        MediaPipe ImageEmbedder 로드 + cropTo 전처리 (GPU 실패 시 CPU 폴백)
-  landmarker.js      Hand/Face/Pose Landmarker 로드 + 화면에 그리기
-  features.js        랜드마크 → 특징 벡터 (sense-lab 과 같은 정규화)
+  landmarker.js      Hand/Face/Pose Landmarker · 셀피 세그멘터 로드 + 화면에 그리기
+  features.js        랜드마크 → 특징 벡터 (학습용 정규화)
+  signals.js         그냥 보기 — 학습 없이 읽는 신호 (손가락 수 · 얼굴 방향 · 손 들기 · 박수…)
   sound.js           마이크 + YAMNet (MediaPipe Tasks Audio)
+  speak.js           목소리 (Web Speech API, 기기 안 목소리만) + 효과음
+  bgfx.js            배경 놀이 (사람/배경 나눠 지우기·흐리기·색 바꾸기)
   trainer.js         TF.js 분류기 학습 (Dense64-Dropout-Softmax, webgl→cpu)
   classifier.js      저장 형식 + 추론 (TF.js 없이 도는 순수 JS)
   project.js         IndexedDB 저장 + .teachlab.zip 내보내기/불러오기
-  pyexport.js        파이썬 내보내기 zip 만들기
-  teachlab_src.js    python/teachlab 소스를 문자열로 심은 것 (tools/gen-teachlab-src.mjs 가 만든다)
-  learn.js / exam.js / storage_page.js   페이지 로직
+  learn.js / exam.js / play.js / storage_page.js   페이지 로직
   jszip.min.js
 vendor/
   tasks-vision/      @mediapipe/tasks-vision wasm + vision_bundle.mjs
   tasks-audio/       @mediapipe/tasks-audio wasm + audio_bundle.mjs
-  tfjs/              @tensorflow/tfjs tf.min.js
-models/              mobilenet_v3_small_embedder.tflite · hand/face/pose *.task · yamnet.tflite
-assets/fonts/        Pretendard (셀프호스팅)
+  tfjs/              @tensorflow/tfjs tf.min.js (학습실만 쓴다)
+models/              mobilenet_v3_small_embedder.tflite · hand/face/pose *.task ·
+                     yamnet.tflite · selfie_segmenter.tflite (배경 놀이)
+assets/fonts/        Pretendard (셀프호스팅 — 디자인 킷과 같은 파일)
 assets/img/          캐릭터·로고·앱 아이콘
-python/              PyPI 패키지 `teachlab`
+tools/portable/      오프라인 exe (Go embed 서버)
+tools/shots/         README·설명서 화면 캡처 스크립트
 ```
 
 ## 파이프라인
@@ -94,17 +111,11 @@ python/              PyPI 패키지 `teachlab`
 
 - **거울은 웹캠에만 건다.** 사진 파일은 안 뒤집는다. TM 도 같다:
   거울은 `Webcam` 클래스가 찍을 때 한 번 걸고, `predict(image, flipped=false)`
-  가 기본이다.
-- 거울을 걸고 학습했으므로 파이썬 쪽도 웹캠 프레임은 뒤집어야 맞는다.
-  `project.json` 의 `embedder.mirror` 가 그 표시이고, `predict_webcam()` 이
-  그 값을 따른다. 거울이 아닌 카메라(로봇 카메라 등)는 `predict()` 를 쓴다.
+  가 기본이다. `project.json` 의 `embedder.mirror` 가 그 표시다.
 - 화면 미리보기는 잘라 낸 정사각형 캔버스(`#camCv`)를 그대로 보여 준다.
   `<video>` 는 원본일 뿐이라 화면에 붙이지 않는다 — TM 이 `webcam.canvas` 를
   붙여 보여 주는 것과 같다. **보이는 것이 곧 학습 입력이다.**
-- 자르기·거울을 바꾸면 `python/teachlab/preprocess.py` 도 같이 바꿔야 한다.
-- 축소 보간은 브라우저 캔버스 기본값에 맞춰 파이썬에서 `cv2.INTER_LINEAR` 를 쓴다
-  (같은 사진에서 임베딩 코사인 유사도 약 0.99).
-- 임베딩이 1024차원이라 학습 곱셈이 sense-lab 보다 훨씬 많다.
+- 임베딩이 1024차원이라 학습 곱셈이 랜드마크 소스보다 훨씬 많다.
   그래서 TF.js 백엔드는 `webgl` 먼저, 실패하면 `cpu` 로 내려간다.
 
 ### 소리: 창 길이를 반드시 15600 샘플로
@@ -121,19 +132,26 @@ MediaPipe 가 창을 둘로 쪼개는데, 둘째 창은 400샘플만 진짜이�
 ```
 
 그래서 링 버퍼를 `0.975 × ctx.sampleRate` 로 잡고 `results[0]` 을 쓴다
-(`lib/sound.js`). 파이썬도 같다 (`teachlab/audio.py` 의 `WINDOW_SAMPLES`).
-합성 소리로 재어 보면 이 하나로 4종 분류가 70% → 99.7% 로 올라간다.
+(`lib/sound.js`). 합성 소리로 재어 보면 이 하나로 4종 분류가 70% → 99.7% 로 올라간다.
+
+### 소리: 마이크를 두 번 켜지 않는다
+
+`createSoundEngine().start()` 는 켜는 중에 또 부르면 같은 약속을 돌려준다.
+예전에는 두 번째 호출이 마이크를 하나 더 열어서, 두 스트림이 링 버퍼 하나에
+번갈아 써 소리가 뒤섞였다 (놀이실 새로고침 직후 확신도가 84% → 60% 아래로 떨어졌다).
+켜는 중에 `stop()` 을 부르면 중간에 뜯지 않고 다 켠 뒤 끈다.
 
 ### 소리: 점수를 그대로 넣지 않는다
 
 YAMNet 점수는 sigmoid 출력이라 521칸 중 60칸 남짓만 0이 아니고 값도 작다.
-제곱근으로 펴고 L2 로 크기를 맞춘다 (`applySoundTransform`, `sqrt-l2`).
+학습에는 제곱근으로 펴고 L2 로 크기를 맞춘 값을 쓴다 (`applySoundTransform`, `sqrt-l2`).
 비슷한 소리 4종·종류당 12개·잡음 있는 조건에서 80.0% → 89.4%
 (최악의 경우 40% → 73%).
 
 옛 모델은 날것으로 배웠으므로 `project.json` 의 `embedder.featureTransform`
-에 어느 쪽인지 적는다. 값이 없으면 `raw` 로 본다. 시험실은 고른 모델이 배운
-방식을 따르고, "이어서 배우기" 는 옛 예시를 새 방식으로 변환해 둔다.
+에 어느 쪽인지 적는다. 값이 없으면 `raw` 로 본다. 시험실·놀이실은 고른 모델이
+배운 방식을 따르고, "이어서 배우기" 는 옛 예시를 새 방식으로 변환해 둔다.
+놀이실의 그냥 보기(박수·휘파람·말소리)는 **날것 점수**를 읽는다 — 기준값이 날것 기준이다.
 
 ### Teachable Machine 과 다른 점
 
@@ -144,31 +162,77 @@ YAMNet 점수는 sigmoid 출력이라 521칸 중 60칸 남짓만 0이 아니고 
 | 임베더 | MobileNet v2 (tfjs), 1280차원, 입력 [-1,1] | MediaPipe MobileNetV3-Small, 1024차원, l2 정규화 |
 | 헤드 | Dense(denseUnits, relu) → Dense(N, softmax, useBias=false) | Dense(64, relu) → Dropout(0.2) → Dense(N, softmax) |
 
-임베더는 CLAUDE.md 가 정한 것이다 (sense-lab 과 같은 MediaPipe 스택).
+임베더는 CLAUDE.md 가 정한 것이다 (MediaPipe 스택).
+
+## 놀이실
+
+### 생각 틀
+
+왼쪽에서 볼 것을 켠다 (소스마다 **그냥 보기** 또는 **내 모델**). 오른쪽에서
+"만약 [조건] (그리고/또는 [조건]) 이면 AI가 할 말" 규칙이나 순서를 만든다.
+조건은 `{ src, v }` 이고 `v` 는 `s:신호` (그냥 보기) 또는 `c:종류` (내 모델의 종류)다.
+
+- 카메라 소스(이미지·손·얼굴·포즈)는 프레임마다 **하나씩 돌아가며** 본다.
+  넷을 다 켜도 프레임당 추론은 하나다.
+- 안 쓰는 랜드마커는 `close()` 해서 메모리를 돌려준다.
+- 확신 정도는 시험실 값(`localStorage['teachlab-threshold']`, 기본 60%)을 같이 쓴다.
+  놀이실에는 슬라이더를 두지 않는다 (화면을 단순하게).
+- 소스를 끄면 그 소스의 조건은 **지우지 않고 흐리게** 둔다. 실수로 껐다 켜도
+  아이가 만든 규칙이 사라지지 않게.
+- 상태는 `localStorage['teachlab-play']` 에 저장해 새로고침해도 이어진다.
+
+### 그냥 보기 기준 (`lib/signals.js`)
+
+sense-lab 에서 아이들과 써 보며 맞춘 값을 그대로 옮겼다.
+
+| 신호 | 판정 |
+|---|---|
+| 손가락 수 | 손가락 끝이 가운데 마디보다 손목에서 1.08배 멀면 편 것. 엄지는 끝~새끼 MCP 거리가 손바닥 폭의 1.1배 넘으면 |
+| 얼굴 거리 | 홍채 지름(11.7mm)으로 역산. 40cm 이하 가까이, 75cm 이상 멀리 (보정 없이 ±10~15%) |
+| 고개 방향 | 코끝이 얼굴 좌우·위아래 사이 어디쯤인지 비율 |
+| 입 벌리기 · 웃기 | blendshape `jawOpen` · `mouthSmile*` 0.4 초과 |
+| 손 들기 | 손목이 코보다 위 |
+| 박수 · 휘파람 · 말소리 | YAMNet 날것 점수 0.3 초과 (말소리는 0.5). 조용함은 RMS 0.02 미만 |
+
+### 목소리 (`lib/speak.js`)
+
+- Web Speech API `speechSynthesis`. **`voice.localService === true` 인 목소리만 쓴다.**
+  크롬의 "Google …" 목소리처럼 인터넷 목소리는 읽을 문장을 서버로 보낸다.
+  맞는 목소리가 없으면 목소리 단추가 "쓸 수 있는 목소리가 없어요" 로 바뀌고 조용히 넘어간다.
+  화면의 답은 그대로 나온다.
+- 기기마다 있는 한국어 목소리가 다르다. 윈도우 한국어판은 기본으로 들어 있고,
+  영문 윈도우는 언어 팩을 깔아야 생긴다. 맥·아이패드·안드로이드는 대개 들어 있다.
+  라즈베리파이 크로미움은 목소리가 없는 경우가 많다 (확인 필요).
+- 깜빡임 거르기: 규칙이 **0.4초 계속** 맞아야 말하고, 말한 규칙은 **0.7초 꺼져야**
+  다시 말한다. 계속 맞고 있으면 한 번만 말한다.
+- 목록은 늦게 도착한다 (크롬은 `voiceschanged` 뒤에야 채워진다). `onVoicesChanged` 로 다시 그린다.
+- 브라우저는 사용자가 한 번 누른 뒤에야 말하게 해 준다. 놀이실은 카메라·카드를 먼저 누르므로 걸리지 않는다.
+- 순서 놀이 한 칸 통과는 웹 오디오로 만든 짧은 "띵" — 목소리가 없는 기기에서도 들린다.
 
 ## 저장 형식
 
 브라우저 저장은 IndexedDB `teach-lab` / 스토어 `projects` (keyPath: `name`).
-가중치는 TF.js 형식이 아니라 **평범한 float32 덩어리**로 둔다 — 파이썬에서
-numpy 로 바로 읽기 위해서다.
+가중치는 TF.js 형식이 아니라 **평범한 float32 덩어리**로 둔다 —
+시험실·놀이실이 TF.js 없이 순수 JS 로 바로 계산한다.
 
 ```
 .teachlab.zip
-  manifest.json     { format:"teachlab", version, kind:"image", app, createdAt }
-  project.json      이름·종류·정확도·임베더 정보
+  manifest.json     { format:"teachlab", version, kind, app, createdAt }
+  project.json      이름·소스·갈래·종류·정확도·추출기 정보(embedder)
   classifier.json   층마다 kernel/bias 의 shape 과 offset(float32 개수)
   classifier.bin    float32 little-endian 을 순서대로 이어 붙인 것
-  samples.json      예시 임베딩 (base64) — 이어서 배우기용
+  samples.json      예시 특징 벡터 (base64) — 이어서 배우기용
   thumbs/<종류번호>/<번호>.jpg
 ```
 
-형식을 바꿀 때는 `manifest.version` 을 올리고, 읽는 쪽
-(`lib/project.js` · `python/teachlab/classifier.py`)을 함께 고칩니다.
+형식을 바꿀 때는 `manifest.version` 을 올리고 읽는 쪽(`lib/project.js`)을 함께 고칩니다.
+`project.json` 의 `embedder` 에는 특징을 다시 만드는 데 필요한 것(정규화·창 길이·거울)을
+적어 둔다. 다른 컴퓨터에서 불러와도 같은 숫자가 나오게 하기 위해서다.
 
 ## 벤더 파일 갱신
 
 ```bash
-npm i @mediapipe/tasks-vision @tensorflow/tfjs
+npm i @mediapipe/tasks-vision @mediapipe/tasks-audio @tensorflow/tfjs
 cp node_modules/@mediapipe/tasks-vision/wasm/vision_wasm_internal.*        vendor/tasks-vision/
 cp node_modules/@mediapipe/tasks-vision/wasm/vision_wasm_nosimd_internal.* vendor/tasks-vision/
 cp node_modules/@mediapipe/tasks-vision/vision_bundle.mjs                  vendor/tasks-vision/
@@ -185,32 +249,21 @@ cp node_modules/@tensorflow/tfjs/dist/tf.min.js                            vendo
 
 `node_modules` 는 커밋하지 않고, 벤더 파일은 커밋합니다.
 
-## 파이썬 패키지
+## 정적 파일 크기
 
-```bash
-cd python
-pip install -e .
-teachlab info <파이썬내보내기>/model
-```
+배포되는 것은 약 67MB 다. 브라우저는 wasm 두 벌(SIMD/구형) 중 하나만 받는다.
 
-**기본 설치를 가볍게 유지할 것.** 이미지 모델은 `.tflite` 를 LiteRT 로 직접
-돌린다 (`teachlab/embedder.py`). MediaPipe 를 쓰지 않는 이유는 무게다.
+| 항목 | 크기 |
+|---|---|
+| models | 25MB (손 7.8 · 포즈 5.8 · 이미지 4.1 · 소리 4.1 · 얼굴 3.8 · 배경 0.25) |
+| vendor/tasks-vision | 23MB (실제로 받는 것 약 12MB) |
+| vendor/tasks-audio | 13MB (실제로 받는 것 약 7MB) |
+| 폰트·아이콘·이미지 | 4.4MB |
+| tfjs | 1.5MB |
 
-| | 받는 것 | 대략 |
-|---|---|---|
-| 기본 (이미지) | numpy · Pillow · ai-edge-litert | 110MB |
-| `[landmark]` `[sound]` | + mediapipe (opencv-contrib·matplotlib 동반) | 800MB |
-
-- MediaPipe ImageEmbedder 가 이 모델에 쓰는 정규화는 `x / 255` 다.
-  LiteRT 로 같은 값을 넣으면 임베딩이 **완전히 같다** (코사인 1.000000).
-  바꾸기 전에 반드시 다시 재 볼 것.
-- 축소 보간은 numpy 로 직접 짠 쌍선형(`preprocess.resize_bilinear`)을 쓴다.
-  브라우저 캔버스의 기본 축소와 같은 격자라 OpenCV·Pillow 없이도 맞는다.
-- `mediapipe` 는 `libEGL`·`libGLESv2` 를 dlopen 한다. 헤드리스 리눅스에서
-  `[landmark]`/`[sound]` 를 쓰려면 `libegl1 libgles2 libglx0` 가 필요하다.
-- TensorFlow 는 설치하지 않는다 (LiteRT 는 TFLite 런타임만 담고 있다).
-
-배포는 `python/` 에서 빌드해 PyPI 에 올립니다 (패키지명 `teachlab`).
+학습실을 처음 열면 고른 소스만 받아 약 18MB 로 시작하고, 그 뒤 나머지 엔진을
+뒤에서 미리 받아(`preloadRest`) 첫 방문에 약 46MB 가 된다. 교실 Wi-Fi 에서
+동시에 열면 부담이 되므로, 필요하면 미리 받기를 끄는 것을 고려한다.
 
 ## 배포 (자매 서비스와 동일)
 
@@ -222,36 +275,24 @@ teachlab info <파이썬내보내기>/model
 
 ## 버전·태그·릴리스
 
-번호가 두 줄이다. 섞지 않는다.
-
 | 무엇 | 태그 | 번호가 사는 곳 | 올리는 곳 |
 |---|---|---|---|
-| 웹앱 (사이트 · `TeachLab.exe`) | `v0.1.1` | 태그 · Release · `CHANGELOG.md` | GitHub Release |
-| 파이썬 `teachlab` | `py-v0.4.0` | `python/pyproject.toml` · `python/teachlab/__init__.py` · `CHANGELOG.md` | PyPI |
+| 웹앱 (사이트 · `TeachLab.exe`) | `v0.2.0` | 태그 · Release · `CHANGELOG.md` | GitHub Release |
 
 - 사이트는 `release` 브랜치가 곧 배포라 태그가 없어도 늘 최신이다. `v*` 태그는
   "이 시점의 exe 와 릴리스 노트"를 남기는 표시다. **사용자에게 보이는 변화가 쌓이면** 하나 끊는다.
-- 파이썬은 PyPI 에 같은 번호를 두 번 올릴 수 없다. 올리기 전에 반드시 번호를 올린다.
-- `MAJOR.MINOR.PATCH`: 고치기만 했으면 PATCH, 기능이 늘었으면 MINOR, 저장 형식·API 가 깨지면 MAJOR.
-  파이썬은 `project.json` 을 읽는 쪽이라 **저장 형식이 바뀌면 둘 다 올린다.**
+- `MAJOR.MINOR.PATCH`: 고치기만 했으면 PATCH, 기능이 늘었으면 MINOR, 저장 형식이 깨지면 MAJOR.
+- 예전 `py-v*` 태그와 PyPI `teachlab` 은 파이썬 내보내기를 걷어내면서 끝났다.
 
 ### 웹앱 릴리스 절차
 
-1. `CHANGELOG.md` 의 "아직 안 올린 것" 을 새 `vX.Y.Z — 날짜` 로 바꾸고 커밋
+1. `CHANGELOG.md` 의 "아직 안 올린 것" 을 새 `### vX.Y.Z — 날짜` 로 바꾸고 커밋
 2. `main` 푸시 → CI 초록 확인 → `release` 에 같은 커밋 푸시 (Cloudflare 자동 배포)
 3. exe + Release: 둘 중 하나
    - `git tag vX.Y.Z && git push origin vX.Y.Z` (태그 푸시가 막힌 환경도 있다)
    - Actions → **Build TeachLab.exe** → Run workflow → `tag` 에 `vX.Y.Z` 입력.
      태그가 없으면 릴리스 액션이 만들어 준다
 4. Release 본문은 워크플로가 `CHANGELOG.md` 의 `### vX.Y.Z` 절을 잘라 넣는다. 그래서 1번을 빼먹으면 본문이 빈다
-
-### 파이썬 릴리스 절차
-
-1. `python/pyproject.toml` 과 `python/teachlab/__init__.py` 의 버전을 같이 올린다
-2. `node tools/gen-teachlab-src.mjs` 로 `lib/teachlab_src.js` 를 다시 만든다 (CI 가 검사한다)
-3. `CHANGELOG.md` 파이썬 절에 적고 커밋 · `main` 푸시
-4. Actions → **Publish teachlab to PyPI** → Run workflow (target `pypi`) 또는 `py-vX.Y.Z` 태그 푸시.
-   자세한 것은 아래 "파이썬 패키지 배포 (PyPI)"
 
 ### 오프라인 exe (자매 서비스와 동일)
 
@@ -260,7 +301,7 @@ teachlab info <파이썬내보내기>/model
 
 - 구성: `.github/workflows/build-exe.yml` + `tools/portable/` (Go embed 서버)
 - 서버는 `.wasm`/`.task`/`.tflite`/`.mjs` MIME 을 명시 등록한다
-- 사이트가 약 66MB 라 exe 는 약 75MB 가 된다 (모델·wasm 이 대부분)
+- 사이트가 약 67MB 라 exe 는 약 75MB 가 된다 (모델·wasm 이 대부분)
 
 ## 저장소 About (GitHub)
 
@@ -270,95 +311,28 @@ teachlab info <파이썬내보내기>/model
 **Description** (그대로 붙여 넣기)
 
 ```
-웹캠·마이크로 보여 준 것을 브라우저 안에서 바로 가르치는 어린이용 Teachable Machine — 이미지·손·얼굴·포즈·소리, 파이썬 내보내기
+웹캠·마이크로 보여 주며 AI를 가르치고, 규칙·순서 놀이로 노는 어린이용 Teachable Machine — 이미지·손·얼굴·포즈·소리, 브라우저 안에서만
 ```
 
 **Website**: 배포 주소 (GitHub Pages 또는 Cloudflare)
 
-**Topics** (쉼표로 나뉘어 있어 한 번에 붙여 넣으면 된다)
-
-```
-teachable-machine, machine-learning, mediapipe, tensorflowjs, image-classification, hand-tracking, pose-estimation, audio-classification, education, kids, on-device, browser, pwa, korean, pibo
-```
-
-**Releases** · **Packages** 표시는 켜 두고, Deployments 는 꺼도 된다.
-
-## 내보낸 zip 이 PyPI 없이 도는 이유
-
-`파이썬으로 내보내기` 는 `python/teachlab/*.py` 를 그대로 받아 zip 안에
-`teachlab/` 폴더로 넣는다 (약 60KB). PyPI 에 올라가 있지 않아도, 교실 PC 에서
-인터넷이 막혀 있어도 `pip install -r requirements.txt` 한 줄이면 돌아간다.
-
-소스는 `lib/teachlab_src.js` 에 문자열로 **심어 둔다**. 사이트에서 받아 오지
-않으므로 배포에서 `python/` 을 빼도 안전하다.
-
-> 한때 `fetch('./python/teachlab/*.py')` 로 받아 오게 했다가, 배포 쪽에서
-> `python/` 을 빼는 순간 404 로 조용히 깨졌다. 배포 설정에 기대지 말 것.
-
-**파이썬을 고쳤으면 반드시 다시 만든다.**
+**Topics** (토픽 칸은 하나 적고 Enter 를 쳐야 칩 하나가 된다. 한꺼번에 넣으려면 `gh` 를 쓴다)
 
 ```bash
-node tools/gen-teachlab-src.mjs          # 다시 만들기
-node tools/gen-teachlab-src.mjs --check  # 최신인지 확인 (CI 가 이걸 돌린다)
+gh repo edit themakerrobot/teach-lab --add-topic teachable-machine,machine-learning,mediapipe,tensorflowjs,image-classification,hand-tracking,pose-estimation,audio-classification,speech-synthesis,education,kids,on-device,browser,pwa,korean,pibo
 ```
 
-안 하면 내보낸 zip 이 옛날 코드를 담는다. `.github/workflows/ci.yml` 이
-푸시마다 확인하므로 잊으면 빨간불이 뜬다.
+**Releases** 표시는 켜 두고, Packages · Deployments 는 꺼도 된다.
 
-- **모델 파일 경로를 C++ 런타임에 문자열로 넘기지 말 것.**
-  `teachlab/modelfile.py` 의 `read_model()` 로 읽어 바이트를 넘긴다.
-  윈도우에서 `C:\Users\...\바탕 화면\...` 같은 한글 경로를 넘기면
-  "Could not open ... The model allocation is null/empty" 로 죽는다.
-  LiteRT 는 `model_content=`, MediaPipe 는 `model_asset_buffer=` 를 쓴다.
-- `requirements.txt` 에는 소스별로 실제 필요한 것만 적는다 (`REQUIREMENTS`).
-  이미지는 LiteRT, 나머지는 MediaPipe.
+## 시험
 
-## 파이썬 패키지 배포 (PyPI)
+자동 시험은 CI 의 문법 검사와 디자인 킷 복사본 검사뿐이다. 화면 흐름은 Playwright 로
+가짜 카메라·합성음을 넣어 손으로 돌린다 (스크립트는 저장소에 두지 않았다).
 
-GitHub Actions 로 올립니다 — **토큰을 레포에 두지 않습니다.**
-PyPI 의 Trusted Publishing(OIDC)을 쓰기 때문에, PyPI 쪽에 "이 레포의 이
-워크플로" 를 한 번만 등록해 두면 그 뒤로는 자격증명이 오가지 않습니다.
-
-### 처음 한 번만 (pypi.org 에서)
-
-1. <https://pypi.org/manage/account/publishing/> → **Add a new pending publisher**
-2. 아래 그대로 입력
-
-   | 칸 | 값 |
-   |---|---|
-   | PyPI Project Name | `teachlab` |
-   | Owner | `themakerrobot` |
-   | Repository name | `teach-lab` |
-   | Workflow name | `publish-pypi.yml` |
-   | Environment name | `pypi` |
-
-3. TestPyPI 로 먼저 연습하려면 <https://test.pypi.org/manage/account/publishing/>
-   에 같은 내용으로 하나 더 등록하고 Environment 는 `testpypi` 로 둡니다.
-
-### 올리기
-
-```bash
-# 1. 버전 올리기 — 두 곳을 같이 고친다
-#    python/pyproject.toml  ·  python/teachlab/__init__.py
-# 2. 커밋·푸시한 뒤
-git tag py-v0.3.0 && git push origin py-v0.3.0
-```
-
-Actions 탭에서 **Run workflow** 로 수동 실행도 됩니다 (`testpypi` / `pypi` 선택).
-exe 빌드는 `v*` 태그, 파이썬 패키지는 `py-v*` 태그로 갈라 두었습니다.
-
-같은 버전 번호는 PyPI 에 두 번 올릴 수 없습니다. 올리기 전에 버전을 올릴 것.
-
-### 로컬에서 빌드만
-
-```bash
-cd python
-python -m build          # dist/teachlab-<ver>-py3-none-any.whl + .tar.gz
-python -m twine check dist/*
-```
-
-내보낸 zip 은 `teachlab/` 소스를 품고 있어서 PyPI 배포와 무관하게 돌아갑니다
-(바로 위 절 참고). PyPI 배포는 `pip install teachlab` 로 쓰고 싶은 사람을 위한 것입니다.
+- 마이크: `AudioContext.prototype.createMediaStreamSource` 를 가로채 사인파·잡음을 넣는다
+- 목소리: `window.speechSynthesis` 를 가짜로 바꿔 말한 문장을 모은다.
+  기기 안 목소리와 인터넷 목소리를 하나씩 넣어 두면 "기기 안 목소리만 쓴다" 도 확인된다
+- 사진: 브라우저 캔버스로 PNG 를 만들어 `setInputFiles` 로 넣는다
 
 ## 화면 캡처 (docs/manual · docs/img)
 
