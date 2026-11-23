@@ -7,6 +7,7 @@
 코드가 서버로 가지 않고, 한 번 열면 **인터넷이 끊겨도** 다시 열립니다.
 
 **바로 쓰기 → https://themakerrobot.github.io/code-lab/**
+· 인터넷이 없는 교실은 [Releases](https://github.com/themakerrobot/code-lab/releases/latest) 의 `CodeLab.exe` (Windows, 더블클릭)
 
 ![블록으로 코딩하고 실행](docs/block.png)
 
@@ -169,6 +170,8 @@ assets/fonts/         Pretendard (셀프호스팅)
 assets/img/           로고 · 파비콘 · turtle 로봇 그림
 webfonts/             Font Awesome 글꼴
 docs/                 README 화면 캡처
+tools/portable/       오프라인 exe 용 Go 서버 (main.go · 아이콘)
+CHANGELOG.md          버전 기록 (Release 본문)
 ```
 
 ### 블록 추가하기
@@ -188,11 +191,30 @@ docs/                 README 화면 캡처
 2. `lib/py-worker.js` 의 `CDN` 주소 버전을 같은 번호로 바꿉니다 (추가 패키지를 받는 곳).
 3. `sw.js` 의 `VERSION` 을 올립니다.
 
-### 배포
+### 배포 (자매 서비스 sense-lab · teach-lab 과 같은 방식)
 
-GitHub Pages 가 `main` 브랜치 루트를 그대로 올립니다 (`.nojekyll` 로 Jekyll 처리 없음).
-`main` 에 머지하면 1분 안팎으로 반영됩니다. 모든 경로가 상대경로라 하위 경로 배포에서도 동작합니다.
-화면에 보이는 파일을 바꿨으면 `sw.js` 의 `VERSION` 을 올려 주세요 — 옛 캐시를 지웁니다.
+| 무엇 | 어디로 | 언제 |
+|---|---|---|
+| 웹 사이트 | GitHub Pages — https://themakerrobot.github.io/code-lab/ | `main` 에 머지하면 1분 안팎 |
+| 오프라인 실행 파일 `CodeLab.exe` (Windows) | [GitHub Releases](https://github.com/themakerrobot/code-lab/releases) | `v*` 태그를 올릴 때 |
+
+- 사이트: `main` 브랜치 루트를 그대로 올립니다 (`.nojekyll` 로 Jekyll 처리 없음).
+  화면에 보이는 파일을 바꿨으면 `sw.js` 의 `VERSION` 을 올려 두세요 — 학생 브라우저의 옛 캐시를 지웁니다.
+- exe: GitHub Actions(`.github/workflows/build-exe.yml`)가 사이트 전체를 Go 서버(`tools/portable/`)에 담아
+  `CodeLab.exe` 하나로 만들고 Release 에 붙입니다. 더블클릭하면 `localhost:50070` 으로 브라우저가 열려요.
+  `localhost` 라 서비스 워커가 동작해서 `input()` · 오프라인 캐시가 그대로 됩니다.
+  numpy 같은 추가 패키지는 exe 안에 없어서, 처음 한 번은 인터넷이 필요합니다.
+- 모든 경로가 상대경로라 하위 경로 배포에서도 동작합니다.
+
+### 릴리스 (exe 만들기)
+
+1. `CHANGELOG.md` 의 "아직 안 올린 것" 을 새 `### vX.Y.Z — 날짜` 절로 바꾸고 `main` 에 머지합니다.
+2. 둘 중 하나:
+   - `git tag vX.Y.Z && git push origin vX.Y.Z`
+   - Actions → **Build CodeLab.exe** → Run workflow → `tag` 에 `vX.Y.Z` 입력 (태그가 없으면 만들어 줍니다)
+3. Release 본문은 워크플로가 `CHANGELOG.md` 의 그 절을 잘라 넣습니다. 1번을 빼먹으면 본문이 빕니다.
+
+번호: 고치기만 했으면 PATCH, 기능이 늘었으면 MINOR, 저장 형식(`.json`)이 깨지면 MAJOR.
 
 ### CI
 

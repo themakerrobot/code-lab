@@ -12,6 +12,9 @@
 [hidden]{display:none !important}
 .cl-flex{flex:1}
 
+/* 헤더: 킷의 갈색 외곽선 상자 대신 테두리 없이 (code-lab 만의 선택 — 킷은 그대로) */
+header{border:0;box-shadow:none}
+
 /* 헤더 탭을 button 으로 쓴다 */
 header .navlink{font-family:inherit}
 header .badge{flex-shrink:0}
