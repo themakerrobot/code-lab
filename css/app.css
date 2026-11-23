@@ -154,7 +154,7 @@
 /* 표 안의 링크형 버튼 — .db 를 <a> 에 쓸 때 밑줄을 없앤다 */
 a.db{text-decoration:none}
 
-/* ── 튜토리얼 (파이보 말풍선 안내) — sense-lab 과 같은 규격 ── */
+/* ── 튜토리얼 (파이보 말풍선 안내) ── */
 .tour{position:fixed;inset:0;z-index:300}
 .tour-spot{position:fixed;border-radius:10px;pointer-events:none;
   border:2px solid var(--acc);

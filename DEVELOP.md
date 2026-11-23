@@ -31,7 +31,7 @@
 "숫자로 바꾸는" 모듈(`embedder.js` · `landmarker.js`+`features.js` · `sound.js`)뿐이고,
 수집·학습·저장·시험·놀이는 한 길을 같이 쓴다. 소스를 더할 때도 그 자리에만 끼운다.
 
-놀이실은 sense-lab 의 시험실을 옮겨 온 것이다 (sense-lab 은 teach-lab 으로 합쳤다).
+놀이실은 옛 sense-lab 의 시험실을 옮겨 온 것이다 (sense-lab 은 teach-lab 으로 합치고 저장소는 지웠다).
 파이썬 내보내기와 PyPI 패키지 `teachlab` 은 v0.2.0 에서 걷어냈다. PyPI 에 올린
 0.4.0 까지는 그대로 남아 있고 더 올리지 않는다.
 
@@ -183,7 +183,7 @@ YAMNet 점수는 sigmoid 출력이라 521칸 중 60칸 남짓만 0이 아니고 
 
 ### 그냥 보기 기준 (`lib/signals.js`)
 
-sense-lab 에서 아이들과 써 보며 맞춘 값을 그대로 옮겼다.
+옛 sense-lab 에서 아이들과 써 보며 맞춘 값을 그대로 옮겼다.
 
 | 신호 | 판정 |
 |---|---|

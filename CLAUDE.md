@@ -1,7 +1,7 @@
 # teach-lab
 
 Teachable Machine 스타일의 브라우저 학습·놀이 툴. themakerrobot 라인업(pibo-lab, edge-lab 등)의 자매 서비스.
-sense-lab 은 이 저장소로 합쳤다 (놀이실).
+sense-lab 은 이 저장소로 합쳤다 (놀이실). sense-lab 저장소는 지웠으니 거기서 찾지 말 것.
 
 ## 범위
 - 입력 5종: 이미지 / 손(hand) / 얼굴(face) / 소리(sound) / 포즈(pose, 상반신·전신)
