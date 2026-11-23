@@ -94,6 +94,26 @@ $('modeSeg').querySelectorAll('button').forEach(b => b.addEventListener('click',
   view = 'paint';
   $('modeSeg').querySelectorAll('button').forEach(o => o.classList.toggle('on', o === b));
   renderLeft(); renderViewSeg(); renderPhoto(); renderWheel();
+
+// ── 체험하기에서 들어오면 (?a=cloak): 예시 방 사진에 미리 칠해 두고 바로 투명 망토를 보여 준다 ──
+// 칠하기 없이도 "망토가 사라지는" 것을 먼저 본다. 미리 칠한 점은 한 번의 붓질이라 되돌리기로 지울 수 있다.
+if (new URLSearchParams(location.search).get('a') === 'cloak') {
+  const s = st.cloak, im = rooms.person, truth = rooms.truth, rnd = seeded(7);
+  let n = 0;
+  for (let k = 0; k < 900; k++) {
+    const i = Math.floor(rnd() * truth.length);
+    const want = k % 3 === 0 ? 1 : 0;              // 망토 1 : 아닌 것 2
+    if (truth[i] !== want) continue;
+    const d = im.data;
+    s.X.push([d[i * 4] / 255, d[i * 4 + 1] / 255, d[i * 4 + 2] / 255]); s.Y.push(want);
+    s.dots.push({ key: 'cloak:room', x: i % im.width, y: Math.floor(i / im.width), c: want, src: 'room' });
+    n++;
+  }
+  s.strokes.push(n);
+  rebuild();
+  view = 'result'; renderViewSeg(); renderPhoto();
+  setTimeout(() => toast(T('AI에게 미리 칠해 뒀어요. 칠하기에서 더 가르쳐 봐요')), 400);
+}
   $('beltSec').style.display = mode === 'robot' ? '' : 'none';
   $('testSec').style.display = mode === 'robot' ? '' : 'none';
   fitPhoto();                    // 컨베이어 칸이 생기거나 사라지면 남는 높이가 바뀐다
@@ -453,3 +473,23 @@ function beltLoop(now) {
 $('engine').textContent = T('인터넷 없이 이 컴퓨터에서 배워요');
 new ResizeObserver(fitPhoto).observe($('photoBox').closest('.pb'));
 renderLeft(); renderViewSeg(); renderPhoto(); renderWheel();
+
+// ── 체험하기에서 들어오면 (?a=cloak): 예시 방 사진에 미리 칠해 두고 바로 투명 망토를 보여 준다 ──
+// 칠하기 없이도 "망토가 사라지는" 것을 먼저 본다. 미리 칠한 점은 한 번의 붓질이라 되돌리기로 지울 수 있다.
+if (new URLSearchParams(location.search).get('a') === 'cloak') {
+  const s = st.cloak, im = rooms.person, truth = rooms.truth, rnd = seeded(7);
+  let n = 0;
+  for (let k = 0; k < 900; k++) {
+    const i = Math.floor(rnd() * truth.length);
+    const want = k % 3 === 0 ? 1 : 0;              // 망토 1 : 아닌 것 2
+    if (truth[i] !== want) continue;
+    const d = im.data;
+    s.X.push([d[i * 4] / 255, d[i * 4 + 1] / 255, d[i * 4 + 2] / 255]); s.Y.push(want);
+    s.dots.push({ key: 'cloak:room', x: i % im.width, y: Math.floor(i / im.width), c: want, src: 'room' });
+    n++;
+  }
+  s.strokes.push(n);
+  rebuild();
+  view = 'result'; renderViewSeg(); renderPhoto();
+  setTimeout(() => toast(T('AI에게 미리 칠해 뒀어요. 칠하기에서 더 가르쳐 봐요')), 400);
+}

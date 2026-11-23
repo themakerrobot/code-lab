@@ -17,6 +17,7 @@ const GL_LANG = (function () {
 })();
 
 const GL_I18N = {
+  'AI에게 미리 칠해 뒀어요. 칠하기에서 더 가르쳐 봐요': 'We painted some for the AI. Paint more to teach it.',
   // ── 페이지 / 헤더 ──
   '홈': 'Home',
   '운전': 'Drive',
