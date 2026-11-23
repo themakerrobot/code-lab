@@ -1,0 +1,55 @@
+name: 릴리스 관리
+
+# 태그를 직접 push/삭제할 수 없는 환경(사내 git 프록시 등)이 있어서
+# 이미 올린 릴리스는 Actions 탭에서 손본다.
+#
+#   Actions → 릴리스 관리 → Run workflow
+#     · 본문 다시 쓰기 : CHANGELOG.md 의 "### vX.Y.Z" 절로 릴리스 본문을 바꾼다 (exe 는 그대로)
+#     · 지우기         : 릴리스와 태그를 함께 지운다
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: '릴리스 태그 (예: v0.2.2)'
+        required: true
+      action:
+        description: '할 일'
+        type: choice
+        options: ['본문 다시 쓰기', '지우기']
+        default: '본문 다시 쓰기'
+
+jobs:
+  admin:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ inputs.tag }}
+    steps:
+      - name: 태그 확인
+        run: |
+          case "$TAG" in v[0-9]*) ;; *) echo "태그는 v 로 시작해야 합니다: $TAG"; exit 1 ;; esac
+
+      - uses: actions/checkout@v4
+        if: inputs.action == '본문 다시 쓰기'
+
+      - name: 본문 다시 쓰기 (build-exe.yml 과 같은 방식)
+        if: inputs.action == '본문 다시 쓰기'
+        run: |
+          awk -v tag="$TAG" '
+            /^### / { on = ($2 == tag) ; next }
+            /^## /  { on = 0 }
+            on      { print }
+          ' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then
+            echo "CHANGELOG.md 에 $TAG 절이 없습니다"; exit 1
+          fi
+          printf '\n---\n`TeachLab.exe` 는 사이트 전체를 담은 오프라인 실행 파일입니다. 더블클릭하면 브라우저가 열려요.\n' >> notes.md
+          cat notes.md
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --notes-file notes.md
+
+      - name: 지우기
+        if: inputs.action == '지우기'
+        run: gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag

@@ -294,6 +294,11 @@ cp node_modules/@tensorflow/tfjs/dist/tf.min.js                            vendo
      태그가 없으면 릴리스 액션이 만들어 준다
 4. Release 본문은 워크플로가 `CHANGELOG.md` 의 `### vX.Y.Z` 절을 잘라 넣는다. 그래서 1번을 빼먹으면 본문이 빈다
 
+이미 올린 릴리스는 Actions → **릴리스 관리** (`release-admin.yml`) 에서 손본다.
+
+- **본문 다시 쓰기**: CHANGELOG 를 고쳐 push 한 뒤 누르면 그 절로 본문만 바뀐다 (exe 는 그대로)
+- **지우기**: 릴리스와 태그를 함께 지운다
+
 ### 오프라인 exe (자매 서비스와 동일)
 
 `v*` 태그(또는 workflow_dispatch 의 `tag` 입력)로 GitHub Actions 가 사이트 전체를 담은 단일
