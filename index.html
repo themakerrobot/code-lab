@@ -19,10 +19,11 @@
 
 <header>
   <h1><img src="assets/img/pibo-logo.png" alt=""><span class="brand-txt">Code Lab</span></h1>
-  <button type="button" class="navlink" data-mode="block"><i class="fa-solid fa-cubes"></i>블록</button>
-  <button type="button" class="navlink" data-mode="python"><i class="fa-brands fa-python"></i>파이썬</button>
+  <button type="button" class="navlink" data-mode="block">블록</button>
+  <button type="button" class="navlink" data-mode="python">파이썬</button>
   <span class="cl-flex"></span>
-  <span class="badge" id="pyBadge">파이썬 준비 중…</span>
+  <span id="engine">준비 중…</span>
+  <button type="button" class="hbtn" id="helpBtn" title="도움말"><i class="fa-solid fa-question"></i></button>
   <button type="button" class="hbtn" id="fsBtn" title="전체화면"></button>
 </header>
 
@@ -110,6 +111,33 @@
   </section>
 
 </main>
+
+<dialog id="helpDlg" class="cl-help" aria-labelledby="helpTitle">
+  <div class="ph"><i class="fa-solid fa-circle-question"></i><span id="helpTitle">Code Lab 사용법</span>
+    <span class="cl-flex"></span>
+    <button type="button" class="hbtn" id="helpClose" title="닫기"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="pb">
+    <div class="sec2 first"><div class="st">코딩하기</div>
+      <p><b>블록</b>: 왼쪽 분류에서 블록을 끌어다 <b>시작(깃발) 블록 아래에</b> 붙여요.<br>
+      <b>파이썬</b>: 코드를 쓰거나 <b>예제</b>에서 골라요. 블록의 <b>코드</b> 탭에서 파이썬으로 옮길 수도 있어요.</p></div>
+    <div class="sec2"><div class="st">실행 · 단축키</div>
+      <table class="mk-table">
+        <tr><td class="nm">실행</td><td>Ctrl + Enter</td></tr>
+        <tr><td class="nm">정지</td><td>Esc — 무한 반복도 바로 멈춰요</td></tr>
+        <tr><td class="nm">바로 저장</td><td>Ctrl + S (작업은 자동으로도 저장돼요)</td></tr>
+      </table></div>
+    <div class="sec2"><div class="st">결과 보기</div>
+      <p><b>결과</b>: 글자와 그래프 · <b>그림</b>: turtle (로봇이 걸어가며 그려요) · <b>카메라</b>: 센서를 쓸 때</p>
+      <p class="hint">turtle 에 키보드 · 마우스 · 타이머를 걸면, 코드가 끝나도 정지할 때까지 기다려요.</p></div>
+    <div class="sec2"><div class="st">센서</div>
+      <p>웹캠 · 마이크로 손가락 수, 손 위치, 얼굴, 소리를 읽어요. sense-lab 모델(.zip)도 <b>불러오기</b>로 넣을 수 있어요.</p>
+      <p class="hint">영상과 소리는 이 컴퓨터 밖으로 나가지 않아요.</p></div>
+    <div class="sec2"><div class="st">파일</div>
+      <p><b>내보내기</b>: 블록은 .json, 파이썬은 .py · <b>불러오기</b>: .json · .py · .zip(sense-lab 모델)</p>
+      <p class="hint">한 번 열면 인터넷 없이도 열려요. 교실 PC 는 내보내기로 파일을 챙겨 두세요.</p></div>
+  </div>
+</dialog>
 
 <div id="toast" class="toast"></div>
 

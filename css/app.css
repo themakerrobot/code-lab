@@ -12,9 +12,25 @@
 [hidden]{display:none !important}
 .cl-flex{flex:1}
 
+/* 헤더 상태 글자 — 자매 서비스(teach-lab)의 #engine 과 같게 */
+#engine{font-size:11px;color:var(--ink3);font-weight:600;white-space:nowrap}
+#engine.err{color:var(--warn)}
+
+/* 도움말 창 */
+.cl-help{margin:auto;width:min(560px,calc(100vw - 32px));max-height:min(80vh,680px);padding:0;
+  border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);
+  box-shadow:0 12px 40px rgba(0,0,0,.18);font-family:var(--sans)}
+.cl-help::backdrop{background:rgba(42,38,32,.35)}
+.cl-help[open]{display:flex;flex-direction:column}
+.cl-help > .ph{display:flex;align-items:center;gap:7px;padding:10px 13px;font-size:13px;font-weight:700;
+  border-bottom:1px solid var(--line-soft)}
+.cl-help > .ph i{color:var(--acc)}
+.cl-help > .pb{padding:4px 16px 14px;overflow-y:auto;font-size:12.5px;line-height:1.7;color:var(--ink2)}
+.cl-help .sec2.first{border-top:0;margin-top:8px;padding-top:0}
+.cl-help .mk-table td{padding:5px 8px}
+
 /* 헤더 탭을 button 으로 쓴다 */
 header .navlink{font-family:inherit}
-header .badge{flex-shrink:0}
 
 /* ── 도구 줄 — 자매 서비스의 단계 표시줄만큼 얇게 (킷 v1.4.0 헤더 36px 에 맞춤) ── */
 /* 킷의 단계 표시줄(#steps)과 같은 띠: 헤더 밑에 붙는 옅은 면 + 아래 괘선 */
@@ -130,6 +146,7 @@ header .badge{flex-shrink:0}
   #panOut{height:46vh;flex:none}
 }
 @media (max-width:700px){
+  #engine{display:none}
   .cl-bar{padding:5px 10px}
   .cl-sep{display:none}
   .cl-tab{font-size:14px}
@@ -138,5 +155,4 @@ header .badge{flex-shrink:0}
 }
 @media (max-width:420px){
   header h1 .brand-txt{display:none}
-  header .badge{font-size:10.5px;padding:3px 8px}
 }
