@@ -332,12 +332,15 @@ function trick() {
 }
 const tricked = () => +$('rot').value !== 0 || +$('scl').value !== 100 || +$('brt').value !== 100;
 for (const [id, out, unit] of [['rot', 'rotVal', '°'], ['scl', 'sclVal', '%'], ['brt', 'brtVal', '%']]) {
-  $(id).addEventListener('input', () => { $(out).textContent = $(id).value + unit; if (model) setStep(4); });
+  $(id).addEventListener('input', () => { $(out).textContent = $(id).value + unit; trickMark(); if (model) setStep(4); });
 }
 $('trickReset').addEventListener('click', () => {
   $('rot').value = 0; $('scl').value = 100; $('brt').value = 100;
   $('rotVal').textContent = '0°'; $('sclVal').textContent = '100%'; $('brtVal').textContent = '100%';
+  trickMark();
 });
+// "AI 속이기" 칸은 접혀 있다. 접어 둔 채 그림이 바뀌어 있으면 제목 옆에 표시한다 (답이 왜 이상한지 헷갈리지 않게)
+function trickMark() { $('trickOn').hidden = !tricked(); }
 
 // ── 실시간: AI가 보는 그림 · 답 · 특징 지도 ─────────────────
 const see = $('seeCv'), seeG = see.getContext('2d');
