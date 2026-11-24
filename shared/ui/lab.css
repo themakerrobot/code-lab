@@ -230,3 +230,12 @@ header{position:sticky;top:0;z-index:60}
   .pan-side{width:236px}
   .pan-out{width:272px}
 }
+
+/* 터치 기기(태블릿 · 휴대폰) — 누른 뒤 손을 떼도 :hover 가 남아 고르지 않은 단추가 켜진 것처럼 보인다.
+   마우스가 없는 기기에서는 hover 색을 평소 색으로 되돌린다 (.on · 주 동작은 그대로) */
+@media (hover:none){
+  .db:not(.on):not(.go):not(.warn):hover{border-color:var(--line-soft);color:var(--ink2);background:var(--panel)}
+  .db.danger:hover{color:var(--ink3)}
+  .db.go:not(:disabled):hover{background:var(--acc);border-color:var(--acc)}
+  .cls:not(.on):hover,.mradio:not(.on):hover{border-color:var(--line)}
+}

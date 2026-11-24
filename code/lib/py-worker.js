@@ -34,6 +34,7 @@ let canSyncInput = false;
 let inputSeq = 0;
 let fontReady = false;
 let modelNames = [];
+let lang = 'ko';                 // 화면 말 (sensor.py 의 오류 · 안내 글)
 
 // ── 출력 묶어 보내기 ──
 // 파이썬이 돌고 있는 동안 워커는 타이머를 못 돌린다 → 쓸 때마다 시간을 보고 보낸다.
@@ -63,7 +64,7 @@ function syncGet(path) {
 function syncInput() {
   flush();
   if (!canSyncInput) {
-    postMessage({ type: 'out', cls: 'err', text: '\n[입력 칸을 준비하지 못했어요. 페이지를 새로고침한 뒤 다시 실행해 주세요]\n' });
+    postMessage({ type: 'out', cls: 'err', text: lang === 'en' ? '\n[Could not get the input box ready. Reload the page and run again]\n' : '\n[입력 칸을 준비하지 못했어요. 페이지를 새로고침한 뒤 다시 실행해 주세요]\n' });
     return '';
   }
   const id = `${token}-${++inputSeq}`;
@@ -128,6 +129,7 @@ async function init() {
   });
   py.setStdin({ stdin: () => syncInput() + '\n' });
   py.registerJsModule('_codelab', {
+    lang() { return lang; },
     turtle(json) { turtleBuf.push(JSON.parse(json)); maybeFlush(); },
     timer(id, ms) {
       timers.set(id, setTimeout(() => { timers.delete(id); dispatch('timer', String(id), 0, 0); }, Math.max(0, ms)));
@@ -282,6 +284,7 @@ onmessage = async (e) => {
     });
   } else if (m.type === 'run') {
     modelNames = m.models || [];
+    lang = m.lang === 'en' ? 'en' : 'ko';
     await ready;
     if (py) await run(m.id, m.code);
   } else if (m.type === 'event') {

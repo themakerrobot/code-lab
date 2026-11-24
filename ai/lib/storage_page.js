@@ -33,6 +33,7 @@ function dateText(iso) {
   const d = new Date(iso);
   if (isNaN(d)) return '';
   const p = n => String(n).padStart(2, '0');
+  if (window.AILAB && window.AILAB.lang === 'en') return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   return d.getFullYear() + '. ' + p(d.getMonth() + 1) + '. ' + p(d.getDate());
 }
 

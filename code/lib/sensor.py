@@ -40,6 +40,14 @@ class SensorError(RuntimeError):
     pass
 
 
+def _L(ko, en):
+    """화면 말에 맞춘 글 (코딩 화면이 한 · 영을 알려 준다)."""
+    try:
+        return en if _codelab.lang() == 'en' else ko
+    except Exception:
+        return ko
+
+
 def _state(fresh=False):
     now = _time.monotonic()
     if fresh or now - _cache[0] > _CACHE_S:
@@ -54,13 +62,13 @@ def _state(fresh=False):
 
 def _need(what, label):
     if not _codelab.can_sync():
-        raise SensorError('센서를 준비하지 못했어요. 페이지를 새로고침한 뒤 다시 실행해 주세요')
+        raise SensorError(_L('센서를 준비하지 못했어요. 페이지를 새로고침한 뒤 다시 실행해 주세요', 'Could not get the sensors ready. Reload the page and run again'))
     st = _state()
     if st.get('ready', {}).get(what):
         return st
     if what not in _asked:
         _asked.add(what)
-        print(f'[{label} 켜는 중…]')
+        print(_L(f'[{label} 켜는 중…]', f'[Turning on {label}…]'))
         _codelab.sensor_need(what)
     t0 = _time.monotonic()
     while True:
@@ -73,24 +81,24 @@ def _need(what, label):
             raise SensorError(err)
         if _time.monotonic() - t0 > _WAIT_S:
             _asked.discard(what)
-            raise SensorError(f'{label}를 준비하지 못했어요')
+            raise SensorError(_L(f'{label}를 준비하지 못했어요', f'Could not get {label} ready'))
         _time.sleep(0.05)
 
 
 def _hand():
-    return _need('hand', '카메라(손)').get('hand') or {}
+    return _need('hand', _L('카메라(손)', 'camera (hand)')).get('hand') or {}
 
 
 def _face():
-    return _need('face', '카메라(얼굴)').get('face') or {}
+    return _need('face', _L('카메라(얼굴)', 'camera (face)')).get('face') or {}
 
 
 def _pose():
-    return _need('pose', '카메라(몸)').get('pose') or {}
+    return _need('pose', _L('카메라(몸)', 'camera (body)')).get('pose') or {}
 
 
 def _sound():
-    return _need('sound', '마이크').get('sound') or {}
+    return _need('sound', _L('마이크', 'mic')).get('sound') or {}
 
 
 # ── 손 ──
@@ -207,7 +215,7 @@ def models():
 
 
 def _model(name):
-    st = _need('model:' + name, f"내 AI '{name}'")
+    st = _need('model:' + name, _L(f"내 AI '{name}'", f"my AI '{name}'"))
     return (st.get('models') or {}).get(name) or {}
 
 

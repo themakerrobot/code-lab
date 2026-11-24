@@ -36,7 +36,7 @@ window.MyAI = (function () {
     if (loaded.has(name)) return loaded.get(name);
     const [P, C, S] = await mods;
     const rec = await P.Store.get(name);
-    if (!rec) throw new Error(`'${name}' AI 가 보관함에 없어요. 가르치기에서 먼저 만들어 주세요`);
+    if (!rec) throw new Error(window.AILAB && window.AILAB.lang === 'en' ? `No AI named '${name}' in My box. Make one in Teach first` : `'${name}' AI 가 보관함에 없어요. 가르치기에서 먼저 만들어 주세요`);
     const m = {
       name,
       source: rec.source || 'image',
@@ -61,7 +61,7 @@ window.MyAI = (function () {
 
   async function importFile(file) {
     const [P] = await mods;
-    if (typeof JSZip === 'undefined') throw new Error('파일을 열 준비가 안 됐어요. 새로고침해 주세요');
+    if (typeof JSZip === 'undefined') throw new Error(window.AILAB && window.AILAB.lang === 'en' ? 'Not ready to open files. Please reload' : '파일을 열 준비가 안 됐어요. 새로고침해 주세요');
     const rec = await P.importZip(file);
     await refresh();
     return rec.name;

@@ -71,7 +71,7 @@ export class Sensors {
         return;
       }
       if (['hand', 'face', 'pose'].includes(what)) { await this._startSource(what); this.waitFirst.add(what); return; }
-      throw new Error('알 수 없는 센서예요: ' + what);
+      throw new Error((window.AILAB && window.AILAB.lang === 'en' ? 'Unknown sensor: ' : '알 수 없는 센서예요: ') + what);
     } catch (e) {
       const msg = this._friendly(e);
       this.state.error[what] = msg;
@@ -82,9 +82,10 @@ export class Sensors {
 
   _friendly(e) {
     const n = e && e.name;
-    if (n === 'NotAllowedError' || n === 'SecurityError') return '카메라·마이크를 쓰도록 허락해 주세요';
-    if (n === 'NotFoundError' || n === 'OverconstrainedError') return '카메라·마이크를 찾지 못했어요. 연결을 확인해 주세요';
-    if (n === 'NotReadableError') return '카메라·마이크를 다른 곳에서 쓰고 있어요';
+    const en = !!(window.AILAB && window.AILAB.lang === 'en');
+    if (n === 'NotAllowedError' || n === 'SecurityError') return en ? 'Please allow the camera and mic' : '카메라·마이크를 쓰도록 허락해 주세요';
+    if (n === 'NotFoundError' || n === 'OverconstrainedError') return en ? 'No camera or mic found. Check the connection' : '카메라·마이크를 찾지 못했어요. 연결을 확인해 주세요';
+    if (n === 'NotReadableError') return en ? 'Another app is using the camera or mic' : '카메라·마이크를 다른 곳에서 쓰고 있어요';
     return String(e && e.message || e);
   }
 

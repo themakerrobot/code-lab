@@ -548,7 +548,7 @@
     turtle.stop();
     turtle.reset();
     showTab(hasTurtle ? 'draw' : 'out');
-    if (!runner.run(code, { models: MyAI.list().map(m => m.name) })) return;
+    if (!runner.run(code, { models: MyAI.list().map(m => m.name), lang: EN ? 'en' : 'ko' })) return;
     if (sensors) sensors.begin();
     setStatus(T('실행 중…', 'Running…'), 'run');
     updateButtons();
@@ -705,7 +705,7 @@
       b.className = 'cl-menuitem';
       b.textContent = EN ? (EX_EN[ex.id] || ex.label) : ex.label;
       b.addEventListener('click', () => {
-        editor.setValue(ex.code);
+        editor.setValue(EN && window.CODELAB_EXAMPLES_EN && CODELAB_EXAMPLES_EN[ex.id] || ex.code);
         menu.hidden = true;
         showTab(ex.turtle ? 'draw' : 'out');
         toast(T('예제를 불러왔어요', 'Example loaded'));
