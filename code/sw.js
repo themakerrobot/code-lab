@@ -10,7 +10,7 @@
 //    '__codelab__/sensor' 로 물으면 그 값을 바로 준다.
 // 카메라 AI 모델·wasm(models/ · vendor/tasks-vision/)은 처음 쓸 때 받아 담는다 (약 29MB).
 
-const VERSION = 'ailab-code-6';
+const VERSION = 'ailab-code-7';
 const RUNTIME = 'codelab-runtime';
 const INPUT_WAIT_MS = 4 * 60 * 1000;   // 그 뒤엔 204 → 워커가 같은 id 로 다시 묻는다
 
@@ -25,7 +25,7 @@ const PRECACHE = [
   'vendor/codemirror/codemirror.css', 'vendor/codemirror/cobalt.css',
   'vendor/codemirror/codemirror.min.js', 'vendor/codemirror/python.js',
   'vendor/blockly/blockly_compressed.js', 'vendor/blockly/blocks_compressed.js',
-  'vendor/blockly/python_compressed.js', 'vendor/blockly/ko.js',
+  'vendor/blockly/python_compressed.js', 'vendor/blockly/ko.js', 'vendor/blockly/en.js',
   'vendor/blockly/media/sprites.png', 'vendor/blockly/media/handdelete.cur',
   'vendor/pyodide/pyodide.mjs', 'vendor/pyodide/pyodide.asm.mjs',
   'vendor/pyodide/pyodide.asm.wasm', 'vendor/pyodide/python_stdlib.zip',

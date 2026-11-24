@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="vendor/codemirror/cobalt.css">
 <link rel="stylesheet" href="css/app.css">
 <link rel="stylesheet" href="../shared/ui/lab.css">
+<script src="../shared/ui/boot.js"></script>
 </head>
 <body>
 
@@ -153,7 +154,8 @@
 <script src="vendor/blockly/blockly_compressed.js"></script>
 <script src="vendor/blockly/blocks_compressed.js"></script>
 <script src="vendor/blockly/python_compressed.js"></script>
-<script src="vendor/blockly/ko.js"></script>
+<!-- Blockly 말: 상단바(nav.js)가 고른 말의 파일 하나만 (ko.js · en.js 둘 다 있다) -->
+<script>document.write('<script src=' + JSON.stringify('vendor/blockly/' + (window.AILAB && window.AILAB.lang === 'en' ? 'en' : 'ko') + '.js') + '><\/script>');</script>
 <script src="blocks/customblock.js"></script>
 <script src="blocks/customblock_callback.js"></script>
 <script src="blocks/customblock_toolbox.js"></script>

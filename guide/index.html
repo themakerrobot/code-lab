@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>사용 가이드 — AI Lab</title>
-<meta name="description" content="AI Lab 사용 가이드: 준비물, 화면 읽는 법, 메뉴별 활동, 보관함, 수업에서 쓰기, 안 될 때.">
+<meta name="description" content="AI Lab 사용 가이드: 준비물, 화면 읽는 법, 메뉴별 활동, 예상 결과, 보관함, 수업에서 쓰기, 안 될 때.">
 <link rel="icon" type="image/png" href="../shared/assets/img/favicon.png">
 <link rel="manifest" href="../manifest.webmanifest">
 <meta name="theme-color" content="#FBF7EF">
@@ -12,17 +12,18 @@
 <link rel="stylesheet" href="../shared/css/all.min.css">
 <link rel="stylesheet" href="../shared/css/themaker-ui.css">
 <link rel="stylesheet" href="../shared/ui/lab.css">
+<script src="../shared/ui/boot.js"></script>
 <style>
   /* 가이드 — 학습지와 같은 종이 한 장. 왼쪽 목차는 따라 내려온다 */
   .gd{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;max-width:1180px;margin:0 auto;padding:14px 18px 40px;width:100%}
-  .toc{position:sticky;top:52px;align-self:start;background:#fff;border:1px solid var(--line-soft);border-radius:var(--r-m);box-shadow:var(--shadow);padding:14px 12px}
+  .toc{position:sticky;top:52px;align-self:start;background:var(--panel);border:1px solid var(--line-soft);border-radius:var(--r-m);box-shadow:var(--shadow);padding:14px 12px}
   .toc b{font-family:var(--serif);font-size:16px;display:block;margin:0 0 8px 4px}
   .toc a{display:flex;gap:8px;align-items:baseline;padding:6px 6px;border-radius:var(--r-s);color:var(--ink2);text-decoration:none;font-size:14px;font-weight:600}
   .toc a span{font-family:var(--serif);font-weight:700;color:var(--ink3);min-width:16px}
   .toc a:hover,.toc a.on{background:var(--panel2);color:var(--ink)}
   .toc a.on span{color:var(--pen-blue)}
   .toc .print{margin-top:10px;width:100%;justify-content:center}
-  .doc{background:#fff;border:1px solid var(--line-soft);border-radius:var(--r-m);box-shadow:var(--shadow);padding:26px 34px 34px;min-width:0}
+  .doc{background:var(--panel);border:1px solid var(--line-soft);border-radius:var(--r-m);box-shadow:var(--shadow);padding:26px 34px 34px;min-width:0}
   .doc-top{display:flex;align-items:flex-end;gap:14px;padding-bottom:12px;border-bottom:2px solid var(--line-d);flex-wrap:wrap}
   .doc-top h1{font-family:var(--serif);font-size:28px;font-weight:700;margin:0}
   .doc-top p{font-size:14.5px;color:var(--ink2);padding-bottom:4px}
@@ -39,7 +40,7 @@
   .doc ul,.doc ol{margin:6px 0 10px;padding-left:22px}
   .doc b{color:var(--ink)}
   .doc code{font-family:var(--mono);font-size:13.5px;background:var(--panel2);border:1px solid var(--line-soft);border-radius:4px;padding:0 5px}
-  .doc kbd{font-family:inherit;font-weight:800;font-size:13px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 6px;background:#fff}
+  .doc kbd{font-family:inherit;font-weight:800;font-size:13px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 6px;background:var(--panel)}
   .doc table{width:100%;border-collapse:collapse;margin:10px 0 14px;font-size:14.5px}
   .doc th{background:var(--panel2);font-size:13px;color:var(--ink3);font-weight:700;text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--line)}
   .doc td{padding:9px 10px;border-bottom:1px solid var(--line-soft);vertical-align:top;line-height:1.6;color:var(--ink2);word-break:keep-all}
@@ -49,11 +50,12 @@
   .doc figcaption{font-size:13px;color:var(--ink3);margin-top:6px;text-align:center}
   .note{border-left:3px solid var(--ok);background:var(--ok-soft);border-radius:0 var(--r-s) var(--r-s) 0;padding:10px 14px;margin:12px 0}
   .note p,.note li{margin:2px 0;color:var(--ink)}
-  .warn{border-left:3px solid var(--pen-red);background:color-mix(in srgb,var(--pen-red) 7%,#fff)}
+  .warn{border-left:3px solid var(--pen-red);background:color-mix(in srgb,var(--pen-red) 7%,var(--panel))}
   .check{list-style:none;padding-left:2px}
-  .check li::before{content:"";display:inline-block;width:14px;height:14px;border:1.5px solid var(--line);border-radius:3px;margin-right:9px;vertical-align:-2px;background:#fff}
+  .check li::before{content:"";display:inline-block;width:14px;height:14px;border:1.5px solid var(--line);border-radius:3px;margin-right:9px;vertical-align:-2px;background:var(--panel)}
   .steps-ol li{margin-bottom:4px}
   .c-red{--c:var(--pen-red)} .c-green{--c:var(--ok)} .c-brown{--c:var(--line-d)} .c-blue{--c:var(--pen-blue)}
+  .gd [hidden]{display:none !important}
   .go{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--pen-blue-d);text-decoration:none;font-size:14px}
   .go:hover{text-decoration:underline}
   @media (max-width:900px){
@@ -66,7 +68,7 @@
   }
   @media print{
     header,.toc{display:none !important}
-    body{background:#fff}
+    body{background:var(--panel)}
     .gd{display:block;padding:0}
     .doc{border:0;box-shadow:none;padding:0}
     .gsec{break-inside:auto} figure,table,.note{break-inside:avoid}
@@ -78,21 +80,22 @@
 <header data-tab="guide" data-menu="guide"></header>
 
 <div class="gd">
-  <nav class="toc" id="toc" aria-label="목차">
+  <nav class="toc" id="toc" aria-label="목차" data-lang="ko">
     <b>목차</b>
     <a href="#prep"><span>1</span>처음 쓰기 전에</a>
     <a href="#screen"><span>2</span>화면 읽는 법</a>
     <a href="#try"><span>3</span>체험하기</a>
     <a href="#teach"><span>4</span>가르치기</a>
     <a href="#self"><span>5</span>스스로 배우기</a>
-    <a href="#make"><span>6</span>만들기</a>
-    <a href="#box"><span>7</span>보관함</a>
-    <a href="#plan"><span>8</span>수업에서 쓰기</a>
-    <a href="#help"><span>9</span>안 될 때</a>
+    <a href="#result"><span>6</span>예상 결과</a>
+    <a href="#make"><span>7</span>만들기</a>
+    <a href="#box"><span>8</span>보관함</a>
+    <a href="#plan"><span>9</span>수업에서 쓰기</a>
+    <a href="#help"><span>10</span>안 될 때</a>
     <button type="button" class="db print" onclick="window.print()"><i class="fa-solid fa-print"></i> 인쇄하기</button>
   </nav>
 
-  <article class="doc">
+  <article class="doc" data-lang="ko">
     <div class="doc-top">
       <h1>AI Lab 사용 가이드</h1>
       <p>보고, 가르치고, 만들어 보는 인공지능 학습지</p>
@@ -109,7 +112,7 @@
         <tr><td>브라우저</td><td><b>크롬 · 엣지</b> (최신). 아이패드는 iPadOS 16.4 이상</td></tr>
         <tr><td>인터넷</td><td><b>처음 열 때만</b> 필요해요. 한 번 연 활동은 다음부터 빨리 열려요</td></tr>
         <tr><td>카메라 · 마이크</td><td>손 · 얼굴 · 몸 · 소리를 쓰는 활동에만. 없어도 되는 활동이 대부분이에요</td></tr>
-        <tr><td>스피커</td><td>AI 목소리 · 말하기 블록을 쓸 때. 기기 안 목소리가 있어야 해요 (<a href="#help">9장</a>)</td></tr>
+        <tr><td>스피커</td><td>AI 목소리 · 말하기 블록을 쓸 때. 기기 안 목소리가 있어야 해요 (<a href="#help">10장</a>)</td></tr>
         <tr><td>여럿이 쓸 때</td><td>2~3명이 PC 한 대 — 조작 · 기록 · 발표를 돌아가며</td></tr>
       </table>
       <h3><i class="fa-solid fa-list-check"></i>먼저 확인할 것 (5분)</h3>
@@ -133,9 +136,10 @@
         <tr><td>상태 글</td><td>예: "인터넷 없이 이 컴퓨터에서 배워요", "파이썬 준비 중…"</td></tr>
         <tr><td>보관함</td><td>가르친 AI · 운전 AI · 코딩 작품을 모아 보는 곳</td></tr>
         <tr><td>가이드</td><td>이 안내 페이지</td></tr>
+        <tr><td><i class="fa-solid fa-moon"></i> / <i class="fa-solid fa-sun"></i></td><td>어둡게 ↔ 밝게</td></tr>
         <tr><td>?</td><td>그 화면의 안내(파이보 말풍선 · 도움말)를 다시 봐요</td></tr>
-        <tr><td>EN / 한</td><td>영어 화면 ↔ 한국어 화면</td></tr>
         <tr><td><i class="fa-solid fa-expand"></i></td><td>전체화면</td></tr>
+        <tr><td>EN / 한</td><td>영어 화면 ↔ 한국어 화면</td></tr>
       </table>
       <p>화면을 아래로 내려도 상단바는 맨 위에 남아요.</p>
       <h3><i class="fa-solid fa-table-cells-large"></i>첫 화면 · 메뉴 화면</h3>
@@ -222,9 +226,86 @@
       <div class="note"><p><b>생각해 볼 것</b> — "벽에 부딪혀도 벌점이 없으면 어떻게 될까?" · "멀리 가는 것만 점수로 주면 이상하게 걷지 않을까?"</p></div>
     </section>
 
+
     <!-- 6 -->
+    <section class="gsec" id="result">
+      <h2><span class="no">6</span>예상 결과 <small>개발 환경 기준</small></h2>
+      <div class="note warn"><p><b>개발 환경에서 잰 값이에요.</b> 개발 PC 의 크롬 브라우저와 자동 시험 프로그램으로 쟀어요. 학습에 무작위가 들어가고, 쓰는 PC · 조작 솜씨에 따라 숫자와 시간이 달라질 수 있어요. 쓰는 PC 에서는 아직 재지 않았어요 — 수업 전에 한 번 돌려 보세요.</p></div>
+
+      <h3><i class="fa-solid fa-car-side"></i>운전 따라 배우기</h3>
+      <p>"가상 학생" 은 사람처럼 0.22초 늦게 반응하도록 만든 시험 프로그램이에요.</p>
+      <table>
+        <tr><th>가르친 방법</th><th>AI 운전 결과</th></tr>
+        <tr><td>보통 속도 · 구불구불 트랙 40초<br><small>(약 490장면)</small></td><td>세 트랙 모두 <b>3바퀴 완주</b> — 한 번도 안 가 본 트랙도</td></tr>
+        <tr><td>빠르게 · 둥근 트랙 기본 · 거꾸로 각 16초 + 뱀 트랙 15초<br><small>(약 940장면)</small></td><td>머리핀(거꾸로) · 산길 · 처음 보는 트랙 2 · 도시 블록(거꾸로) 모두 3바퀴 완주</td></tr>
+        <tr><td>구불구불 트랙 반 바퀴, 자주 고치며<br><small>(왼 54 · 오 75장면)</small></td><td>24코스 모두 완주</td></tr>
+        <tr><td>둥근 트랙만 한 바퀴<br><small>(왼쪽 장면 6~12개)</small></td><td>둥근 트랙은 돌지만, 다른 트랙은 0.2~0.3바퀴 만에 부딪힘</td></tr>
+        <tr><td>곧게만</td><td>첫 커브 전에 부딪힘 (0.1바퀴 안)</td></tr>
+      </table>
+
+      <h3><i class="fa-solid fa-eye"></i>AI 눈 들여다보기 <small style="font-weight:500;color:var(--ink3)">예시 그림 세트 · 속이기 시험</small></h3>
+      <table>
+        <tr><th>데이터 늘리기</th><th>똑바로</th><th>기울이기</th><th>작게</th><th>어둡게</th></tr>
+        <tr><td>안 흔듦</td><td>100%</td><td>40%</td><td>42%</td><td>100%</td></tr>
+        <tr><td>돌리기</td><td>97%</td><td><b>80%</b></td><td>33%</td><td>58%</td></tr>
+      </table>
+      <ul>
+        <li>예시 그림으로만 배운 AI 가 마우스로 그린 ○ · △ 도 98% 넘게 맞혔어요.</li>
+        <li>한 번 배우기 2~3초. 그림 한 장은 흔든 뒤에도 틀릴 수 있어요 — 표 전체가 어떻게 바뀌는지 보세요.</li>
+      </ul>
+
+      <h3><i class="fa-solid fa-palette"></i>색 로봇 <small style="font-weight:500;color:var(--ink3)">망토 사진 · 가까운 이웃 1개</small></h3>
+      <table>
+        <tr><th>칠해서 가르친 사진</th><th>보통</th><th>어둡게</th><th>노을</th></tr>
+        <tr><td>보통</td><td>100%</td><td>75%</td><td>50%</td></tr>
+        <tr><td>보통 + 어둡게</td><td>100%</td><td>100%</td><td>75%</td></tr>
+        <tr><td>보통 + 어둡게 + 노을</td><td>100%</td><td>100%</td><td>100%</td></tr>
+      </table>
+      <ul>
+        <li>여러 번 재면 보통만 가르쳤을 때 어둡게 42~85%, 노을 42~60% 사이예요.</li>
+        <li>작은 신경망은 노을에 더 강해요 (보통만 가르쳐도 노을 70~100%).</li>
+        <li>화분을 "망토 아님" 으로 칠하면 화분은 약 10% 만 남고, 망토도 100% → 95% 로 조금 줄어요.</li>
+      </ul>
+
+      <h3><i class="fa-solid fa-pen-nib"></i>글 이어 쓰기</h3>
+      <ul>
+        <li>동물 예시: 작은 신경망 약 8초, Transformer 약 16초에 배워요. 온도 0.5 에서 "토끼는 천천히 걸어요." 처럼 이어 써요.</li>
+        <li>구구단: <code>7 × 8 =</code> 에 <code>48</code> 처럼 틀린 답을 쓰고 밑줄이 생겨요 — 그럴듯하게 틀리는 AI(환각) 이야기 거리.</li>
+        <li>들여다보기의 어텐션 무늬는 배울 때마다 달라요.</li>
+      </ul>
+
+      <h3><i class="fa-solid fa-scale-balanced"></i>공정한 AI? <small style="font-weight:500;color:var(--ink3)">질문 3단계</small></h3>
+      <table>
+        <tr><th>설정</th><th>정확도</th><th>두 반 합격률 차이</th></tr>
+        <tr><td>① 작년 기록 그대로</td><td>73~81%</td><td><b>22~30%p</b> ("2반인가" 를 물어요)</td></tr>
+        <tr><td>② '2반인가' 가리기</td><td>74~82%</td><td><b>22~28%p</b> ("통학 버스" 를 대신 물어요)</td></tr>
+        <tr><td>③ '통학 버스' 도 가리기</td><td>78~93%</td><td>−7~1%p</td></tr>
+        <tr><td>④ 기록을 실력대로 고치기</td><td><b>85~94%</b></td><td>−8~1%p</td></tr>
+        <tr><td>2반 기록만 2배 (편향 그대로)</td><td>74~85%</td><td>21~38%p</td></tr>
+      </table>
+      <p>"질문 몇 단계까지?" 를 1 로 하면 우연히 공정해 보이기도 해요. 헷갈리면 3 으로 두세요.</p>
+
+      <h3><i class="fa-solid fa-broom"></i>청소 로봇 <small style="font-weight:500;color:var(--ink3)">150걸음 · 연습 600판</small></h3>
+      <table>
+        <tr><th>청소기</th><th>치운 비율</th></tr>
+        <tr><td>규칙 청소기 3종</td><td>13~56%</td></tr>
+        <tr><td>배우는 청소기 (기본 상)</td><td><b>95~100%</b> — 처음 보는 방도 95~100%</td></tr>
+        <tr><td>먼지 나침반 끔</td><td>47~96% (대체로 떨어져요)</td></tr>
+        <tr><td>먼지 상 0 · 움직이면 +0.1</td><td>22~75% (청소는 뒷전)</td></tr>
+      </table>
+      <p>연습 600판은 약 1초.</p>
+
+      <h3><i class="fa-solid fa-bug"></i>진화하는 생물 <small style="font-weight:500;color:var(--ink3)">30세대 · 약 1.6초</small></h3>
+      <table>
+        <tr><th>상</th><th>결과</th></tr>
+        <tr><td>멀리 가기</td><td>애벌레 7~10m → <b>20m</b>, 네발이 7~14m → <b>27~32m</b>. 똑바로 선 시간은 33~57% (굴러가요)</td></tr>
+        <tr><td>뒤집히지 않고 멀리 가기</td><td>똑바로 <b>75~100%</b>, 8~14m</td></tr>
+      </table>
+      <p>평지 생물을 오르막 · 울퉁불퉁한 땅에 보내면 대체로 덜 가지만 편차가 커요.</p>
+    </section>
+    <!-- 7 -->
     <section class="gsec c-blue" id="make">
-      <h2><span class="no">6</span>만들기 <small>내가 가르친 AI 로 작품을</small></h2>
+      <h2><span class="no">7</span>만들기 <small>내가 가르친 AI 로 작품을</small></h2>
       <p>가르친 AI · 체험한 인식을 재료로 작품을 만들어요. 쉬운 것부터 세 단계예요.</p>
       <h3><i class="fa-solid fa-diagram-project"></i>① 순서도 놀이</h3>
       <figure><img src="img/flow.png" alt="순서도 놀이" loading="lazy"><figcaption>순서도 놀이 — 지금 맞는 갈래에 불이 켜져요</figcaption></figure>
@@ -251,9 +332,9 @@
       </ul>
     </section>
 
-    <!-- 7 -->
+    <!-- 8 -->
     <section class="gsec" id="box">
-      <h2><span class="no">7</span>보관함</h2>
+      <h2><span class="no">8</span>보관함</h2>
       <figure><img src="img/box.png" alt="보관함" loading="lazy"><figcaption>보관함 — 가르친 AI · 운전 AI · 코딩 작품</figcaption></figure>
       <table>
         <tr><th>종류</th><th>어디서 넣나</th><th>보관함에서 할 수 있는 것</th></tr>
@@ -274,7 +355,7 @@
 
     <!-- 8 -->
     <section class="gsec" id="plan">
-      <h2><span class="no">8</span>수업에서 쓰기 <small>흐름 예시 · 한 차시 40~45분</small></h2>
+      <h2><span class="no">9</span>수업에서 쓰기 <small>흐름 예시 · 한 차시 40~45분</small></h2>
       <table>
         <tr><th>차시</th><th>흐름</th></tr>
         <tr><td>1</td><td><b>체험하기</b>(10분: 손 · 얼굴 · 몸, 무슨 소리야?) → <b>내 AI 만들기</b>: 가위 · 바위 · 보 종류 만들기 · 예시 모으기 · 배우기 · 시험하기 · 저장</td></tr>
@@ -293,7 +374,7 @@
 
     <!-- 9 -->
     <section class="gsec" id="help">
-      <h2><span class="no">9</span>안 될 때</h2>
+      <h2><span class="no">10</span>안 될 때</h2>
       <table>
         <tr><th>증상</th><th>해 볼 것</th></tr>
         <tr><td>카메라가 안 켜져요</td><td>주소창 왼쪽 자물쇠 → 카메라 <b>허용</b>. 화상회의 등 다른 프로그램이 카메라를 쓰고 있으면 닫기. 노트북 카메라 가리개 확인</td></tr>
@@ -308,14 +389,312 @@
       <p>문의 · 고칠 점은 <a class="go" href="https://github.com/themakerrobot/ai-lab/issues" target="_blank" rel="noopener">이슈로 남겨 주세요 <i class="fa-solid fa-arrow-up-right-from-square"></i></a></p>
     </section>
   </article>
+
+  <nav class="toc" id="toc-en" aria-label="Contents" data-lang="en" hidden>
+    <b>Contents</b>
+    <a href="#en-prep"><span>1</span>Before you start</a>
+    <a href="#en-screen"><span>2</span>Reading the screen</a>
+    <a href="#en-try"><span>3</span>Try</a>
+    <a href="#en-teach"><span>4</span>Teach</a>
+    <a href="#en-self"><span>5</span>Self-learning</a>
+    <a href="#en-result"><span>6</span>Expected results</a>
+    <a href="#en-make"><span>7</span>Make</a>
+    <a href="#en-box"><span>8</span>My box</a>
+    <a href="#en-plan"><span>9</span>Lesson flow</a>
+    <a href="#en-help"><span>10</span>Troubleshooting</a>
+    <button type="button" class="db print" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
+  </nav>
+
+  <article class="doc" data-lang="en" hidden lang="en">
+    <div class="doc-top">
+      <h1>AI Lab Guide</h1>
+      <p>An AI worksheet: watch it, teach it, build with it</p>
+    </div>
+    <p class="lead">AI Lab is a web tool for <b>watching, teaching and building with</b> artificial intelligence.
+      It opens from one address — no install, no sign-up, no fee. <a class="go" href="../index.html">Open the home page <i class="fa-solid fa-arrow-right"></i></a></p>
+    <figure><img src="img/home.png" alt="Home — the AI worksheet"><figcaption>Home — the AI worksheet (screens in this guide are shown in Korean)</figcaption></figure>
+
+    <section class="gsec" id="en-prep">
+      <h2><span class="no">1</span>Before you start</h2>
+      <table>
+        <tr><th>Item</th><th>Details</th></tr>
+        <tr><td>Browser</td><td><b>Chrome · Edge</b> (latest). iPad needs iPadOS 16.4 or later</td></tr>
+        <tr><td>Internet</td><td>Needed <b>only the first time</b>. An activity you opened once opens faster next time</td></tr>
+        <tr><td>Camera · mic</td><td>Only for activities with hands · face · body · sound. Most activities work without them</td></tr>
+        <tr><td>Speaker</td><td>For AI voice and the "say" block. The device needs a built-in voice (<a href="#en-help">section 10</a>)</td></tr>
+        <tr><td>Sharing a PC</td><td>2–3 people per PC — take turns operating, recording and presenting</td></tr>
+      </table>
+      <h3><i class="fa-solid fa-list-check"></i>Check first (5 min)</h3>
+      <ul class="check">
+        <li>AI Lab opens on the PC you will use</li>
+        <li>Camera day: <b>Try → Hands · Face · Body</b> → <b>Camera on</b> → <b>Allow</b> when the browser asks</li>
+        <li>Sound day: <b>Try → AI voice</b> → press <b>Read it</b> and listen</li>
+        <li>The first time an activity opens it downloads files (hand tracking about 20 MB · Python about 13 MB). Open it once beforehand</li>
+      </ul>
+      <div class="note"><p><b>Privacy</b> — photos, video, sound and text <b>never leave the device.</b> Training and inference run inside the browser; nothing is sent to a server. Voices are on-device only.</p></div>
+    </section>
+
+    <section class="gsec" id="en-screen">
+      <h2><span class="no">2</span>Reading the screen</h2>
+      <h3><i class="fa-solid fa-window-maximize"></i>Top bar — the same on every screen</h3>
+      <table>
+        <tr><th>Part</th><th>What it does</th></tr>
+        <tr><td>Pibo · AI Lab</td><td>Back to the home page</td></tr>
+        <tr><td>Four menus</td><td><b>Try · Teach · Self-learning · Make</b>. The current menu is underlined in its colour (red · green · brown · navy)</td></tr>
+        <tr><td>Status text</td><td>e.g. "Learning on this computer, offline", "Preparing Python…"</td></tr>
+        <tr><td>My box</td><td>Your taught AIs, driving AIs and code projects</td></tr>
+        <tr><td>Guide</td><td>This page</td></tr>
+        <tr><td><i class="fa-solid fa-moon"></i> / <i class="fa-solid fa-sun"></i></td><td>Dark ↔ light</td></tr>
+        <tr><td>?</td><td>Shows the tips for that screen again</td></tr>
+        <tr><td><i class="fa-solid fa-expand"></i></td><td>Full screen</td></tr>
+        <tr><td>EN / 한</td><td>English ↔ Korean</td></tr>
+      </table>
+      <p>The top bar stays at the top when you scroll.</p>
+      <h3><i class="fa-solid fa-table-cells-large"></i>Home · menu pages</h3>
+      <ul>
+        <li><b>Home</b> is one worksheet: 1 Try → 2 Teach → 3 Self-learning → 4 Make. Click a picture to open that activity. The red-pen note <b>"Start here!"</b> points to the first one.</li>
+        <li><b>Menu pages</b> (click a menu in the top bar) list the activity cards with a one-line description.</li>
+      </ul>
+      <figure><img src="img/menu-try.png" alt="Menu page — Try" loading="lazy"><figcaption>Menu page — Try</figcaption></figure>
+      <h3><i class="fa-solid fa-person-chalkboard"></i>Activity screens</h3>
+      <ul>
+        <li>Below the top bar: the <b>activity name</b>, then the <b>steps (1 · 2 · 3 …)</b>. The current step lights up. Click the name to go back to the menu.</li>
+        <li>Three columns: <b>left (prepare) · middle (watch · do) · right (learn · results)</b>.</li>
+        <li>A main button you can't press yet is <b>dashed</b> (e.g. "Start learning" before there are enough scenes).</li>
+        <li>Red handwritten notes tell you what to try now.</li>
+      </ul>
+    </section>
+
+    <section class="gsec c-red" id="en-try">
+      <h2><span class="no">3</span>Try <small>AI recognises things without being taught</small></h2>
+      <p>Good for the first 5–10 minutes.</p>
+      <table>
+        <tr><th>Activity</th><th>What happens</th><th>Needs</th></tr>
+        <tr><td>Hands · Face · Body</td><td>The AI follows finger joints, face and body with dots and lines. Turn each on or off on the left</td><td>Camera</td></tr>
+        <tr><td>What sound?</td><td>The AI guesses claps, whistles, speech</td><td>Mic</td></tr>
+        <tr><td>Change background</td><td>Keep only the person; blur, erase or colour the background</td><td>Camera</td></tr>
+        <tr><td>Invisible cloak</td><td>Opens pre-painted, so the cloak vanishes at once. Similar colours (a plant, a shirt) confuse the AI → teach it more with <b>Paint</b></td><td>None (sample photo)</td></tr>
+        <tr><td>AI voice</td><td>The AI reads what you write. Change voice, speed and pitch; the word being read is underlined</td><td>Speaker</td></tr>
+      </table>
+      <div class="note"><p><b>Think about</b> — "How does AI recognise a hand?" · "Why did the plant vanish too?" · "How should '3:30' be read?"</p></div>
+    </section>
+
+    <section class="gsec c-green" id="en-teach">
+      <h2><span class="no">4</span>Teach <small>Show examples and the AI learns</small></h2>
+      <p>Supervised learning. About two lessons per activity.</p>
+      <h3><i class="fa-solid fa-camera"></i>My AI (image · hand · face · body · sound)</h3>
+      <figure><img src="img/myai.png" alt="My AI" loading="lazy"><figcaption>My AI</figcaption></figure>
+      <ol class="steps-ol">
+        <li><b>Make classes</b> — choose what to look at on the left, then make one class per thing to tell apart (e.g. rock · paper · scissors)</li>
+        <li><b>Collect examples</b> — select a class, then <b>hold to collect</b>. Similar numbers per class, varying angle and distance</li>
+        <li><b>Learn</b> — <b>Start learning</b> on the right. Accuracy appears</li>
+        <li><b>Save</b> — name it and save; it goes into <b>My box</b></li>
+      </ol>
+      <ul>
+        <li>Switch <b>[Teach | Test]</b> next to the activity name to test right away. When unsure, it answers "I'm not sure".</li>
+        <li>Saved AIs can be picked by name in <b>Make (flowchart · blocks · Python)</b> — no file copying.</li>
+      </ul>
+      <h3><i class="fa-solid fa-car-side"></i>Learn to drive</h3>
+      <figure><img src="img/drive.png" alt="Learn to drive" loading="lazy"><figcaption>Learn to drive</figcaption></figure>
+      <p>You drive with <kbd>←</kbd> <kbd>→</kbd>; the AI learns from the car's 7 sensor numbers and the direction you chose (imitation learning).</p>
+      <ol class="steps-ol">
+        <li><b>Drive</b> — start <b>slow</b>, on a winding track. The <b>scene count</b> card on the left grows</li>
+        <li><b>Learn</b> — after 30 scenes <b>Start learning</b> turns on (until then the bar reads "scenes n / 30")</li>
+        <li><b>AI drives</b> — switch "Who drives?" to <b>AI</b> and go</li>
+        <li><b>New track</b> — does it work on a track it never saw?</li>
+      </ol>
+      <ul>
+        <li>If only one kind of curve is collected, a <b>red-pen circle</b> and "Show me right curves too!" appear — a good moment to talk about data bias.</li>
+        <li><b>Advanced</b> also teaches speed (accelerate · brake). Try the basic level first.</li>
+        <li>Folding panels bottom right: <b>Race — 3 tracks</b> · <b>Save · load AI</b> · <b>AI driving log</b></li>
+      </ul>
+      <h3><i class="fa-solid fa-shapes"></i>Other Teach activities</h3>
+      <table>
+        <tr><th>Activity</th><th>Steps</th><th>What you learn</th></tr>
+        <tr><td>Inside the AI eye</td><td>Collect → Learn → Look inside → Fool it</td><td>Build an image network from scratch; see what it looks at through filters and feature maps. <b>Add sample drawings (○ △ ☆)</b> works without a camera</td></tr>
+        <tr><td>Colour robot</td><td>Paint to teach → Colour map → Robot mission</td><td>Paint colours to teach; the AI decides pixel by pixel. New lighting breaks it, teaching that lighting fixes it</td></tr>
+        <tr><td>Write on</td><td>Add text → Learn → Write on → Look inside</td><td>The AI reads your text and continues it by guessing the next letter (a tiny language model)</td></tr>
+        <tr><td>A fair AI?</td><td>Make the AI → Is it fair? → Fix it</td><td>An AI trained on last year's unfair records picks among three equally skilled friends; fix the records and compare</td></tr>
+      </table>
+    </section>
+
+    <section class="gsec c-brown" id="en-self">
+      <h2><span class="no">5</span>Self-learning <small>Give points and the AI finds a way</small></h2>
+      <p><b>No right answers — only points for doing well.</b> The AI tries thousands of times (reinforcement learning · evolution).</p>
+      <table>
+        <tr><th>Activity</th><th>Steps</th><th>What happens</th></tr>
+        <tr><td>Cleaning robot</td><td>Rule cleaner → Learning cleaner → Sensors · new room</td><td>A rule-following cleaner vs one that learned by itself. Change <b>rewards and penalties</b> (dust · step · wall), <b>practise</b>, then race</td></tr>
+        <tr><td>Evolving creatures</td><td>Evolve → Change rewards → New ground · mutation</td><td>Virtual creatures find how to walk over generations. You decide what earns points</td></tr>
+      </table>
+      <div class="note"><p><b>Think about</b> — "What if hitting a wall costs nothing?" · "If only distance earns points, will it walk strangely?"</p></div>
+    </section>
+
+    <section class="gsec" id="en-result">
+      <h2><span class="no">6</span>Expected results <small>measured in the development environment</small></h2>
+      <div class="note warn"><p><b>Measured in the development environment</b> — Chrome on the development PC, with automated test programs. Training is random, so numbers and times vary with the PC and with how people operate it. Not yet measured on other PCs — try it once before a lesson.</p></div>
+      <h3><i class="fa-solid fa-car-side"></i>Learn to drive</h3>
+      <p>The "virtual student" is a test program that reacts 0.22 s late, like a person.</p>
+      <table>
+        <tr><th>How it was taught</th><th>AI driving</th></tr>
+        <tr><td>Normal speed · winding track 40 s<br><small>(about 490 scenes)</small></td><td><b>3 laps</b> on all three tracks — including one it never saw</td></tr>
+        <tr><td>Fast · round track forward and reverse 16 s each + snake track 15 s<br><small>(about 940 scenes)</small></td><td>3 laps on hairpin (reverse) · mountain · unseen track 2 · city block (reverse)</td></tr>
+        <tr><td>Half a lap of the winding track, correcting often<br><small>(left 54 · right 75 scenes)</small></td><td>Finished all 24 courses</td></tr>
+        <tr><td>One lap of the round track only<br><small>(6–12 left scenes)</small></td><td>Laps the round track; crashes after 0.2–0.3 laps elsewhere</td></tr>
+        <tr><td>Straight only</td><td>Crashes before the first curve (under 0.1 lap)</td></tr>
+      </table>
+      <h3><i class="fa-solid fa-eye"></i>Inside the AI eye <small style="font-weight:500;color:var(--ink3)">sample drawings · fool-it test</small></h3>
+      <table>
+        <tr><th>Augmentation</th><th>Upright</th><th>Tilted</th><th>Small</th><th>Dark</th></tr>
+        <tr><td>None</td><td>100%</td><td>40%</td><td>42%</td><td>100%</td></tr>
+        <tr><td>Rotate</td><td>97%</td><td><b>80%</b></td><td>33%</td><td>58%</td></tr>
+      </table>
+      <ul>
+        <li>An AI taught only with sample drawings got mouse-drawn ○ · △ over 98% right.</li>
+        <li>One training run takes 2–3 s. A single drawing can still be wrong after augmentation — look at the whole table.</li>
+      </ul>
+      <h3><i class="fa-solid fa-palette"></i>Colour robot <small style="font-weight:500;color:var(--ink3)">cloak photos · 1 nearest neighbour</small></h3>
+      <table>
+        <tr><th>Painted photos</th><th>Normal</th><th>Dark</th><th>Sunset</th></tr>
+        <tr><td>Normal</td><td>100%</td><td>75%</td><td>50%</td></tr>
+        <tr><td>Normal + dark</td><td>100%</td><td>100%</td><td>75%</td></tr>
+        <tr><td>Normal + dark + sunset</td><td>100%</td><td>100%</td><td>100%</td></tr>
+      </table>
+      <ul>
+        <li>Over many runs, teaching only normal gives dark 42–85% and sunset 42–60%.</li>
+        <li>The small neural network handles sunset better (sunset 70–100% from normal only).</li>
+        <li>Painting the plant as "not cloak" leaves about 10% of the plant, and the cloak drops slightly, 100% → 95%.</li>
+      </ul>
+      <h3><i class="fa-solid fa-pen-nib"></i>Write on</h3>
+      <ul>
+        <li>Animal sample: the small network learns in about 8 s, the Transformer in about 16 s. At temperature 0.5 it writes sentences like "The rabbit walks slowly."</li>
+        <li>Times table: it writes a wrong answer such as <code>48</code> for <code>7 × 8 =</code> and underlines it — a talking point about confident mistakes (hallucination).</li>
+        <li>The attention pattern in "Look inside" changes every training run.</li>
+      </ul>
+      <h3><i class="fa-solid fa-scale-balanced"></i>A fair AI? <small style="font-weight:500;color:var(--ink3)">3 question levels</small></h3>
+      <table>
+        <tr><th>Setting</th><th>Accuracy</th><th>Pass-rate gap between classes</th></tr>
+        <tr><td>① Last year's records as they are</td><td>73–81%</td><td><b>22–30 pts</b> (asks "Class 2?")</td></tr>
+        <tr><td>② Hide "Class 2?"</td><td>74–82%</td><td><b>22–28 pts</b> (asks "school bus" instead)</td></tr>
+        <tr><td>③ Also hide "school bus"</td><td>78–93%</td><td>−7–1 pts</td></tr>
+        <tr><td>④ Fix records to match skill</td><td><b>85–94%</b></td><td>−8–1 pts</td></tr>
+        <tr><td>Double Class 2 records (bias kept)</td><td>74–85%</td><td>21–38 pts</td></tr>
+      </table>
+      <p>With "How many question levels?" set to 1 it can look fair by chance. Keep it at 3 if unsure.</p>
+      <h3><i class="fa-solid fa-broom"></i>Cleaning robot <small style="font-weight:500;color:var(--ink3)">150 steps · 600 practice rounds</small></h3>
+      <table>
+        <tr><th>Cleaner</th><th>Share cleaned</th></tr>
+        <tr><td>3 rule cleaners</td><td>13–56%</td></tr>
+        <tr><td>Learning cleaner (default rewards)</td><td><b>95–100%</b> — also 95–100% in an unseen room</td></tr>
+        <tr><td>Dust compass off</td><td>47–96% (usually lower)</td></tr>
+        <tr><td>Dust reward 0 · moving +0.1</td><td>22–75% (cleaning comes last)</td></tr>
+      </table>
+      <p>600 practice rounds take about 1 s.</p>
+      <h3><i class="fa-solid fa-bug"></i>Evolving creatures <small style="font-weight:500;color:var(--ink3)">30 generations · about 1.6 s</small></h3>
+      <table>
+        <tr><th>Reward</th><th>Result</th></tr>
+        <tr><td>Go far</td><td>Caterpillar 7–10 m → <b>20 m</b>, quadruped 7–14 m → <b>27–32 m</b>. Upright only 33–57% of the time (it rolls)</td></tr>
+        <tr><td>Go far without flipping</td><td>Upright <b>75–100%</b>, 8–14 m</td></tr>
+      </table>
+      <p>Creatures grown on flat ground usually go less far on slopes or bumpy ground, with large variation.</p>
+    </section>
+
+    <section class="gsec c-blue" id="en-make">
+      <h2><span class="no">7</span>Make <small>Build things with the AI you taught</small></h2>
+      <p>Use your taught AIs and the recognisers from Try as materials. Three steps, easiest first.</p>
+      <h3><i class="fa-solid fa-diagram-project"></i>① Flowchart play</h3>
+      <figure><img src="img/flow.png" alt="Flowchart play" loading="lazy"><figcaption>Flowchart play — the branch that matches now lights up</figcaption></figure>
+      <ul>
+        <li>Turn on what to look at on the left (hands · face · body · sound · my AI).</li>
+        <li>In <b>Rule play</b> on the right, <b>Make a rule</b> → "If ○○ → the AI says …". Pick chips to fill it in.</li>
+        <li>The <b>flowchart</b> view draws the same rules as "Start → look → ◇ if ①? yes → say / no ↓ …". Click a diamond to change the condition, a bubble to change what it says.</li>
+        <li><b>Order play</b> is "do ①, then ②, then success!".</li>
+        <li>Turn on <b>Voice</b> and the AI speaks aloud.</li>
+      </ul>
+      <h3><i class="fa-solid fa-cubes"></i>② Blocks · ③ Python</h3>
+      <figure><img src="img/code.png" alt="Block coding" loading="lazy"><figcaption>Block coding</figcaption></figure>
+      <ul>
+        <li>Switch with <b>[Blocks | Python]</b> in the toolbar. The <b>Code</b> tab shows the Python made from your blocks.</li>
+        <li><b>Run</b> <kbd>Ctrl</kbd> + <kbd>Enter</kbd> · <b>Stop</b> <kbd>Esc</kbd> · <b>Save</b> <kbd>Ctrl</kbd> + <kbd>S</kbd> (work is also saved automatically)</li>
+        <li><b>Sensor</b> category: finger count · hand position · face · hands above head · loudness · clap
+          <ul>
+            <li><b>My AI</b>: pick an AI saved in Teach by name</li>
+            <li><b>Say with AI voice</b>: reads aloud with an on-device voice</li>
+          </ul></li>
+        <li>In Python: <code>import sensor</code>, then <code>sensor.finger_count()</code> · <code>sensor.model("rps")</code> · <code>sensor.say("hello")</code>. <b>Examples</b> include "Talk with my AI".</li>
+        <li><b>On an error</b> a short plain explanation comes first, the original error below it, and in Python the wrong line is highlighted.</li>
+        <li><b>?</b> in the top bar lists shortcuts, sensors and saving.</li>
+      </ul>
+    </section>
+
+    <section class="gsec" id="en-box">
+      <h2><span class="no">8</span>My box</h2>
+      <figure><img src="img/box.png" alt="My box" loading="lazy"><figcaption>My box — taught AIs · driving AIs · code projects</figcaption></figure>
+      <table>
+        <tr><th>Kind</th><th>Where it comes from</th><th>What you can do in My box</th></tr>
+        <tr><td>Taught AI</td><td>My AI → Save</td><td>Test · keep teaching · export (.ailab.zip) · rename · delete</td></tr>
+        <tr><td>Driving AI</td><td>Learn to drive → <b>Save · load AI → Save to My box</b></td><td>Open · file · rename · delete</td></tr>
+        <tr><td>Code project</td><td>Blocks · Python → <b>Save to My box</b></td><td>Open · file · rename · delete</td></tr>
+      </table>
+      <div class="note warn">
+        <p>My box lives <b>only in that browser on that computer</b>. To move it or keep it long, <b>download it as a file</b>. Clearing browsing data also clears My box.</p>
+        <p>Where to load files on another computer</p>
+        <ul>
+          <li>Taught AI (.ailab.zip): drop it on <b>Load again</b> in My box (or <b>Open</b> in Blocks · Python)</li>
+          <li>Driving AI (.json): Learn to drive → <b>Save · load AI</b> → <i class="fa-solid fa-upload"></i></li>
+          <li>Code project (.json · .py): <b>Open</b> in Blocks · Python</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="gsec" id="en-plan">
+      <h2><span class="no">9</span>Lesson flow <small>example · 40–45 min each</small></h2>
+      <table>
+        <tr><th>#</th><th>Flow</th></tr>
+        <tr><td>1</td><td><b>Try</b> (10 min: hands · face · body, what sound?) → <b>My AI</b>: rock · paper · scissors classes, collect, learn, test, save</td></tr>
+        <tr><td>2</td><td><b>Flowchart play</b>: with the saved RPS AI, 3 rules like "if scissors → say 'scissors!'" → read the flowchart: "it asks from the top, in order"</td></tr>
+        <tr><td>3</td><td><b>Blocks</b>: the same game in blocks — my-AI block + if + say with AI voice → peek at Python in the Code tab</td></tr>
+        <tr><td>4</td><td><b>Learn to drive</b>: straight-only vs varied teaching; the red pen points to data bias</td></tr>
+        <tr><td>5</td><td><b>Cleaning robot</b>: change rewards and penalties; how is it different from teaching?</td></tr>
+        <tr><td>6</td><td><b>A fair AI?</b>: wrong records make a wrong AI — data ethics</td></tr>
+      </table>
+      <ul>
+        <li>On your own, follow the same order (Try → Teach → Make).</li>
+        <li>Younger children: Try → My AI → Flowchart play is plenty.</li>
+        <li>Older children: Blocks → Python, then Inside the AI eye · Write on · Evolving creatures.</li>
+      </ul>
+    </section>
+
+    <section class="gsec" id="en-help">
+      <h2><span class="no">10</span>Troubleshooting</h2>
+      <table>
+        <tr><th>Problem</th><th>Try this</th></tr>
+        <tr><td>Camera won't turn on</td><td>Lock icon left of the address → camera <b>Allow</b>. Close video-call apps using the camera. Check a laptop camera cover</td></tr>
+        <tr><td>Mic · sound recognition fails</td><td>Lock icon → microphone <b>Allow</b>; check the input device in Windows sound settings</td></tr>
+        <tr><td>"No voice on this device"</td><td><b>Windows</b>: Settings → Time &amp; language → Speech → add a voice. <b>Mac · iPad</b>: built in. <b>Chromebook · Android</b>: may be missing (text still shows)</td></tr>
+        <tr><td>Slow the first time</td><td>It is downloading hand-tracking · Python files once. Open it beforehand</td></tr>
+        <tr><td>Hand · face tracking never works</td><td>The browser may be too old (Chrome · Edge before 91, iPadOS before 16.4). Update it</td></tr>
+        <tr><td>"My AI" missing in Blocks · Python</td><td>Check it was saved on the same computer and browser. Press <b>Find my AI again</b> in the Sensor category</td></tr>
+        <tr><td>My work disappeared</td><td>Another browser, a private window, or cleared site data. Download important work as a file from My box</td></tr>
+        <tr><td>Code screen froze</td><td><b>Stop</b> (<kbd>Esc</kbd>). Endless loops stop at once</td></tr>
+      </table>
+      <p>Questions or suggestions: <a class="go" href="https://github.com/themakerrobot/ai-lab/issues" target="_blank" rel="noopener">leave an issue <i class="fa-solid fa-arrow-up-right-from-square"></i></a></p>
+    </section>
+  </article>
 </div>
 
 <script src="../shared/ui/menu.js"></script>
 <script src="../shared/ui/nav.js"></script>
 <script>
+  // 한 · 영 — 상단바 단추가 고른 말의 판만 보인다
+  (function () {
+    const en = window.AILAB && window.AILAB.lang === 'en';
+    document.querySelectorAll('[data-lang]').forEach(e => { e.hidden = e.dataset.lang !== (en ? 'en' : 'ko'); });
+    if (en) { document.documentElement.lang = 'en'; document.title = 'Guide — AI Lab'; }
+  })();
   // 목차: 지금 읽는 절에 불 켜기
   (function () {
-    const links = [...document.querySelectorAll('#toc a')];
+    const toc = document.querySelector('.toc:not([hidden])');
+    const links = [...toc.querySelectorAll('a')];
     const secs = links.map(a => document.querySelector(a.getAttribute('href')));
     const mark = () => {
       let cur = 0;

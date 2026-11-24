@@ -984,3 +984,19 @@ const CODELAB_TOOLBOX = {
     }
   ],
 };
+
+// 영어 화면 — 분류 이름 · 꼬리표 · 단추 · 기본 글을 바꾼다
+if (CL_EN) {
+  const EN = { '시작': 'Start', '논리': 'Logic', '반복': 'Loops', '수학': 'Math', '문자': 'Text', '목록': 'Lists', '색상': 'Colour',
+    '변수': 'Variables', '함수': 'Functions', '도구': 'Tools', '센서': 'Sensors',
+    '손 · 얼굴 · 몸 (웹캠)': 'Hand · face · body (webcam)', '소리 (마이크)': 'Sound (mic)', '말하기 (스피커)': 'Speak (speaker)',
+    '내 AI (가르치기에서 만든 것)': 'My AI (made in Teach)', '내 AI 다시 찾기': 'Find my AI again', '가르치기 열기': 'Open Teach',
+    '안녕!': 'Hello!', '가위': 'scissors' };
+  const walk = (node) => {
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node)) { node.forEach(walk); return; }
+    for (const k of ['name', 'text', 'TEXT']) if (typeof node[k] === 'string' && EN[node[k]]) node[k] = EN[node[k]];
+    Object.values(node).forEach(walk);
+  };
+  walk(CODELAB_TOOLBOX);
+}

@@ -8,9 +8,9 @@
 
 /* ── 1. 메뉴 색 — 지금 어느 메뉴인지 색으로. 킷 컴포넌트가 전부 --acc 를 따르므로 이것만 바꾼다 ── */
 :root{ --m:var(--pen-blue); --m-ink:var(--pen-blue-d); --m-soft:#E6EEF6 }   /* #E6EEF6 = 킷 --acc-soft 값 (순환 참조를 피하려고 값으로) */
-body[data-menu="try"]  { --m:var(--pen-red); --m-ink:var(--pen-red); --m-soft:color-mix(in srgb,var(--pen-red) 10%,#fff) }
+body[data-menu="try"]  { --m:var(--pen-red); --m-ink:var(--pen-red); --m-soft:color-mix(in srgb,var(--pen-red) 10%,var(--panel)) }
 body[data-menu="teach"]{ --m:var(--ok);      --m-ink:var(--ok);      --m-soft:var(--ok-soft) }
-body[data-menu="self"] { --m:var(--line-d);  --m-ink:var(--line-d);  --m-soft:color-mix(in srgb,var(--line-d) 9%,#fff) }
+body[data-menu="self"] { --m:var(--line-d);  --m-ink:var(--line-d);  --m-soft:color-mix(in srgb,var(--line-d) 9%,var(--panel)) }
 body[data-menu="make"] { --m:var(--pen-blue);--m-ink:var(--pen-blue-d);--m-soft:#E6EEF6 }
 body[data-menu="box"]  { --m:var(--ink2);    --m-ink:var(--ink);     --m-soft:var(--panel2) }
 body[data-menu]{ --acc:var(--m); --acc-ink:var(--m-ink); --acc-soft:var(--m-soft) }
@@ -37,7 +37,7 @@ header h1 img{height:24px}
 .actname{display:inline-flex;align-items:center;gap:10px;margin-right:14px;flex-shrink:0}
 .actname > a{font-family:var(--serif);font-weight:700;font-size:16px;color:var(--m);text-decoration:none;white-space:nowrap}
 .actname > a:hover{text-decoration:underline;text-underline-offset:3px}
-.actpages{display:inline-flex;border:1px solid var(--line-soft);border-radius:var(--r-s);overflow:hidden;background:#fff}
+.actpages{display:inline-flex;border:1px solid var(--line-soft);border-radius:var(--r-s);overflow:hidden;background:var(--panel)}
 .actpages > *{padding:4px 11px;font-size:13px;font-weight:700;color:var(--ink3);text-decoration:none;white-space:nowrap}
 .actpages > * + *{border-left:1px solid var(--line-soft)}
 .actpages .on{background:var(--m-soft);color:var(--m-ink)}
@@ -52,7 +52,7 @@ header h1 img{height:24px}
 .pan > .ph > i:first-child{color:var(--m)}
 .db{border-color:var(--line-soft)}
 /* 아직 못 누르는 주 버튼: 흐린 색 덩어리 대신 점선 — "곧 켜질 단추" 로 보이게 */
-.db.go:disabled{opacity:1;background:#fff;color:var(--ink3);border:1.5px dashed var(--line)}
+.db.go:disabled{opacity:1;background:var(--panel);color:var(--ink3);border:1.5px dashed var(--line)}
 
 /* 빨간 펜 메모 — 활동지에 손으로 적어 둔 것처럼 */
 .redpen{font-family:var(--serif);font-weight:700;color:var(--pen-red);font-size:15px;line-height:1.3;transform:rotate(-3deg)}
@@ -60,7 +60,7 @@ header h1 img{height:24px}
 /* ── 5. 학습지 (첫 화면 · 메뉴 화면) ── */
 body.sheet-page{overflow:visible;height:auto;min-height:100vh;padding-bottom:0}
 .sheet-wrap{flex:1 0 auto;padding:12px 18px 14px;display:flex}
-.sheet{flex:1;background:#fff;border:1px solid var(--line-soft);border-radius:var(--r-m);box-shadow:var(--shadow);
+.sheet{flex:1;background:var(--panel);border:1px solid var(--line-soft);border-radius:var(--r-m);box-shadow:var(--shadow);
   display:flex;flex-direction:column;padding:16px 22px 14px;min-height:0}
 .sheet-top{display:flex;align-items:flex-end;gap:14px;padding-bottom:10px;border-bottom:2px solid var(--line-d);flex-wrap:wrap}
 .sheet-top h2{font-family:var(--serif);font-size:26px;font-weight:700}
@@ -102,8 +102,8 @@ body.sheet-page{overflow:visible;height:auto;min-height:100vh;padding-bottom:0}
 .ill .dot.soft{opacity:.35}
 .ill .dot.soft2{opacity:.75}
 .ill .fl{fill:var(--c);opacity:.14}
-.ill .paper{fill:#fff}
-.ill .soft-fill{fill:color-mix(in srgb,var(--c) 12%,#fff)}
+.ill .paper{fill:var(--panel)}
+.ill .soft-fill{fill:color-mix(in srgb,var(--c) 12%,var(--panel))}
 .ill .pen-blue{fill:var(--pen-blue)} .ill .pen-red{fill:var(--pen-red)}
 .ill .ok-line{fill:none;stroke:var(--ok);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .ill text{font-family:var(--serif);font-weight:700;font-size:22px}
@@ -191,3 +191,29 @@ header{position:sticky;top:0;z-index:60}
 .guide-link{font-size:13px;font-weight:700;color:var(--pen-blue-d);text-decoration:none;padding-bottom:4px;white-space:nowrap}
 .guide-link:hover{text-decoration:underline;text-underline-offset:3px}
 @media (max-width:900px){ .hbtn.hbox span{display:none} }
+
+/* ── 9. 어둡게 — 칠판 (짙은 초록 바탕 · 분필 글씨) ──
+   학습지(밝게)와 같은 토큰 이름에 칠판 값만 넣는다. 화면 코드는 토큰을 쓰니 그대로 따라온다.
+   그림판 · 거북이 · 그래프처럼 '종이' 인 곳은 일부러 흰 종이로 남긴다. */
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#1D2420; --panel:#252E29; --panel2:#2B3530;
+  --line:#7E8B82; --line-soft:#3B4741; --line-d:#C7D1C9;
+  --ink:#ECEFE7; --ink2:#C8D0C6; --ink3:#9AA59C;
+  --pen-blue:#7DB6D3; --pen-blue-d:#A8D0E3; --pen-red:#EE8D68;
+  --acc-soft:#223845; --ok:#7CC995; --ok-soft:#21392A;
+  --shadow:0 1px 0 rgba(0,0,0,.45);
+  --m-soft:#223845;
+}
+:root[data-theme="dark"] body{background-color:var(--paper);background-image:radial-gradient(rgba(236,239,231,.06) 1px,transparent 1px)}
+:root[data-theme="dark"] header{background:var(--panel);box-shadow:0 1px 0 var(--line-soft)}
+:root[data-theme="dark"] body[data-menu="make"]{--m-soft:#223845}
+:root[data-theme="dark"] .db.go,:root[data-theme="dark"] .db.go:hover,
+:root[data-theme="dark"] .chip.on,:root[data-theme="dark"] .playtabs button.on{color:#14201A}
+:root[data-theme="dark"] .db.go:disabled{color:var(--ink3);background:var(--panel)}
+:root[data-theme="dark"] .stp .cir{color:#14201A}
+:root[data-theme="dark"] .inp,:root[data-theme="dark"] select,:root[data-theme="dark"] input,:root[data-theme="dark"] textarea{background:var(--panel2);color:var(--ink);border-color:var(--line-soft)}
+:root[data-theme="dark"] #langToggle{background:var(--panel);color:var(--ink)}
+:root[data-theme="dark"] .mk-table th{background:var(--panel2)}
+:root[data-theme="dark"] .ill .t-ink{fill:var(--ink2)}
+:root[data-theme="dark"] img[src*="pibo-"]{filter:brightness(.92)}

@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../shared/css/all.min.css">
 <link rel="stylesheet" href="../shared/css/themaker-ui.css">
 <link rel="stylesheet" href="../shared/ui/lab.css">
+<script src="../shared/ui/boot.js"></script>
 <style>
   .vlist{display:flex;flex-direction:column;gap:6px}
   .vlist .db{justify-content:flex-start;height:42px;font-size:14px;width:100%}
@@ -30,9 +31,9 @@
   .go-row .db.go{flex:1}
   .stage{margin-top:18px;display:flex;gap:16px;align-items:flex-start}
   .stage img{width:86px;flex:none}
-  .bubble{flex:1;min-height:92px;background:#fff;border:1.5px solid var(--line-soft);border-radius:var(--r-m);padding:14px 16px;
+  .bubble{flex:1;min-height:92px;background:var(--panel);border:1.5px solid var(--line-soft);border-radius:var(--r-m);padding:14px 16px;
     font-size:22px;line-height:1.6;position:relative;word-break:keep-all}
-  .bubble::before{content:"";position:absolute;left:-9px;top:26px;width:14px;height:14px;background:#fff;
+  .bubble::before{content:"";position:absolute;left:-9px;top:26px;width:14px;height:14px;background:var(--panel);
     border-left:1.5px solid var(--line-soft);border-bottom:1.5px solid var(--line-soft);transform:rotate(45deg)}
   .bubble .w{background:var(--m-soft);color:var(--m-ink);border-radius:3px;box-shadow:0 2px 0 var(--m)}
   .bubble .muted{color:var(--ink3);font-size:15px}

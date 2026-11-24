@@ -387,7 +387,7 @@ table.exam td.ok{color:var(--ok);font-weight:700}
 .meter .mt{flex:1;height:7px;border-radius:4px;background:var(--line-soft);overflow:hidden}
 .meter .mt > div{height:100%;background:var(--acc);border-radius:4px;transition:width .2s}
 .meter span{font-size:12px;font-weight:700;color:var(--ink2);white-space:nowrap}
-.boxrow{display:flex;align-items:center;gap:8px;width:100%;border:1px solid var(--line-soft);background:#fff;border-radius:var(--r-s);padding:6px 9px;margin-bottom:5px;font:inherit;font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;text-align:left}
+.boxrow{display:flex;align-items:center;gap:8px;width:100%;border:1px solid var(--line-soft);background:var(--panel);border-radius:var(--r-s);padding:6px 9px;margin-bottom:5px;font:inherit;font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;text-align:left}
 .boxrow:hover{border-color:var(--acc);background:var(--acc-soft)}
 .boxrow i{color:var(--acc)}
 .boxrow span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

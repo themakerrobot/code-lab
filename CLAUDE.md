@@ -33,4 +33,7 @@
 - 옛 주소 안내 · 옛 파일 형식 지원 같은 하위 호환은 만들지 않는다. 지울 것은 지운다
 - edge-lab(설치형 엣지 도구)과는 다른 제품이다. UX · UI 구성만 참고했고, 파일 형식 · 코드는 맞추지 않는다
 - 화면 말: 모델 → AI, 포즈 → 몸, 옛 방 이름(학습실 · 시험실 · 놀이실) 대신 '내 AI 만들기 · 시험하기 · 놀이'
-- UI 문구 한국어 우선, 새 문구는 영어도 같이 (menu.js 는 ko/en, 화면은 각 i18n.js)
+- UI 문구 한국어 우선, 새 문구는 영어도 같이 (menu.js 는 ko/en, 화면은 각 i18n.js · 코딩은 `CL_T(한, 영)` · Blockly 말은 `code/vendor/blockly/ko.js` · `en.js`, 가이드는 `data-lang` 두 판)
+- 한 · 영 단추와 밝게 · 어둡게 단추는 nav.js 가 모든 화면에 단다. 말은 localStorage `language`, 테마는 `ailab-theme` — `shared/ui/boot.js` 가 `<head>` 에서 먼저 읽는다 (새 화면도 lab.css 다음 줄에 boot.js)
+- 어둡게(칠판)는 `lab.css` 끝의 `:root[data-theme="dark"]` 가 킷 토큰 값만 바꾼다. 화면 CSS 에 `#fff` 대신 `var(--panel)`. 캔버스를 다시 그려야 하면 `ailab-theme` 이벤트를 듣는다
+- 예상 결과(가이드 6장)는 개발 환경에서 잰 값이다. 활동 모델을 바꾸면 tests/ 와 함께 다시 재서 고친다

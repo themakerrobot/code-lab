@@ -9,6 +9,10 @@
 
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => document.querySelectorAll(s);
+  // 한 · 영 — 상단바가 고른 말 (CL_EN 은 blocks/customblock.js)
+  const EN = typeof CL_EN !== 'undefined' && CL_EN;
+  const T = (ko, en) => (EN ? en : ko);
+  if (EN) translatePage();
 
   // ── 저장소 (시크릿 창 등에서 막혀도 화면은 떠야 한다) ──
   const store = {
@@ -27,6 +31,59 @@
     mode: (new URLSearchParams(location.search).get('mode') || store.get(KEY.mode, 'block')) === 'python' ? 'python' : 'block',
     fontSize: Math.min(28, Math.max(12, parseInt(store.get(KEY.font, '16'), 10) || 16)),
   };
+
+  // 영어 화면 — index.html 에 박힌 한국어를 한 번에 바꾼다 (글자 마디 · title · placeholder · 도움말)
+  function translatePage() {
+    const W = {
+      '블록': 'Blocks', '파이썬': 'Python', '실행': 'Run', '정지': 'Stop', '예제': 'Examples', '불러오기': 'Open',
+      '내보내기': 'Export', '보관함에 저장': 'Save to My box', '글자': 'Text', '블록 편집기': 'Block editor', '준비': 'Ready',
+      '줄 1, 칸 1': 'Ln 1, Col 1', '결과': 'Output', '그림': 'Drawing', '카메라': 'Camera', '코드': 'Code', '지우기': 'Clear',
+      '영상과 소리는 이 컴퓨터 밖으로 나가지 않아요': 'Video and sound never leave this computer',
+      '블록이 만든 파이썬 코드예요': 'Python made from your blocks', '파이썬으로 고치기': 'Edit as Python',
+      '블록 · 파이썬 사용법': 'Blocks · Python help',
+    };
+    const A = {
+      '실행 (Ctrl+Enter)': 'Run (Ctrl+Enter)', '정지 (Esc)': 'Stop (Esc)',
+      '.json(블록) · .py(파이썬) · .ailab.zip(내 AI)': '.json (blocks) · .py (Python) · .ailab.zip (my AI)',
+      '블록은 .json, 파이썬은 .py 로 내보내요': 'Blocks export as .json, Python as .py',
+      '이 브라우저의 보관함에 넣어요 — 보관함 화면에서 다시 열어요': 'Saves into My box in this browser — reopen it from My box',
+      '글자 작게': 'Smaller text', '글자 크게': 'Larger text', '끌어서 넓이 바꾸기': 'Drag to resize', '결과 지우기': 'Clear output',
+      '여기에 입력하고 Enter': 'Type here and press Enter', '.py 파일로 받기': 'Download .py', '닫기': 'Close',
+    };
+    const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (tw.nextNode()) nodes.push(tw.currentNode);
+    nodes.forEach(n => {
+      const t = n.nodeValue.trim();
+      if (t && W[t]) n.nodeValue = n.nodeValue.replace(t, W[t]);
+    });
+    document.querySelectorAll('[title],[placeholder]').forEach(el => {
+      if (A[el.title]) el.title = A[el.title];
+      if (el.placeholder && A[el.placeholder]) el.placeholder = A[el.placeholder];
+    });
+    const body = document.querySelector('#helpDlg .sec2.first');
+    if (body) body.parentNode.innerHTML = `
+    <div class="sec2 first"><div class="st">Coding</div>
+      <p><b>Blocks</b>: drag blocks from the categories on the left and attach them <b>under the start (flag) block</b>.<br>
+      <b>Python</b>: write code or pick one from <b>Examples</b>. The <b>Code</b> tab of Blocks can move it to Python.</p></div>
+    <div class="sec2"><div class="st">Run · shortcuts</div>
+      <table class="mk-table"><tr><td class="nm">Run</td><td>Ctrl + Enter</td></tr>
+        <tr><td class="nm">Stop</td><td>Esc — stops endless loops at once</td></tr>
+        <tr><td class="nm">Save now</td><td>Ctrl + S (work is also saved automatically)</td></tr></table></div>
+    <div class="sec2"><div class="st">Results</div>
+      <p><b>Output</b>: text and plots · <b>Drawing</b>: turtle (a robot that draws as it walks) · <b>Code</b>: Python made from your blocks</p>
+      <p class="hint">If turtle listens to keys, mouse or timers, it keeps waiting after the code ends until you stop it.</p></div>
+    <div class="sec2"><div class="st">Sensors · my AI · voice</div>
+      <p>Reads finger count, hand position, face and sound from the webcam and mic.<br>
+      <b>My AI</b>: use an AI made in Teach straight from My box (the Sensors category · Python <code>sensor.model()</code>).<br>
+      <b>Say with AI voice</b>: reads aloud with a voice on this device.</p>
+      <p class="hint">Video, sound and text never leave this computer.</p></div>
+    <div class="sec2"><div class="st">Saving · files</div>
+      <p><b>Save to My box</b>: give it a name and reopen it from <b>My box</b> in the top bar.<br>
+      <b>Export</b>: blocks as .json, Python as .py · <b>Open</b>: .json · .py · .ailab.zip (my AI)</p>
+      <p class="hint">Once opened it works offline. Move to another computer with a file.</p></div>`;
+    document.documentElement.lang = 'en';
+  }
 
   // ── 토스트 · 상태 줄 ──
   let toastTimer;
@@ -77,6 +134,26 @@
     },
   });
 
+  // 어둡게 — 바탕 · 툴박스 · 꺼내기 판만 칠판 색으로 (블록 색은 그대로)
+  const darkTheme = Blockly.Theme.defineTheme('codelab-dark', {
+    base: blockTheme,
+    componentStyles: {
+      workspaceBackgroundColour: '#1D2420',
+      toolboxBackgroundColour: '#252E29',
+      toolboxForegroundColour: '#ECEFE7',
+      flyoutBackgroundColour: '#2B3530',
+      flyoutForegroundColour: '#ECEFE7',
+      flyoutOpacity: 0.97,
+      scrollbarColour: '#7E8B82',
+      scrollbarOpacity: 0.6,
+      insertionMarkerOpacity: 0.5,
+      selectedGlowColour: '#A8D0E3',
+      selectedGlowSize: 0.5,
+      replacementGlowColour: '#A8D0E3',
+    },
+  });
+  const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+
   const workspace = Blockly.inject('blocklyDiv', {
     toolbox: CODELAB_TOOLBOX,
     collapse: true,
@@ -96,8 +173,9 @@
     zoom: { controls: true, wheel: false, startScale: 0.8, maxScale: 3, minScale: 0.3, scaleSpeed: 1.1, pinch: true },
     move: { scrollbars: { horizontal: true, vertical: true }, drag: true, wheel: true },
     renderer: 'zelos',
-    theme: blockTheme,
+    theme: isDark() ? darkTheme : blockTheme,
   });
+  document.addEventListener('ailab-theme', () => workspace.setTheme(isDark() ? darkTheme : blockTheme));
 
   // 한글 변수·함수 이름을 그대로 쓴다 (Blockly 는 기본으로 _EB_B3_80 처럼 바꾼다).
   // Pyodide 는 진짜 파이썬 3 라 한글 이름이 그대로 돈다.
@@ -155,7 +233,7 @@
       const flags = workspace.getAllBlocks(false).filter(b => b.type === 'flag_event');
       if (flags.length > 1) {
         const nb = workspace.getBlockById(event.blockId);
-        if (nb && nb.type === 'flag_event') { nb.dispose(); toast('시작 블록은 하나만 둘 수 있어요'); }
+        if (nb && nb.type === 'flag_event') { nb.dispose(); toast(T('시작 블록은 하나만 둘 수 있어요', 'Only one start block is allowed')); }
       }
     }
     if (event.isUiEvent) return;
@@ -188,7 +266,7 @@
   });
   editor.on('cursorActivity', () => {
     const p = editor.getCursor();
-    $('#cursorPos').textContent = `줄 ${p.line + 1}, 칸 ${p.ch + 1}`;
+    $('#cursorPos').textContent = T(`줄 ${p.line + 1}, 칸 ${p.ch + 1}`, `Ln ${p.line + 1}, Col ${p.ch + 1}`);
   });
   let pySaveTimer;
   editor.on('change', () => {
@@ -201,7 +279,7 @@
   });
 
   function refreshCodeView() {
-    codeView.setValue(blocksToCode() || '# 시작 블록 아래에 블록을 붙여 보세요\n');
+    codeView.setValue(blocksToCode() || T('# 시작 블록 아래에 블록을 붙여 보세요\n', '# Attach blocks under the start block\n'));
   }
 
   function applyFontSize() {
@@ -256,7 +334,7 @@
         const img = document.createElement('img');
         img.className = 'cl-plot';
         img.src = src;
-        img.alt = '그래프';
+        img.alt = T('그래프', 'plot');
         frag.appendChild(img);
         outChars += 2000;   // 잘라 낼 때 그림도 몫을 갖게
         continue;
@@ -289,7 +367,7 @@
         outTrimmed = true;
         const note = document.createElement('span');
         note.className = 'info cl-trim';
-        note.textContent = '… 앞부분은 너무 길어서 지웠어요\n';
+        note.textContent = T('… 앞부분은 너무 길어서 지웠어요\n', '… earlier output was too long and was cleared\n');
         outText.insertBefore(note, outText.firstChild);
       }
     }
@@ -323,14 +401,14 @@
 
   runner.onStatus = (t) => { if (t) setStatus(t, 'run'); };
   runner.onReady = (v) => {
-    setPyBadge('파이썬 ' + String(v).split('.').slice(0, 2).join('.'), true);
-    if (!runner.running) setStatus('준비', '');
+    setPyBadge(T('파이썬 ', 'Python ') + String(v).split('.').slice(0, 2).join('.'), true);
+    if (!runner.running) setStatus(T('준비', 'Ready'), '');
     updateButtons();
   };
   runner.onFatal = (t) => {
-    setPyBadge('파이썬을 못 불러왔어요', false);
-    setStatus('파이썬을 불러오지 못했어요', 'err');
-    out('\n파이썬을 불러오지 못했어요. 새로고침해 주세요.\n' + t + '\n', 'err');
+    setPyBadge(T('파이썬을 못 불러왔어요', 'Python failed to load'), false);
+    setStatus(T('파이썬을 불러오지 못했어요', 'Could not load Python'), 'err');
+    out(T('\n파이썬을 불러오지 못했어요. 새로고침해 주세요.\n', '\nCould not load Python. Please reload.\n') + t + '\n', 'err');
   };
   runner.onOut = (t, cls) => out(t, cls);
   runner.onTurtle = (cmds) => turtle.push(cmds);
@@ -361,35 +439,35 @@
   runner.onSay = async (text) => {
     try {
       const S = await speakMod;
-      if (!S.speak(text, 'ko', { max: 200 }) && !noVoiceTold) {
+      if (!S.speak(text, EN ? 'en' : 'ko', { max: 200 }) && !noVoiceTold) {
         noVoiceTold = true;
-        out('[이 기기에는 쓸 수 있는 한국어 목소리가 없어요 — 글로만 보여요]\n', 'err');
+        out(T('[이 기기에는 쓸 수 있는 한국어 목소리가 없어요 — 글로만 보여요]\n', '[No English voice on this device — text only]\n'), 'err');
       }
     } catch (e) { /* 목소리가 안 돼도 프로그램은 계속 */ }
   };
 
   runner.onSensorNeed = async (what) => {
-    setStatus(what === 'sound' ? '마이크를 켜는 중…' : (what === 'off' ? '센서 끄는 중…' : '카메라·AI 를 준비하는 중…'), 'run');
+    setStatus(what === 'sound' ? T('마이크를 켜는 중…', 'Turning on the mic…') : (what === 'off' ? T('센서 끄는 중…', 'Turning sensors off…') : T('카메라·AI 를 준비하는 중…', 'Preparing camera and AI…')), 'run');
     const s = await getSensors();
     await s.need(what);
-    if (runner.running) setStatus(runner.waiting ? '계속 실행 중이에요 · 끝내려면 정지(Esc)' : '실행 중…', 'run');
+    if (runner.running) setStatus(runner.waiting ? T('계속 실행 중이에요 · 끝내려면 정지(Esc)', 'Still running · Stop (Esc) to end') : T('실행 중…', 'Running…'), 'run');
   };
 
   // 내 AI — 가르치기에서 만든 AI 는 보관함에서 바로 읽는다 (my-ai.js). 다른 기기에서 가져온 파일만 불러오기로.
   async function importModel(file) {
     try {
       const name = await MyAI.importFile(file);
-      toast(`'${name}' AI 를 보관함에 넣었어요`);
+      toast(T(`'${name}' AI 를 보관함에 넣었어요`, `Put AI '${name}' in My box`));
       workspace.refreshToolboxSelection();
       return name;
     } catch (e) {
-      toast('AI 파일(.ailab.zip)을 열지 못했어요');
+      toast(T('AI 파일(.ailab.zip)을 열지 못했어요', 'Could not open the AI file (.ailab.zip)'));
       return null;
     }
   }
   workspace.registerButtonCallback('refreshAI', async () => {
     const list = await MyAI.refresh();
-    toast(list.length ? `내 AI ${list.length}개를 찾았어요` : '아직 가르친 AI 가 없어요. 가르치기에서 만들어 보세요');
+    toast(list.length ? T(`내 AI ${list.length}개를 찾았어요`, `Found ${list.length} AI(s)`) : T('아직 가르친 AI 가 없어요. 가르치기에서 만들어 보세요', 'No taught AI yet. Make one in Teach'));
     workspace.refreshToolboxSelection();
   });
   workspace.registerButtonCallback('openTeach', () => { window.open('../ai/index.html', '_blank'); });
@@ -397,7 +475,7 @@
 
   // ── turtle 이벤트: 코드는 끝났고 키보드·마우스를 기다린다 ──
   runner.onWaiting = () => {
-    setStatus('계속 실행 중이에요 · 끝내려면 정지(Esc)', 'run');
+    setStatus(T('계속 실행 중이에요 · 끝내려면 정지(Esc)', 'Still running · Stop (Esc) to end'), 'run');
     updateButtons();
   };
 
@@ -451,15 +529,15 @@
     $('#inRow').hidden = true;
     if (sensors) sensors.stopAll();
     const sec = (elapsed || 0).toFixed(2);
-    $('#execTime').textContent = sec + '초';
+    $('#execTime').textContent = sec + T('초', ' s');
     if (ok) {
-      out(`\n실행 끝 (${sec}초)\n`, 'info');
-      setStatus('실행 끝', 'ok');
+      out(T(`\n실행 끝 (${sec}초)\n`, `\nDone (${sec} s)\n`), 'info');
+      setStatus(T('실행 끝', 'Done'), 'ok');
     } else {
       if (!turtle.busy) showTab('out');
       out('\n' + friendlyError(error) + '\n\n', 'err');
       out(error.text || '', 'err');
-      setStatus('오류', 'err');
+      setStatus(T('오류', 'Error'), 'err');
     }
     updateButtons();
   };
@@ -467,6 +545,7 @@
   // 쉬운 말 한 줄 (lib/errhelp.js) + 원래 오류. 파이썬 편집기면 그 줄을 짚는다.
   function friendlyError(e) {
     if (e.lineno && state.mode === 'python') markLine(e.lineno);
+    if (EN) return (e.lineno ? `Line ${e.lineno}: ` : '') + (e.type || 'Error') + (e.msg ? ': ' + e.msg : '');   // 쉬운 말 설명은 한국어만
     return ErrHelp.explain(e, state.mode);
   }
 
@@ -486,7 +565,7 @@
     if (!runner.ready || runner.running) return;
     const code = currentCode();
     if (!code.trim()) {
-      toast(state.mode === 'block' ? '시작 블록 아래에 블록을 붙여 주세요' : '실행할 코드가 없어요');
+      toast(state.mode === 'block' ? T('시작 블록 아래에 블록을 붙여 주세요', 'Attach blocks under the start block') : T('실행할 코드가 없어요', 'No code to run'));
       return;
     }
     clearOut();
@@ -498,7 +577,7 @@
     showTab(hasTurtle ? 'draw' : 'out');
     if (!runner.run(code, { models: MyAI.list().map(m => m.name) })) return;
     if (sensors) sensors.begin();
-    setStatus('실행 중…', 'run');
+    setStatus(T('실행 중…', 'Running…'), 'run');
     updateButtons();
   }
 
@@ -510,10 +589,10 @@
     if (sensors) sensors.stopAll();
     if (wasRunning) {
       runner.stop();
-      setPyBadge('다시 준비 중…', false);
-      out('\n멈췄어요\n', 'info');
+      setPyBadge(T('다시 준비 중…', 'Restarting…'), false);
+      out(T('\n멈췄어요\n', '\nStopped\n'), 'info');
     }
-    setStatus('멈춤', '');
+    setStatus(T('멈춤', 'Stopped'), '');
     updateButtons();
   }
 
@@ -539,7 +618,7 @@
     const isBlock = mode === 'block';
     $('#blocklyDiv').hidden = !isBlock;
     $('#pyWrap').hidden = isBlock;
-    $('#editTitle').textContent = isBlock ? '블록 편집기' : '파이썬 편집기';
+    $('#editTitle').textContent = isBlock ? T('블록 편집기', 'Block editor') : T('파이썬 편집기', 'Python editor');
     $('#editIcon').className = isBlock ? 'fa-solid fa-cubes' : 'fa-brands fa-python';
     $('#tabCodeBtn').hidden = !isBlock;
     // 단계 줄 맨 앞 활동 이름도 함께 (상단바 공통 nav.js 가 만든 것)
@@ -579,33 +658,33 @@
     } else {
       download('code.py', editor.getValue(), 'text/x-python');
     }
-    toast('파일로 내보냈어요');
+    toast(T('파일로 내보냈어요', 'Exported to a file'));
   }
 
   // 작업은 자동으로 이 브라우저에 저장된다. Ctrl+S 는 바로 한 번 더 저장한다.
   function saveNow() {
     store.set(KEY.blocks, JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
     store.set(KEY.python, editor.getValue());
-    toast('이 브라우저에 저장했어요');
+    toast(T('이 브라우저에 저장했어요', 'Saved in this browser'));
   }
 
   function exportPy() {
     download('code.py', currentCode(), 'text/x-python');
-    toast('.py 파일로 내보냈어요');
+    toast(T('.py 파일로 내보냈어요', 'Exported as .py'));
   }
 
   // ── 보관함 (공용 shared/ui/box.js) — 작품을 이름 붙여 모아 두고, 보관함 화면에서 다시 연다 ──
   const boxMod = import(new URL('../shared/ui/box.js', location.href).href);   // 이 화면(code/index.html) 기준
   async function saveToBox() {
     const isBlock = state.mode === 'block';
-    const def = (isBlock ? '블록 작품' : '파이썬 작품') + ' ' + new Date().toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' });
-    const name = prompt('보관함에 넣을 이름', def);
+    const def = (isBlock ? T('블록 작품', 'Blocks') : T('파이썬 작품', 'Python')) + ' ' + new Date().toLocaleDateString(EN ? 'en-US' : 'ko-KR', { month: 'numeric', day: 'numeric' });
+    const name = prompt(T('보관함에 넣을 이름', 'Name for My box'), def);
     if (name === null) return;
     const data = isBlock
       ? { mode: 'block', blocks: Blockly.serialization.workspaces.save(workspace) }
       : { mode: 'python', code: editor.getValue() };
-    try { const { Box } = await boxMod; await Box.put({ kind: 'code', name, data }); toast('보관함에 넣었어요'); }
-    catch (e) { toast('보관함에 넣지 못했어요'); }
+    try { const { Box } = await boxMod; await Box.put({ kind: 'code', name, data }); toast(T('보관함에 넣었어요', 'Saved to My box')); }
+    catch (e) { toast(T('보관함에 넣지 못했어요', 'Could not save to My box')); }
   }
   async function openFromBox(id) {
     try {
@@ -614,8 +693,8 @@
       if (!it || it.kind !== 'code') return;
       if (it.data.mode === 'block') { loadBlocks(it.data.blocks); setMode('block'); }
       else { editor.setValue(it.data.code || ''); setMode('python'); }
-      toast(`'${it.name}' 을(를) 열었어요`);
-    } catch (e) { toast('보관함에서 열지 못했어요'); }
+      toast(T(`'${it.name}' 을(를) 열었어요`, `Opened '${it.name}'`));
+    } catch (e) { toast(T('보관함에서 열지 못했어요', 'Could not open from My box')); }
   }
 
   function importFile(file) {
@@ -628,31 +707,35 @@
         if (/\.json$/i.test(file.name)) {
           const dropped = loadBlocks(JSON.parse(text));
           setMode('block');
-          toast(dropped ? `불러왔어요. 지금은 없는 블록 ${dropped}종은 뺐어요` : '불러왔어요');
+          toast(dropped ? T(`불러왔어요. 지금은 없는 블록 ${dropped}종은 뺐어요`, `Loaded. Removed ${dropped} unknown block type(s)`) : T('불러왔어요', 'Loaded'));
         } else {
           editor.setValue(text);
           setMode('python');
-          toast('불러왔어요');
+          toast(T('불러왔어요', 'Loaded'));
         }
       } catch (e) {
-        toast('파일을 읽지 못했어요');
+        toast(T('파일을 읽지 못했어요', 'Could not read the file'));
       }
     };
     r.readAsText(file);
   }
 
+  const EX_EN = { hello: 'Say hello', input: 'Get input', loop: 'Times table (loop)', function: 'Make a function', list: 'Lists',
+    korean: 'Korean names', numpy: 'Number table (numpy)', turtle: 'Robot drawing — shapes', turtle2: 'Robot drawing — spiral',
+    plot: 'Draw a graph (matplotlib)', keys: 'Move the turtle with arrow keys', fingers: 'Count fingers (camera)',
+    handturtle: 'Move the turtle by hand (camera)', myai: 'Talk with my AI (made in Teach)', game: 'Number guessing game' };
   function buildExamples() {
     const menu = $('#exMenu');
     CODELAB_EXAMPLES.forEach(ex => {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'cl-menuitem';
-      b.textContent = ex.label;
+      b.textContent = EN ? (EX_EN[ex.id] || ex.label) : ex.label;
       b.addEventListener('click', () => {
         editor.setValue(ex.code);
         menu.hidden = true;
         showTab(ex.turtle ? 'draw' : 'out');
-        toast('예제를 불러왔어요');
+        toast(T('예제를 불러왔어요', 'Example loaded'));
         editor.focus();
       });
       menu.appendChild(b);
@@ -753,7 +836,7 @@
   $('#toPyBtn').addEventListener('click', () => {
     editor.setValue(blocksToCode());
     setMode('python');
-    toast('파이썬 편집기로 옮겼어요');
+    toast(T('파이썬 편집기로 옮겼어요', 'Moved to the Python editor'));
   });
   $('#fontDown').addEventListener('click', () => { if (state.fontSize > 12) { state.fontSize--; applyFontSize(); } });
   $('#fontUp').addEventListener('click', () => { if (state.fontSize < 28) { state.fontSize++; applyFontSize(); } });
@@ -769,7 +852,7 @@
   {
     const helpDlg = $('#helpDlg');
     const btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'hbtn'; btn.id = 'helpBtn'; btn.title = '도움말';
+    btn.type = 'button'; btn.className = 'hbtn'; btn.id = 'helpBtn'; btn.title = T('도움말', 'Help');
     btn.innerHTML = '<i class="fa-solid fa-question"></i>';
     const fs = $('#fsBtn');
     fs ? fs.parentNode.insertBefore(btn, fs) : document.querySelector('header').appendChild(btn);
@@ -785,7 +868,7 @@
   setMode(state.mode);
   showTab('out');
   updateButtons();
-  setPyBadge('파이썬 준비 중…', false);
-  setStatus('파이썬을 불러오는 중…', 'run');
+  setPyBadge(T('파이썬 준비 중…', 'Preparing Python…'), false);
+  setStatus(T('파이썬을 불러오는 중…', 'Loading Python…'), 'run');
   runner.start();
 })();

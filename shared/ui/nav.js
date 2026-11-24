@@ -120,6 +120,43 @@
     }
   }
 
+  // ── 밝게 · 어둡게 (전체화면 앞) ──
+  // boot.js 가 이미 html[data-theme] 을 정해 두었다. 여기서는 단추만 — 누르면 바꾸고 기억한다.
+  {
+    const dark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+    const tb = document.createElement('button');
+    tb.type = 'button'; tb.className = 'hbtn'; tb.id = 'themeBtn';
+    const paint = () => {
+      tb.innerHTML = dark() ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+      tb.title = dark() ? (lang === 'en' ? 'Light' : '밝게') : (lang === 'en' ? 'Dark' : '어둡게');
+    };
+    tb.addEventListener('click', () => {
+      const next = dark() ? 'light' : 'dark';
+      if (next === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      else document.documentElement.removeAttribute('data-theme');
+      try { localStorage.setItem('ailab-theme', next); } catch (e) {}
+      paint();
+      document.dispatchEvent(new CustomEvent('ailab-theme', { detail: next }));   // 캔버스를 다시 그릴 화면을 위해
+    });
+    paint();
+    const fsb = document.getElementById('fsBtn');
+    fsb ? header.insertBefore(tb, fsb) : header.appendChild(tb);
+  }
+
+  // ── 한 · 영 (맨 오른쪽) — 화면마다 i18n.js 가 있든 없든 같은 단추 ──
+  // i18n.js 는 #langToggle 이 이미 있으면 새로 만들지 않는다. 누르면 저장하고 다시 연다 (i18n.js 와 같은 동작).
+  if (!document.getElementById('langToggle')) {
+    const lb = document.createElement('button');
+    lb.type = 'button'; lb.id = 'langToggle';
+    lb.textContent = lang === 'en' ? '한' : 'EN';
+    lb.title = '한국어 / English';
+    lb.addEventListener('click', () => {
+      try { localStorage.setItem('language', lang === 'en' ? 'ko' : 'en'); } catch (e) {}
+      location.reload();
+    });
+    header.appendChild(lb);
+  }
+
   // ── 활동 이름 (단계 표시줄 맨 앞) · 한 활동 안의 화면 전환 ──
   if (act) {
     document.title = T(act) + ' — AI Lab';
