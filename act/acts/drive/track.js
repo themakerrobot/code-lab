@@ -39,7 +39,7 @@ function turtle(x, y, headingDeg, cmds, step = 40) {
 
 // level: 1 쉬움 · 2 보통 · 3 어려움. unseen: 연습에 쓰지 말고 시험에 쓰는 트랙.
 // 조절점 방향은 상관없다 — 차는 pts[0] 에서 pts[1] 쪽으로 출발하고, "거꾸로" 를 고르면 반대로 돈다.
-// 처음 세 트랙(oval·wavy·test)은 DEVELOP.md 의 잰 결과가 기대는 트랙이라 모양을 바꾸지 않는다.
+// 처음 세 트랙(oval·wavy·test)은 가이드 6장 '예상 결과' 와 tests/ 가 기대는 트랙이라 모양을 바꾸지 않는다.
 // (oval · wavy · square · bean · zigzag · snake · test · test2 · c1~c3). 한쪽을 바꾸면 다른 쪽도 바꾼다.
 export const TRACKS = [
   {
@@ -119,7 +119,7 @@ export const TRACKS = [
 ];
 
 // 대회 트랙 — AI 만 달린다 (사람 운전 · 끼어들기 · 장면 모으기 없음). 연습 트랙(TRACKS)과 따로 둔다:
-// 섞으면 "연습 트랙 — 12개", 24코스 검사, DEVELOP.md 의 일반화 표가 모두 바뀐다.
+// 섞으면 "연습 트랙 — 12개", 24코스 검사, 가이드 '예상 결과' 가 모두 바뀐다.
 // 기본 방향만 쓴다 (거꾸로는 없다 — 화면에서 방향 고르기를 숨긴다). c1 '대회 1 · 머리핀' 은 연습용 '머리핀 트랙' 과 다른 트랙.
 export const CONTEST = [
   {

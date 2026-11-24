@@ -38,13 +38,6 @@ function ensureClassifier() {
 // 미리 내려받기 (페이지 진입 시 불러두면 첫 켜기가 빠르다)
 export function preloadSound() { return ensureClassifier().catch(() => {}); }
 
-export async function listMics() {
-  try {
-    const devs = await navigator.mediaDevices.enumerateDevices();
-    return devs.filter(d => d.kind === 'audioinput');
-  } catch (e) { return []; }
-}
-
 // createSoundEngine() → { start, stop, running, ready, latest, levels, onTick }
 //  latest = { vec: Float32Array(521), top: [{name, score}…], level }
 //  levels = 최근 소리 크기(RMS) 기록 — 파형 그리기용

@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   Teach Lab 전용 스타일
+   내 AI 만들기 · 시험하기 · 놀이 · 보관함(ai/) 화면 스타일
    ═══════════════════════════════════════════════════════════
    공통 규격(색·버튼·패널·표·반응형)은 css/themaker-ui.css 가 전부 담당한다.
    이 파일은 이미지 학습툴에만 있는 것(카메라 상자·예시 썸네일·
@@ -92,7 +92,7 @@
 #cmWrap td.diag{color:#FFFFFF}
 .cm-note{font-size:10.5px;color:var(--ink3);margin-top:6px;line-height:1.5;text-align:center}
 
-/* ── 시험실 ── */
+/* ── 시험하기 ── */
 .thr{margin-top:13px}
 .thr .lb{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--ink2);margin-bottom:5px}
 .answer{margin-top:4px;margin-bottom:11px}
@@ -105,7 +105,7 @@
 .stnote{font-size:11px;color:var(--ink3);margin-top:12px;line-height:1.7}
 
 /* ── 반응형 (공통 규격에 없는 것만) ── */
-@media (max-width:1100px){
+@media (max-width:1000px){
   #camBox{width:100%;height:auto;max-height:none}
   .thumbs{max-height:96px}
 }
@@ -151,7 +151,7 @@ a.db{text-decoration:none}
 .tour-next{font-size:12.5px;padding:5px 14px}
 
 /* ═══════════════════════════════════════════════════════════
-   놀이실 — 어린 학생이 쓰는 화면
+   놀이 — 어린 학생이 쓰는 화면
    ═══════════════════════════════════════════════════════════
    고르기는 큰 카드·칩, 지금 맞는 것은 초록 불(--ok). 새 색은 쓰지 않는다. */
 
@@ -301,9 +301,10 @@ body.try-mode #panR{display:none}
 .fc-body{position:relative}
 .fc-loop{position:absolute;left:0;top:76px;bottom:6px;width:14px;border:1.5px solid var(--ink2);border-right:0;border-radius:8px 0 0 8px}
 .fc-loop::after{content:"";position:absolute;right:-6px;top:-5.5px;border:4.5px solid transparent;border-left:6px solid var(--ink2);border-right:0}
-.fc-loop span{position:absolute;left:-2px;bottom:-20px;font-size:11.5px;font-weight:700;color:var(--ink3);white-space:nowrap}
+.fc-loop span{position:absolute;left:20px;bottom:-9px;font-size:11.5px;font-weight:700;color:var(--ink3);white-space:nowrap}
 /* 순서도로 볼 때는 오른쪽 칸을 넓힌다 (그림이 들어가게) */
 body.flow-view #panR{width:430px}
+@media (max-width:1000px){ body.flow-view #panR{width:auto} }   /* 좁은 화면은 칸이 세로로 쌓이니 넓이를 풀어 준다 */
 body.flow-view .fc-row{grid-template-columns:190px 34px 1fr}
 body.flow-view .fc-box{width:190px}
 body.flow-view .fc-down{margin-left:102px}
@@ -320,3 +321,6 @@ body.flow-view .fc-start{margin-left:54px}
 .brow .dt{font-size:12px;color:var(--ink3);white-space:nowrap}
 .brow .acts{display:flex;gap:4px}
 .brow .db{padding:4px 9px;font-size:12px;text-decoration:none}
+
+/* 카메라 고르기 — 고를 것이 없으면(권한 전 · 카메라 하나도 없음) 빈 칸을 보이지 않는다 */
+#camSel:empty{display:none}

@@ -21,7 +21,7 @@ const $ = id => document.getElementById(id);
 const RECORD_EVERY = 3;        // 3번 움직일 때마다 한 장면 기록 (초당 20장)
 // 사람은 보고 나서 키를 누르기까지 0.1~0.3초 걸린다. 그래서 "지금 누른 키"를
 // "지금 센서"가 아니라 "조금 전 센서"와 짝지어 기록한다. 그러지 않으면 AI는
-// 늘 한 박자 늦게 도는 법을 배워서 곧 부딪힌다 (DEVELOP.md 의 잰 결과 참고).
+// 늘 한 박자 늦게 도는 법을 배워서 곧 부딪힌다.
 const REACT_STEPS = 6;         // 6걸음 = 0.1초
 const AI_LAPS = 3;             // AI는 3바퀴 돌면 완주
 const EPOCHS = 60;
@@ -317,7 +317,7 @@ $('stopBtn').addEventListener('click', stop);
 // 빨리 감기: AI 가 운전할 때만 한 프레임에 걸음을 3배로 돌린다. 물리 · 기록 · 바퀴 시간(게임 시간)은 그대로
 $('fastBtn').addEventListener('click', () => { fast = !fast; $('fastBtn').classList.toggle('on', fast); });
 // 보기 속도: 게임 시간을 느리게 흘린다. 차의 물리·센서·학습은 그대로라 배운 AI도 똑같이 달린다.
-// (0.35~1배 모두에서 "0.1초 전 센서와 짝짓기(6걸음)" 로 배운 AI가 완주하는 것을 확인했다 — DEVELOP.md)
+// (0.35~1배 모두에서 "0.1초 전 센서와 짝짓기(6걸음)" 로 배운 AI가 완주하는 것을 확인했다 — tests/drive.test.mjs)
 let speed = 0.55;
 $('speedSeg').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
   speed = +b.dataset.s;
@@ -744,3 +744,6 @@ $('panTitle').textContent = trackName();
 $('engine').textContent = T('인터넷 없이 이 컴퓨터에서 배워요');
 paintCurTrack(); paintMode(); paintTrain(); paintWho(); refreshCounts(); paintRuns(); paintRace();
 sizeCanvas(); refreshLive(); draw();
+
+// 밝게 · 어둡게를 바꾸면 캔버스를 새 색으로 다시 그린다 (색은 CSS 토큰에서 그릴 때 읽는다)
+document.addEventListener('ailab-theme', () => { try { roadCache = null } catch (e) {} try { draw() } catch (e) {} try { drawChart() } catch (e) {} try { paintCurTrack() } catch (e) {} });

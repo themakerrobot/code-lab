@@ -230,3 +230,6 @@ addEventListener('resize', drawChart);
 $('engine').textContent = T('인터넷 없이 이 컴퓨터에서 배워요');
 fresh();
 requestAnimationFrame(frame);
+
+// 밝게 · 어둡게를 바꾸면 캔버스를 새 색으로 다시 그린다 (색은 CSS 토큰에서 그릴 때 읽는다)
+document.addEventListener('ailab-theme', () => { try { draw() } catch (e) {} try { drawChart() } catch (e) {} });

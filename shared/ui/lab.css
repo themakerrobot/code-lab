@@ -133,10 +133,13 @@ body.sheet-page{overflow:visible;height:auto;min-height:100vh;padding-bottom:0}
 /* ── 6. 좁은 화면 상단바 ── */
 @media (max-width:900px){ #engine{display:none} .hbtn.hbox span{display:none} .navlink{padding:3px 9px 0;font-size:13.5px} }
 @media (max-width:700px){
-  header{padding:0 6px;gap:0;overflow-x:auto}
-  header h1{padding-right:6px}
-  header h1 .brand-txt{display:none}
-  .navlink{padding:3px 7px 0;font-size:13px}
+  /* 휴대폰: 위 줄은 로고 + 단추(보관함 · 가이드 · 어둡게 · ? · 한/영), 아래 줄은 메뉴 넷을 똑같은 너비로 */
+  header{padding:4px 6px 0;gap:0;height:auto;flex-wrap:wrap;overflow:visible}
+  header h1{padding-right:6px;height:34px;display:flex;align-items:center}
+  .hbtn{margin-left:3px}
+  #fsBtn{display:none}
+  .navlink{order:3;flex:1 0 25%;max-width:25%;height:36px;justify-content:center;padding:3px 2px 0;font-size:13px;white-space:nowrap}
+  header::after{content:"";order:2;flex-basis:100%;height:0}   /* 메뉴 넷은 늘 아래 줄로 */
   #steps,.steps{padding:6px 8px;overflow-x:auto}
   .actname > a{font-size:14.5px}
   .stpline{margin:0 4px;min-width:4px}
@@ -217,3 +220,13 @@ header{position:sticky;top:0;z-index:60}
 :root[data-theme="dark"] .mk-table th{background:var(--panel2)}
 :root[data-theme="dark"] .ill .t-ink{fill:var(--ink2)}
 :root[data-theme="dark"] img[src*="pibo-"]{filter:brightness(.92)}
+
+/* 태블릿 가로(1024~1100px, 아이패드) — 킷은 1100px 아래에서 칸을 세로로 쌓지만,
+   그러면 운전 트랙 · 카메라가 화면 아래로 밀린다. 이 폭에서는 세 칸을 그대로 두고 양옆만 좁힌다 */
+@media (min-width:1001px) and (max-width:1100px){
+  html,body{overflow:hidden;height:100%;min-height:0}
+  body{overflow:hidden}
+  .mk-main{flex-direction:row}
+  .pan-side{width:236px}
+  .pan-out{width:272px}
+}

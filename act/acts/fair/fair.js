@@ -23,7 +23,7 @@ export function seeded(seed) {
 const gauss = rnd => { let u = 0; for (let i = 0; i < 6; i++) u += rnd(); return (u - 3) / Math.sqrt(0.5); };
 
 // 세상 설정 (고급): 반별 버스 타는 비율, 버스 타는 친구의 출석률이 기록에 낮게 적히는 정도(%p).
-// 기본값이면 예전과 난수 순서까지 같다 — DEVELOP.md · LESSONS.md 의 잰 값이 그대로다.
+// 기본값이면 난수 순서까지 같다 — 가이드 6장 '예상 결과' 의 잰 값이 그대로다.
 export const WORLD = { bus1: 0.1, bus2: 0.9, attendPenalty: 0 };
 
 // 지원자 한 명. 실력(merit)은 진짜 출석률로 정하고, 기록에는 버스 감점이 들어간 출석률이 적힌다

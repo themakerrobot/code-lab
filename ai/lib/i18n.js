@@ -20,6 +20,8 @@ const GL_LANG = (function () {
 const GL_I18N = {
   '보관함은 이 컴퓨터의 브라우저 안에만 있어요. 다른 컴퓨터로 옮기거나 오래 둘 때는 파일로 내려받아 두세요.': 'My box lives only in this browser. Download files to move them or keep them long.',
   '내가 만든 것': 'What I made',
+  '아직 가르친 AI 가 없어요.': 'No AI yet. Make one in',
+  '에서 먼저 가르쳐 주세요.': 'first.',
   '가르친 AI': 'My AIs',
   '블록 · 파이썬 · 순서도 놀이에서 바로 골라 써요': 'Pick them right away in Blocks · Python · Flow play',
   '운전 AI': 'Driving AI',
@@ -197,10 +199,7 @@ const GL_I18N = {
   '프로젝트 파일은 다른 컴퓨터의 AI Lab 에서 그대로 열려요. 예시까지 들어 있어 이어서 배울 수 있어요.':
     'A project file opens as-is in AI Lab on another computer. It keeps the examples, so you can keep teaching.',
   '알아 두기': 'Good to know',
-  'AI는 이 컴퓨터의 브라우저 안에만 저장돼요. 다른 곳으로 옮기거나 오래 보관할 때는 꼭 내보내기를 쓰세요.':
-    'Models live only in this browser. Use Export to move them or keep them for long.',
   '만든 날': 'Made on',
-  '시험하기': 'Test it',
   '이어서 배우기': 'Keep teaching',
   '프로젝트 파일로 내보내기': 'Export as a project file',
   '이름 바꾸기': 'Rename',
@@ -248,7 +247,6 @@ const GL_I18N = {
   '내보낸 파일을 여기에 놓으면\n다시 들어와요.':
     'Drop an exported file here\nto bring it back.',
   // ── 놀이 ──
-  '놀이': 'Play',
   '놀이': 'Play',
   '무엇을 볼까요?': 'What should it watch?',
   '눌러서 켜고 꺼요. 그냥 보기는 배우지 않아도 돼요.': 'Tap to turn on or off. "Just look" works without teaching.',
@@ -374,29 +372,9 @@ function localizeDOM(root) {
     document.title = GL_I18N[document.title.trim()];
 }
 
-// ── 언어 토글 버튼 (헤더 맨 오른쪽) ──
-function setLanguage(v) {
-  try { localStorage.setItem('language', v); } catch (e) {}
-  location.reload();
-}
-
-function mountLangToggle() {
-  const bar = document.querySelector('header');
-  if (!bar || document.getElementById('langToggle')) return;
-
-  const toKo = (GL_LANG !== 'ko');
-  const b = document.createElement('button');
-  b.id = 'langToggle';
-  b.type = 'button';
-  b.textContent = toKo ? '한' : 'EN';
-  b.title = '한국어 / English';
-  b.addEventListener('click', function () { setLanguage(toKo ? 'ko' : 'en'); });
-
-  bar.appendChild(b);
-}
-
+// 한 · 영 단추는 상단바(shared/ui/nav.js)가 단다. 여기서는 화면 글만 바꾼다.
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', function () { localizeDOM(); mountLangToggle(); });
+  document.addEventListener('DOMContentLoaded', function () { localizeDOM(); });
 } else {
-  localizeDOM(); mountLangToggle();
+  localizeDOM();
 }

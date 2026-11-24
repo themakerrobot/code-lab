@@ -138,7 +138,7 @@ function renderClasses() {
   $('clsList').innerHTML = MODES[mode].classes.map((label, c) => {
     const sw = s.swatch[c];
     return `<div class="cls clsrow${c === s.sel ? ' on' : ''}" data-c="${c}">
-      <div class="top"><span class="swatch" style="${sw ? `background:rgb(${sw.join(',')})` : ''}"></span>
+      <div class="top"><span class="swatch${sw ? '' : ' empty'}" style="${sw ? `background:rgb(${sw.join(',')})` : ''}" title="${sw ? '' : T('아직 안 칠했어요')}"></span>
         <span class="nm">${T(label)}</span><span class="ct num">${counts[c]}</span></div></div>`;
   }).join('');
   $('clsList').querySelectorAll('.cls').forEach(el => el.addEventListener('click', () => { s.sel = +el.dataset.c; renderClasses(); }));
@@ -493,3 +493,6 @@ if (new URLSearchParams(location.search).get('a') === 'cloak') {
   view = 'result'; renderViewSeg(); renderPhoto();
   setTimeout(() => toast(T('AI에게 미리 칠해 뒀어요. 칠하기에서 더 가르쳐 봐요')), 400);
 }
+
+// 밝게 · 어둡게를 바꾸면 캔버스를 새 색으로 다시 그린다 (색은 CSS 토큰에서 그릴 때 읽는다)
+document.addEventListener('ailab-theme', () => { try { renderPhoto() } catch (e) {} try { renderWheel() } catch (e) {} });

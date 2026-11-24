@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════
-// 다국어 (한국어 / English) — Sense Lab lib/i18n.js 와 같은 방식
+// 다국어 (한국어 / English) — ai/lib/i18n.js 와 같은 방식
 // ═══════════════════════════════════════════════════════════
 //  · 한국어 원문을 그대로 '키' 로 쓴다 → 사전에 없으면 한국어가 그대로 나오므로
 //    번역이 빠져도 화면이 깨지지 않는다.
@@ -42,50 +42,22 @@ const GL_I18N = {
   '불러오지 못했어요. 새로고침해 주세요': 'Could not load. Please refresh',
   '인터넷 없이 이 컴퓨터에서 배워요': 'Learns on this computer, no internet',
 
-  // ── 홈 ──
-  'AI는 어떻게 배울까요?': 'How does AI learn?',
-  '따라 하며 배우고, 상을 받으며 배우고, 글을 읽으며 배워요.': 'By copying, by rewards, and by reading.',
-  '설치도 가입도 없어요. 모든 계산은 이 컴퓨터 안에서 해요.': 'No install, no sign-up. Everything runs on this computer.',
+  // ── 활동 소개 (메뉴 카드 · 화면) ──
   '따라 배우기': 'Learning by copying',
-  '규칙 vs 학습': 'Rules vs learning',
   '언어모델': 'Language model',
-  '데이터와 편향': 'Data and bias',
-  '상 주며 배우기': 'Learning from rewards',
   '내가 운전하면 AI가 보고 따라 배워요.': 'You drive, and the AI learns by watching.',
-  '커브만 가르치지 않으면 어떻게 될까요?': 'What if you never teach it the curves?',
-  '규칙대로 도는 청소기와 스스로 배운 청소기.': 'A rule-following cleaner vs one that learned.',
-  '누가 더 깨끗이 치울까요?': 'Which one cleans better?',
-  '글을 가르치면 AI가 다음 글자를 맞혀요.': 'Teach it some text and it guesses the next letter.',
-  'AI는 어느 글자를 보고 골랐을까요?': 'Which letters did the AI look at?',
-  '한쪽 데이터만 많으면 AI는 어떻게 판단할까요?': 'What happens when the data is one-sided?',
-  'AI가 고른 까닭도 봐요.': 'See why the AI chose.',
   '가상 생물이 걷는 법을 스스로 찾아요.': 'A virtual creature finds out how to walk.',
   '무엇에 상을 줄지 내가 정해요.': 'You decide what earns a reward.',
   '준비 중': 'Coming soon',
   '해 보기': 'Try it',
-  '크롬·엣지에서 가장 잘 돌아가요. 카메라가 없어도 모든 활동을 할 수 있어요.': 'Works best in Chrome or Edge. Every activity works without a camera.',
 
   // ── 준비 중 화면 ──
-  '준비 중이에요': 'Coming soon',
-  '운전 — 따라 배우기': 'Drive — Learning by copying',
-  '청소 — 규칙 vs 학습': 'Clean — Rules vs learning',
-  '공정 — 데이터와 편향': 'Fair — Data and bias',
-  '진화 — 상 주며 배우기': 'Evolve — Learning from rewards',
-  '내가 키보드로 운전하면 AI가 보고 따라 배워요.': 'You drive with the keyboard, and the AI learns by watching.',
-  '직진만 가르치면 커브에서 어떻게 될까요? 데이터가 곧 실력이라는 걸 알아봐요.': 'Teach it only straight roads — what happens at a curve? Data is skill.',
   '규칙대로 도는 청소기와 스스로 배운 청소기를 겨뤄요.': 'A rule-following cleaner races one that learned.',
-  '방을 그리고, 두 청소기가 얼마나 깨끗이 치우는지 비교해요.': 'Draw a room and compare how well each one cleans.',
-  '한쪽 데이터만 많으면 AI의 판단이 어떻게 바뀔까요?': 'How does one-sided data change the AI’s decisions?',
-  'AI가 무엇을 보고 골랐는지 나무 그림으로 봐요.': 'See what the AI looked at, as a tree.',
-  '무엇에 상을 줄지 내가 정해요. 엉뚱한 꾀를 부리면 어떻게 할까요?': 'You decide the reward. What if it finds a sneaky trick?',
-  '문장 활동 해 보기': 'Try the Words activity',
 
   // ── 튜토리얼 ──
   '그만 볼래요': 'Skip',
   '다음': 'Next',
   '다 봤어요': 'Done',
-  '안녕! 여기는 AI Lab이에요.\nAI가 배우는 방법을 놀면서 알아봐요.': 'Hi! This is AI Lab.\nLet’s play and see how AI learns.',
-  '해 보고 싶은 활동을 골라요.\n위쪽 탭으로도 갈 수 있어요.': 'Pick an activity.\nThe tabs at the top work too.',
   '여기서는 AI에게 문장을 가르쳐요.\n다음 글자를 맞히는 AI예요.': 'Here you teach the AI sentences.\nIt guesses the next letter.',
   '가르칠 글을 넣어요.\n예시 글을 골라도 돼요.': 'Put in some text.\nOr pick an example.',
   'AI 종류를 골라요.\n두 가지를 비교해 봐요.': 'Pick a kind of AI.\nCompare the two.',
@@ -116,7 +88,6 @@ const GL_I18N = {
   '교과서 직접 바꿔 보기': 'Change the textbook yourself',
   '작년 심사가 2반에 불공정했던 정도': 'How unfair last year was to Class 2',
   '교과서에 넣을 2반 친구 수': 'Class 2 students in the textbook',
-  '1반은 늘 120명이에요. 2반 친구의 90%, 1반 친구의 10%가 통학 버스를 타요.': 'Class 1 always has 120. 90% of Class 2 and 10% of Class 1 take the school bus.',
   '선발 AI 시험장': 'Selection AI test',
   '차례대로 눌러 봐요': 'Press them in order',
   '1번부터 눌러 보세요. AI가 작년 기록으로 배워요.': "Start with 1. The AI learns from last year's records.",
@@ -180,7 +151,7 @@ const GL_I18N = {
   '아무거나 해 보기를 0%로 하면 배운 대로만 움직여요. 가끔 같은 곳을 맴돌다 멈추는 모습을 볼 수 있어요.': 'At 0% it only does what it learned. Sometimes you will see it circle in one spot and get stuck.',
   '연습하기 ({n}판)': 'Practice ({n} rounds)',
   '시합 ({n}걸음)': 'Race ({n} steps)',
-  '먼지가 있는 칸은 진하고, 치운 칸은 밝아요. 한 판은 {n}걸음이에요.': 'Dusty cells are dark, clean ones are light. A race is {n} steps.',
+  '먼지가 있는 칸에는 점이 찍혀 있어요. 한 판은 {n}걸음이에요.': 'Dusty cells have dots. A race is {n} steps.',
   '판': ' rounds',
   '처음 아무거나': 'random at start',
   '학습 속도': 'learning rate',
@@ -222,7 +193,6 @@ const GL_I18N = {
   '감속': 'Slower',
   '그대로': 'Keep',
   '가속': 'Faster',
-  '{thr} 장면이 더 필요해요 ({n}/{need})': 'Need more "{thr}" scenes ({n}/{need})',
   '가속이나 감속하는 운전도 보여 주세요': 'Show some speeding up or slowing down too',
   '바퀴 수보다 왼쪽·오른쪽으로 도는 장면이 골고루 있는 게 중요해요. 둥근 트랙은 한쪽으로만 돌아요.': 'A good mix of left and right turns matters more than the number of laps. The round track only turns one way.',
   '직선에서 가속, 커브 앞에서 감속하는 장면을 골고루 보여 주세요. 감속을 안 보여 주면 AI도 안 줄여요.': 'Show speeding up on straights and slowing down before corners. If you never slow down, neither will the AI.',
@@ -237,7 +207,6 @@ const GL_I18N = {
   '최고 속도 {v}배': 'top speed ×{v}',
   'AI가 보는 숫자 — 센서 7개 + 빠르기': 'Numbers the AI sees — 7 sensors + speed',
   'AI 저장': 'Save AI',
-  'AI 불러오기': 'Load AI',
   '{mode} AI를 불러왔어요 (장면 {n}개로 배운 것)': 'Loaded the {mode} AI (learned from {n} scenes)',
   '불러오지 못했어요': "Couldn't load it",
   '운전 AI 파일이 아니에요': 'Not a driving AI file',
@@ -282,10 +251,8 @@ const GL_I18N = {
   '모두 {n}장면': '{n} scenes in all',
   '지우기': 'Clear',
   '보여 준 운전을 모두 지울까요?': 'Clear all the driving you showed?',
-  '곧게만 달리면 AI는 도는 법을 못 배워요.': 'If you only go straight, the AI never learns to turn.',
   '운전을 시작하면 장면이 쌓여요.': 'Scenes pile up as you drive.',
   '양쪽으로 도는 장면이 넉넉해요. 배우기를 눌러 봐요!': 'Plenty of turns both ways. Try Start teaching!',
-  '{dir}으로 도는 장면이 더 필요해요 ({n}/{need})': 'Need more {dir} turns ({n}/{need})',
   '출발': 'Go',
   '멈춤': 'Stop',
   '빠르게': 'Faster',
@@ -300,7 +267,6 @@ const GL_I18N = {
   'AI가 보는 숫자 — 센서 7개': 'Numbers the AI sees — 7 sensors',
   'AI는 트랙 그림이 아니라 이 숫자만 봐요. 1에 가까울수록 길이 멀리 열려 있어요.': 'The AI never sees the track picture, only these numbers. Closer to 1 means more open road.',
   'AI라면 이렇게 해요': 'What the AI would do',
-  'AI 운전 기록': 'AI driving log',
   '아직 없어요': 'Nothing yet',
   '먼저 배우기를 해 주세요': 'Please teach the AI first',
   '쾅! 길 밖으로 나갔어요': 'Crash! Off the road',
@@ -323,7 +289,6 @@ const GL_I18N = {
   'AI 눈': 'AI Eye',
   '합성곱 신경망': 'Convolutional network',
   '그림을 보여 주면 AI가 처음부터 눈을 만들어요.': 'Show pictures and the AI builds its eyes from scratch.',
-  'AI는 그림에서 무엇을 찾을까요?': 'What does the AI look for in a picture?',
   '예시 모으기': 'Collect examples',
   '속이기': 'Trick it',
   '종류 & 예시': 'Kinds & examples',
@@ -371,18 +336,17 @@ const GL_I18N = {
   '작게': 'Small',
   '어둡게': 'Dark',
   '배운 그림인데도 틀린 것': 'Wrong even on learned pictures',
-  'AI가 배운 필터 8개': 'The 8 filters the AI learned',
   'AI가 스스로 만든 5×5 무늬예요. 파란 칸은 "여기가 밝으면", 빨간 칸은 "여기가 어두우면" 반응해요.': 'The AI made these 5×5 patterns itself. Blue cells react to bright, red cells to dark.',
-  '필터를 거친 그림 (특징 지도)': 'Picture after each filter (feature maps)',
-  '진한 곳이 필터가 찾은 곳이에요. 여러 그림을 보여 주며 각 필터가 무엇을 찾는지 적어 봐요.': 'Dark spots are what a filter found. Show different pictures and write what each filter looks for.',
   '무엇을 찾나?': 'Finds what?',
-  '모델 주고받기': 'Share models',
+  'AI 주고받기': 'Share AIs',
+  '그림을 보여 주면 AI가 답해요': 'Show a picture and the AI answers',
+  '아직 안 칠했어요': 'Not painted yet',
   '내보내기': 'Export',
   '불러오기': 'Import',
-  '다른 모둠의 모델을 불러와 내 그림으로 시험해 봐요.': 'Import another group’s model and test it with your pictures.',
-  '불러온 모델': 'Imported model',
-  '모델을 불러왔어요. 내 그림으로 시험해 봐요': 'Model imported. Test it with your pictures',
-  '파일을 읽지 못했어요. 내보낸 모델 파일이 맞는지 확인해 주세요': 'Could not read the file. Is it an exported model?',
+  '친구가 내보낸 AI를 불러와 내 그림으로 시험해 봐요.': 'Load a friend’s AI and test it with your pictures.',
+  '불러온 AI': 'Loaded AI',
+  'AI를 불러왔어요. 내 그림으로 시험해 봐요': 'AI loaded. Test it with your pictures',
+  '파일을 읽지 못했어요. 내보낸 AI 파일이 맞는지 확인해 주세요': 'Could not read the file. Is it an exported AI?',
   '여기서는 AI에게 그림 보는 눈을 만들어 줘요.\nAI는 처음엔 아무것도 몰라요.': 'Here you build the AI’s eyes.\nIt starts knowing nothing.',
   '그리기나 카메라로 보여 줘요.\n예시 그림을 넣어도 돼요.': 'Show pictures by drawing or with the camera.\nOr add the samples.',
   'AI는 이 작은 흑백 그림만 봐요.\n사진보다 훨씬 작죠?': 'The AI only sees this tiny gray picture.\nMuch smaller than a photo!',
@@ -393,9 +357,7 @@ const GL_I18N = {
 
   // ── 색 로봇 ──
   '색 로봇': 'Color Robot',
-  '결정 경계': 'Decision boundary',
   '색을 칠해 가르치면 AI가 픽셀마다 골라요.': 'Paint colors to teach, and the AI picks for every pixel.',
-  '투명 망토를 만들고, 색 고르기 로봇도 가르쳐요.': 'Make an invisibility cloak and teach a sorting robot.',
   '칠해서 가르치기': 'Paint to teach',
   '색 지도': 'Color map',
   '로봇 미션': 'Robot mission',
@@ -492,7 +454,7 @@ const GL_I18N = {
   '걸음': ' steps',
   '부딪힘 0': 'Bumps 0',
   '부딪힘': 'Bumps',
-  '먼지가 있는 칸은 진하고, 치운 칸은 밝아요. 한 판은 150걸음이에요.': 'Dusty cells are dark, clean cells are light. A race is 150 steps.',
+  '먼지가 있는 칸에는 점이 찍혀 있어요. 한 판은 150걸음이에요.': 'Dusty cells have dots. A race is 150 steps.',
   '배우는 청소기의 생각 — 지금 할 일마다 매긴 점수': 'What the learner thinks — a score for each move now',
   '앞으로': 'Forward',
   '왼쪽으로': 'Turn left',
@@ -536,19 +498,13 @@ const GL_I18N = {
   '공정한가?': 'Is it fair?',
   '고치기': 'Fix it',
   '지난 선발 기록': 'Past selection records',
-  '2반 기록 수': 'Records from Class 2',
   '명': '',
-  '지난 심사가 2반에 불리했던 정도': 'How unfair past judges were to Class 2',
   '조금': 'a little',
   '많이': 'a lot',
   '아주 많이': 'very much',
   '기록 고치기 — 실력만 보고 다시 심사한 결과로 바꿔요': 'Fix the records — re-judge on skill only',
-  '기록 한눈에': 'Records at a glance',
-  '코딩 동아리가 지난 몇 년의 선발 기록으로 AI를 만들려고 해요. 실력은 연습 시간 · 만든 작품 · 출석률로 정해져요.': 'A coding club wants an AI trained on past years’ selections. Real skill comes from practice hours, projects made and attendance.',
   '예': 'Yes',
   '아니요': 'No',
-  '1반 120명의 기록은 그대로예요. 버스는 멀리 사는 친구들이 타요.': 'Class 1 always has 120 records. Kids who live far take the bus.',
-  '선발 AI (결정 나무)': 'Selection AI (decision tree)',
   'AI가 볼 수 있는 정보': 'What the AI may look at',
   '연습 시간': 'Practice hours',
   '만든 작품': 'Projects made',
@@ -557,15 +513,11 @@ const GL_I18N = {
   '통학 버스': 'School bus',
   '질문 몇 단계까지?': 'How many levels of questions?',
   'AI가 묻는 질문 — 위에서부터 따라가요': 'The AI’s questions — follow from the top',
-  'AI를 만들면 나무 그림이 나와요': 'Build the AI to see its tree',
-  '지원자 한 명 넣어 보기 — 반만 바꾸면 어떻게 될까요?': 'Try one applicant — what if only the class changes?',
   '시간': 'h',
   '개': '',
   '올해 지원자 200명': '200 applicants this year',
-  '올해 지원자는 1반·2반이 100명씩이고, 두 반의 실력은 똑같이 섞여 있어요.': 'This year: 100 from each class, with the same mix of skill.',
   'AI를 만들면 결과가 나와요': 'Build the AI to see results',
   '비교표': 'Comparison',
-  'AI를 만들 때마다 한 줄씩 쌓여요': 'One row each time you build',
   '반': 'Class',
   '버스': 'Bus',
   '작품': 'Projects',
@@ -579,14 +531,12 @@ const GL_I18N = {
   '기록': 'Records',
   '중': 'of which',
   'AI가 쓴 정보': 'Information the AI used',
-  '실력과 상관없는 정보로 고르고 있어요!': 'It is choosing with information unrelated to skill!',
   '반별 합격률': 'Acceptance rate by class',
   '1반': 'Class 1',
   '2반': 'Class 2',
   '차이': 'Gap',
   '— 실력이 같은데 차이가 커요': '— big gap despite equal skill',
   '— 거의 같아요': '— about the same',
-  '실력이 되는데 떨어진 친구': 'Qualified but rejected',
   '실력대로 맞게 고른 비율 (정확도)': 'Chosen correctly by skill (accuracy)',
   '정보': 'Info',
   '전부': 'all',
@@ -595,17 +545,11 @@ const GL_I18N = {
   '설정': 'Setup',
   '정확도': 'Accuracy',
   '볼 수 있는 정보를 하나 이상 골라 주세요': 'Pick at least one piece of information',
-  'AI를 만들면 시험해 볼 수 있어요': 'Build the AI to try this',
   '1반 · 걸어서': 'Class 1 · walks',
   '2반 · 버스': 'Class 2 · bus',
   '2반 · 걸어서': 'Class 2 · walks',
   '실력은 똑같은데 결과가 달라요!': 'Same skill, different result!',
   '실력이 같으면 결과도 같아요.': 'Same skill, same result.',
-  '여기서는 지난 기록으로 선발 AI를 만들어요.\nAI는 공정할까요?': 'Here you build a selection AI from past records.\nWill it be fair?',
-  '지난 기록이에요.\n2반의 합격률이 왜 낮을까요?': 'These are the past records.\nWhy is Class 2’s rate lower?',
-  'AI가 볼 정보를 고르고 만들어요.': 'Choose what the AI sees, then build it.',
-  '실력이 같은 올해 지원자로 시험해요.\n두 반의 합격률을 비교해요.': 'Test on this year’s equally skilled applicants.\nCompare the two classes.',
-  '실력은 그대로 두고 반만 바꿔 봐요.': 'Keep the skill, change only the class.',
 
   // ── 진화 ──
   '진화시키기': 'Evolve',
@@ -766,27 +710,9 @@ function localizeDOM(root) {
   document.documentElement.lang = 'en';
 }
 
-// ── 언어 토글 버튼 (자매 서비스와 같은 버튼·위치) ──
-function setLanguage(v) {
-  try { localStorage.setItem('language', v); } catch (e) {}
-  location.reload();
-}
-
-function mountLangToggle() {
-  const bar = document.querySelector('header');
-  if (!bar || document.getElementById('langToggle')) return;
-  const toKo = (GL_LANG !== 'ko');
-  const b = document.createElement('button');
-  b.id = 'langToggle';
-  b.type = 'button';
-  b.textContent = toKo ? '한' : 'EN';
-  b.title = '한국어 / English';
-  b.addEventListener('click', function () { setLanguage(toKo ? 'ko' : 'en'); });
-  bar.appendChild(b);
-}
-
+// 한 · 영 단추는 상단바(shared/ui/nav.js)가 단다. 여기서는 화면 글만 바꾼다.
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', function () { localizeDOM(); mountLangToggle(); });
+  document.addEventListener('DOMContentLoaded', function () { localizeDOM(); });
 } else {
-  localizeDOM(); mountLangToggle();
+  localizeDOM();
 }

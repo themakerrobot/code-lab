@@ -42,7 +42,6 @@ export function makeAugment(opts, rnd = Math.random) {
 }
 
 // ── 예시 그림 세트 ─────────────────────────────────────────
-export const SHAPES = ['circle', 'triangle', 'star', 'square'];
 
 function segDist(px, py, ax, ay, bx, by) {
   const dx = bx - ax, dy = by - ay, L = dx * dx + dy * dy || 1;

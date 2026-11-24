@@ -379,6 +379,15 @@ function live(now) {
   }
   seeG.putImageData(im, 0, 0);
   if (!model) return;
+  // 빈 그림(한 가지 색뿐)에는 답하지 않는다 — 아무것도 없는데 "동그라미 52%" 라고 하면 헷갈린다
+  let lo = 1, hi = 0;
+  for (let i = 0; i < x.length; i++) { if (x[i] < lo) lo = x[i]; if (x[i] > hi) hi = x[i]; }
+  if (hi - lo < 0.08) {
+    if (!$('pred').dataset.blank) $('pred').innerHTML = '<div class="hint" style="margin-top:0">' + esc(T('그림을 보여 주면 AI가 답해요')) + '</div>';
+    $('pred').dataset.blank = '1';
+    return;
+  }
+  delete $('pred').dataset.blank;
   const { Z, out } = model.forward(x), best = argmax(out);
   $('pred').innerHTML = Array.from(out).map((v, c) => `
     <div class="bar${c === best ? ' top' : ''}"><div class="bl"><span>${esc(modelNames[c] ?? '?')}</span>
@@ -388,7 +397,7 @@ function live(now) {
 }
 requestAnimationFrame(live);
 
-// ── 모델 주고받기 ───────────────────────────────────────────
+// ── AI 주고받기 ───────────────────────────────────────────
 $('saveBtn').addEventListener('click', () => {
   if (!model) return;
   const body = JSON.stringify({ app: 'ai-lab-eye', v: 1, names: modelNames, notes, model: model.toJSON() });
@@ -408,11 +417,11 @@ $('loadFile').addEventListener('change', async () => {
     model = TinyCNN.fromJSON(o.model); modelNames = o.names.map(String);
     notes = Array.from({ length: model.F }, (_, i) => String((o.notes || [])[i] || ''));
     $('saveBtn').disabled = false;
-    $('prgLabel').textContent = `${T('불러온 모델')}: ${modelNames.join(' · ')}`;
+    $('prgLabel').textContent = `${T('불러온 AI')}: ${modelNames.join(' · ')}`;
     renderFilters(); setStep(3);
-    toast(T('모델을 불러왔어요. 내 그림으로 시험해 봐요'));
+    toast(T('AI를 불러왔어요. 내 그림으로 시험해 봐요'));
   } catch (e) {
-    toast(T('파일을 읽지 못했어요. 내보낸 모델 파일이 맞는지 확인해 주세요'));
+    toast(T('파일을 읽지 못했어요. 내보낸 AI 파일이 맞는지 확인해 주세요'));
   }
 });
 
@@ -420,3 +429,6 @@ $('loadFile').addEventListener('change', async () => {
 $('engine').textContent = T('인터넷 없이 이 컴퓨터에서 배워요');
 capLabel();
 renderClasses();
+
+// 밝게 · 어둡게를 바꾸면 캔버스를 새 색으로 다시 그린다 (색은 CSS 토큰에서 그릴 때 읽는다)
+document.addEventListener('ailab-theme', () => { try { drawChart() } catch (e) {} try { renderFilters() } catch (e) {} });

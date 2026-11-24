@@ -47,7 +47,7 @@
   const steps = TOURS[PAGE];
   if (!steps) return;
 
-  const SEEN_KEY = 'tl-tour-' + PAGE;
+  const SEEN_KEY = 'ailab-tour-' + PAGE;
   let idx = -1, box = null;
 
   function el(tag, cls, parent) {

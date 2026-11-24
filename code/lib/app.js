@@ -20,10 +20,10 @@
     set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
   };
   const KEY = {
-    mode: 'codelab-mode',
-    blocks: 'codelab-blocks',
-    python: 'codelab-python',
-    font: 'codelab-font',
+    mode: 'ailab-code-mode',
+    blocks: 'ailab-code-blocks',
+    python: 'ailab-code-python',
+    font: 'ailab-code-font',
   };
 
   const state = {
@@ -191,35 +191,8 @@
   // 시작 블록(깃발)에 붙은 블록만 실행된다 — 떨어진 블록은 흐리게
   new DisableTopBlocks(workspace).init();
 
-  // 지금 없는 블록(예전 로봇 전용 블록 등)이 든 파일도 열리게, 모르는 블록은 빼고 알려 준다.
-  // 모르는 블록을 만나면 그 블록과 그 아래에 붙은 것까지 뺀다.
-  function stripUnknown(node, dropped) {
-    if (Array.isArray(node)) {
-      return node.map(n => stripUnknown(n, dropped)).filter(n => n !== null);
-    }
-    if (!node || typeof node !== 'object') return node;
-    if (typeof node.type === 'string' && 'id' in node && !Blockly.Blocks[node.type]) {
-      dropped.add(node.type);
-      // 아래에 붙어 있던 블록은 살려서 한 칸 끌어올린다
-      return node.next && node.next.block ? stripUnknown(node.next.block, dropped) : null;
-    }
-    const out = {};
-    for (const k of Object.keys(node)) {
-      const v = stripUnknown(node[k], dropped);
-      if (v === null) continue;
-      // { block: X } 나 { shadow: X } 연결 칸이 비면 칸째 뺀다
-      if (v && typeof v === 'object' && !Array.isArray(v)
-          && ('block' in node[k] || 'shadow' in node[k]) && !('block' in v) && !('shadow' in v)) continue;
-      out[k] = v;
-    }
-    return out;
-  }
-
   function loadBlocks(json) {
-    const dropped = new Set();
-    const clean = stripUnknown(json, dropped);
-    Blockly.serialization.workspaces.load(clean, workspace);
-    return dropped.size;
+    Blockly.serialization.workspaces.load(json, workspace);
   }
 
   function blocksToCode() {
@@ -394,12 +367,12 @@
   const runner = new PyRunner();
   const turtle = new TurtleCanvas($('#turtle'));
 
-  // 헤더 오른쪽 상태 글 — teach-lab · ml-lab 과 같은 #engine (모양은 css/app.css 의 "상단바 공통")
+  // 헤더 오른쪽 상태 글 — 다른 화면과 같은 #engine (모양은 css/app.css 의 "상단바 공통")
   function setPyBadge(text) {
     $('#engine').textContent = text;
   }
 
-  runner.onStatus = (t) => { if (t) setStatus(t, 'run'); };
+  runner.onStatus = (t) => { if (t) setStatus(EN && t === '파이썬을 불러오는 중…' ? 'Loading Python…' : t, 'run'); };   // 워커 글은 한국어 하나뿐
   runner.onReady = (v) => {
     setPyBadge(T('파이썬 ', 'Python ') + String(v).split('.').slice(0, 2).join('.'), true);
     if (!runner.running) setStatus(T('준비', 'Ready'), '');
@@ -705,9 +678,9 @@
       const text = String(r.result);
       try {
         if (/\.json$/i.test(file.name)) {
-          const dropped = loadBlocks(JSON.parse(text));
+          loadBlocks(JSON.parse(text));
           setMode('block');
-          toast(dropped ? T(`불러왔어요. 지금은 없는 블록 ${dropped}종은 뺐어요`, `Loaded. Removed ${dropped} unknown block type(s)`) : T('불러왔어요', 'Loaded'));
+          toast(T('불러왔어요', 'Loaded'));
         } else {
           editor.setValue(text);
           setMode('python');

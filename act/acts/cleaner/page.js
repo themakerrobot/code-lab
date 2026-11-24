@@ -11,7 +11,7 @@ import { W, H, ROOMS, RULES, QAgent, Sim, randomRoom, seeded, DIRS } from './wor
 const T = s => (typeof GL_T === 'function' ? GL_T(s) : s);
 const $ = id => document.getElementById(id);
 
-// 기본값 (고급 설정에서 바꿀 수 있다). 기본값은 DEVELOP.md · LESSONS.md 의 잰 값 기준
+// 기본값 (고급 설정에서 바꿀 수 있다). 기본값은 가이드 6장 '예상 결과' 의 잰 값 기준
 const DEF = { raceSteps: 150, episodes: 600, epsStart: 0.3, alpha: 0.2, gamma: 0.9, raceEps: 0.05 };
 let raceSteps = DEF.raceSteps, raceEps = DEF.raceEps, curveEpisodes = DEF.episodes;
 const ACT_LABEL = ['앞으로', '왼쪽으로', '오른쪽으로', '뒤로'];
@@ -216,7 +216,7 @@ function paintAdv() {
   $('alphaVal').textContent = a.alpha; $('gammaVal').textContent = a.gamma;
   raceSteps = segVal('raceStepsSeg', 'n'); raceEps = segVal('raceEpsSeg', 'e');
   $('raceLbl').textContent = T('시합 ({n}걸음)').replace('{n}', raceSteps);
-  $('stepsHint').textContent = T('먼지가 있는 칸은 진하고, 치운 칸은 밝아요. 한 판은 {n}걸음이에요.').replace('{n}', raceSteps);
+  $('stepsHint').textContent = T('먼지가 있는 칸에는 점이 찍혀 있어요. 한 판은 {n}걸음이에요.').replace('{n}', raceSteps);
 }
 ['epsStart', 'alpha', 'gamma'].forEach(id => $(id).addEventListener('input', paintAdv));
 ['epSeg', 'raceStepsSeg', 'raceEpsSeg'].forEach(id => bindSeg(id, paintAdv));
@@ -311,3 +311,6 @@ function draw() {
 // ── 시작 ────────────────────────────────────────────────────
 $('engine').textContent = T('인터넷 없이 이 컴퓨터에서 배워요');
 renderRooms(); renderBots(); sizeCanvas(); badges();
+
+// 밝게 · 어둡게를 바꾸면 캔버스를 새 색으로 다시 그린다 (색은 CSS 토큰에서 그릴 때 읽는다)
+document.addEventListener('ailab-theme', () => { try { draw() } catch (e) {} try { drawChart() } catch (e) {} });

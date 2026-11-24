@@ -148,7 +148,6 @@ export class Policy {
 // ── AI 파일 ─────────────────────────────────────────────────
 // 배운 AI 를 JSON 으로. 계산에 난수가 없어 다른 PC 에서 불러와도 같은 운전을 한다.
 // 저장 형식 kind 'ai-lab-drive'.
-// 트랙 · 물리가 같아 같은 AI 면 두 서비스에서 같은 대회 기록이 나온다. 읽을 때는 예전 ml-lab 파일('ml-lab-drive')도 받는다.
 export const AI_KINDS = ['ai-lab-drive'];
 
 export function savePolicy(pol, info = {}) {
@@ -160,7 +159,7 @@ export function savePolicy(pol, info = {}) {
 // 망가진 파일이면 Error (message 는 화면에 그대로 보여 줄 한국어 문장 — 화면에서 T() 로 옮긴다)
 export function loadPolicy(o) {
   if (!o || !AI_KINDS.includes(o.kind) || !o.p) throw new Error('운전 AI 파일이 아니에요');
-  const heads = Array.isArray(o.heads) ? o.heads : [o.nOut || 3];
+  const heads = Array.isArray(o.heads) ? o.heads : [];
   if (!(o.nIn === 7 && heads.length === 1 && heads[0] === 3) && !(o.nIn === 8 && heads.length === 2 && heads[0] === 3 && heads[1] === 3))
     throw new Error('운전 AI 파일이 아니에요');
   const pol = new Policy(o.nIn, { hid: o.hid | 0 || 24, heads });

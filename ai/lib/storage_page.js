@@ -65,9 +65,9 @@ async function render() {
       '<td>' + dateText(rec.createdAt) + '</td>' +
       '<td><div class="acts">' +
         '<a class="db" href="test.html?use=' + encodeURIComponent(rec.name) + '" title="' + T('시험하기') + '">' +
-          '<i class="fa-solid fa-flask"></i></a>' +
+          '<i class="fa-solid fa-flask"></i> ' + T('시험하기') + '</a>' +
         '<a class="db" href="index.html?load=' + encodeURIComponent(rec.name) + '" title="' + T('이어서 배우기') + '">' +
-          '<i class="fa-solid fa-graduation-cap"></i></a>' +
+          '<i class="fa-solid fa-graduation-cap"></i> ' + T('이어서 배우기') + '</a>' +
         '<button class="db" data-act="zip" title="' + T('프로젝트 파일로 내보내기') + '">' +
           '<i class="fa-solid fa-file-arrow-down"></i></button>' +
         '<button class="db" data-act="rename" title="' + T('이름 바꾸기') + '">' +

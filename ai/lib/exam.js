@@ -34,7 +34,7 @@ let lastSee = 0, lastVec = null, lastResult = null;
 let threshold = 0.6;
 let holdUntil = 0;              // 사진 파일로 맞힌 답을 잠시 붙들어 두는 시각
 let engineBusy = false;
-let soundTransform = 'raw';     // 고른 AI가 배운 방식 (옛 AI는 날것)
+let soundTransform = '';        // 고른 AI가 배운 방식 (soundTransformOf)
 
 const camCv = $('camCv');
 const fileCv = document.createElement('canvas');

@@ -1,12 +1,12 @@
 // ═══════════════════════════════════════════════════════════
-// 보관함 — 브라우저 저장 + 프로젝트 파일(.teachlab.zip) 내보내기·불러오기
+// 보관함 — 브라우저 저장 + 프로젝트 파일(.ailab.zip) 내보내기·불러오기
 // ═══════════════════════════════════════════════════════════
-//  · 저장소   : IndexedDB 'teach-lab' / 스토어 'projects' (keyPath: name)
+//  · 저장소   : IndexedDB 'ai-lab' / 스토어 'projects' (keyPath: name)
 //  · 원본 사진은 저장하지 않는다. 임베딩(숫자)과 작은 썸네일만 남는다.
 //  · TF.js 에 기대지 않는다 — 가중치는 평범한 float32 덩어리다.
 //
-// 프로젝트 파일 구조 (.teachlab.zip)
-//   manifest.json     { format:"teachlab", version, kind, app, createdAt }
+// 프로젝트 파일 구조 (.ailab.zip)
+//   manifest.json     { format:"ailab", version, source, app, createdAt }
 //   project.json      이름·소스(이미지/손/얼굴/몸/소리)·종류·정확도·특징 뽑는 법
 //   classifier.json   분류기 구조
 //   classifier.bin    분류기 가중치 (float32 little-endian)
@@ -16,7 +16,7 @@
 import { bytesToB64, b64ToBytes } from './classifier.js';
 
 export const PROJECT_FORMAT = 'ailab';
-export const PROJECT_VERSION = 2;
+export const PROJECT_VERSION = 1;
 export const PROJECT_EXT = '.ailab.zip';
 
 const DB_NAME = 'ai-lab', STORE = 'projects', DB_VER = 1;
@@ -95,15 +95,14 @@ export function buildZip(rec) {
   zip.file('manifest.json', JSON.stringify({
     format: PROJECT_FORMAT,
     version: PROJECT_VERSION,
-    kind: rec.source || rec.kind || 'image',
+    source: rec.source,
     app: 'ai-lab',
     createdAt: rec.createdAt || new Date().toISOString(),
   }, null, 2));
 
   zip.file('project.json', JSON.stringify({
     name: rec.name,
-    kind: rec.source || rec.kind || 'image',
-    source: rec.source || 'image',
+    source: rec.source,
     variant: rec.variant || null,
     classes: rec.classes,
     sampleCounts: rec.sampleCounts,
@@ -176,13 +175,9 @@ export async function readZip(file) {
     }
   }
 
-  // version 1 은 이미지 전용이었다 — source 가 없으면 이미지로 본다
-  const source = project.source || (project.kind && project.kind !== 'image' ? project.kind : 'image');
-
   return {
     name: project.name,
-    kind: source,
-    source,
+    source: project.source,
     variant: project.variant || null,
     classes: project.classes,
     sampleCounts: project.sampleCounts,
@@ -196,7 +191,7 @@ export async function readZip(file) {
 
 export async function importZip(file) {
   const rec = await readZip(file);
-  rec.name = await Store.freeName(rec.name || file.name.replace(/\.ailab\.zip$/i, '').replace(/\.zip$/i, ''));
+  rec.name = await Store.freeName(rec.name || file.name.replace(/\.ailab\.zip$/i, ''));
   return Store.save(rec);
 }
 

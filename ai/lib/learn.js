@@ -15,7 +15,7 @@ import { Store, examplesToRecord, examplesFromRecord } from './project.js';
 import {
   SOURCE_LIST, SOURCE_HINT, VARIANT_UI, variantsOf, defaultVariant,
   dimOfSource, extractorSpec, isImageSource, isLandmarkSource, isSoundSource,
-  applySoundTransform, soundTransformOf, SOUND_TRANSFORM,
+  applySoundTransform, SOUND_TRANSFORM,
 } from './sources.js';
 
 const $ = id => document.getElementById(id);
@@ -735,7 +735,6 @@ async function saveModel() {
     const packed = await serialize(trained.model, trained.classes, dim);
     await Store.save({
       name,
-      kind: source,
       source,
       variant,
       classes: trained.classes,
@@ -803,12 +802,6 @@ async function restoreWork(name) {
     if (!rec || !rec.examples || !rec.examples.length) { toast(T('이어 할 예시가 없어요')); return; }
     const dim = rec.embedder ? rec.embedder.dim : dimOfSource(source, variant);
     classes = examplesFromRecord(rec.examples, dim);
-    // 옛 소리 AI는 날것 점수로 모았다. 지금 방식으로 맞춰 둔다 —
-    // 안 그러면 이어서 모은 새 예시와 섞여서 학습이 망가진다.
-    if (isSoundSource(source) && soundTransformOf(rec.embedder) !== SOUND_TRANSFORM) {
-      classes.forEach(c => { c.vecs = c.vecs.map(v => applySoundTransform(v, SOUND_TRANSFORM)); });
-      console.log('옛 소리 AI의 예시를', SOUND_TRANSFORM, '로 맞췄습니다');
-    }
     selected = 0;
     $('mdlName').value = rec.name;
     renderClasses(); refreshUI(); steps();

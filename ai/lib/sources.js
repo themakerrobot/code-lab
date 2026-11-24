@@ -29,12 +29,11 @@ import { VARIANTS, dimOf } from './features.js';
 //   박수·휘파람·조용히 :  날것 67.5%  →  sqrt+L2 98.2%
 //   4종 전부           :  날것 70.0%  →  sqrt+L2 91.9%
 //
-// 옛 AI는 날것으로 배웠으므로 프로젝트 파일에 어느 쪽인지 적어 둔다.
-// featureTransform 이 없으면 'raw' 로 본다.
+// 소리 AI 는 언제나 이 방식으로 배운다 (프로젝트 파일의 featureTransform).
 export const SOUND_TRANSFORM = 'sqrt-l2';
 
 export function applySoundTransform(vec, kind) {
-  if (kind !== 'sqrt-l2') return vec;              // 'raw' 또는 옛 AI
+  if (kind !== 'sqrt-l2') return vec;
   const out = new Float32Array(vec.length);
   let sum = 0;
   for (let i = 0; i < vec.length; i++) {
@@ -47,9 +46,9 @@ export function applySoundTransform(vec, kind) {
   return out;
 }
 
-// 저장된 AI가 어떤 방식으로 배웠는지 (옛 AI는 날것)
+// 저장된 AI가 어떤 방식으로 배웠는지
 export function soundTransformOf(spec) {
-  return (spec && spec.featureTransform) || 'raw';
+  return (spec && spec.featureTransform) || SOUND_TRANSFORM;
 }
 
 export const SOURCE_LIST = [
@@ -59,12 +58,6 @@ export const SOURCE_LIST = [
   { id: 'pose', label: '몸', icon: 'fa-person', input: 'camera' },
   { id: 'sound', label: '소리', icon: 'fa-microphone', input: 'mic' },
 ];
-
-export const SOURCE_IDS = SOURCE_LIST.map(s => s.id);
-
-export function sourceMeta(id) {
-  return SOURCE_LIST.find(s => s.id === id) || SOURCE_LIST[0];
-}
 
 export function isSoundSource(id) { return id === 'sound'; }
 export function isImageSource(id) { return id === 'image'; }

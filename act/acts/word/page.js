@@ -350,3 +350,6 @@ $('duelIn').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isCom
 
 $('engine').textContent = T('인터넷 없이 이 컴퓨터에서 배워요');
 setTraining(false);
+
+// 밝게 · 어둡게를 바꾸면 캔버스를 새 색으로 다시 그린다 (색은 CSS 토큰에서 그릴 때 읽는다)
+document.addEventListener('ailab-theme', () => { try { drawChart() } catch (e) {} });

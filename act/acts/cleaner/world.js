@@ -186,7 +186,7 @@ export class QAgent {
     return { total, coverage: sim.coverage };
   }
   // 실제로 청소할 때도 5% 는 아무거나 해 본다 — 같은 칸을 맴도는 고리에서 빠져나오게
-  // (0 으로 두면 시드에 따라 한곳에서 계속 부딪히며 멈추는 일이 잦았다. DEVELOP.md)
+  // (0 으로 두면 시드에 따라 한곳에서 계속 부딪히며 멈추는 일이 잦았다)
   policy(rnd = Math.random, eps = 0.05) {
     return { pick: sim => rnd() < eps ? (rnd() * 4) | 0 : this.best(sim.state()), after() {} };
   }
