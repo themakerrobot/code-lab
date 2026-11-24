@@ -23,7 +23,7 @@
     html += '<div class="sheet-top"><h2>' + (en ? 'AI worksheet' : '인공지능 학습지') + '</h2>'
       + '<p>' + (en ? 'Look, teach, then make.' : '보고, 가르치고, 만들어 봐요.') + '</p>'
       + '<div class="nm">' + (en ? 'Name' : '이름') + '<span></span>' + (en ? 'Date' : '날짜') + '<span></span></div>'
-      + '<a class="guide-link" href="' + A.href('guide/index.html') + '"><i class="fa-solid fa-book-open"></i> ' + (en ? 'Guide for teachers' : '선생님 가이드') + '</a></div>';
+      + '<a class="guide-link" href="' + A.href('guide/index.html') + '"><i class="fa-solid fa-book-open"></i> ' + (en ? 'How to use' : '사용 가이드') + '</a></div>';
   } else {
     const m = list[0];
     html += '<div class="sheet-top"><h2>' + esc(T(m)) + '</h2><p>' + esc(T(m.sub)) + '</p></div>';

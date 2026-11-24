@@ -80,7 +80,7 @@
   const guide = document.createElement('a');
   guide.className = 'hbtn hbox' + (menuId === 'guide' ? ' on' : '');
   guide.href = ROOT + 'guide/index.html';
-  guide.title = lang === 'en' ? 'Guide for teachers' : '선생님 가이드';
+  guide.title = lang === 'en' ? 'How to use' : '사용 가이드';
   guide.innerHTML = '<i class="fa-solid fa-book-open"></i><span>' + (lang === 'en' ? 'Guide' : '가이드') + '</span>';
   header.appendChild(guide);
 
