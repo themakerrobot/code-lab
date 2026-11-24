@@ -186,3 +186,8 @@ header{position:sticky;top:0;z-index:60}
 /* 킷은 좁은 화면에서 html · body 둘 다 overflow:auto 로 둔다 — 그러면 body 가 (안 움직이는) 스크롤 칸이 되어
    sticky 가 body 에 붙어 버린다. 스크롤은 문서(html)만 하게 body 는 visible 로 */
 @media (max-width:1100px){ body{overflow:visible} }
+
+/* 첫 화면 학습지 오른쪽 위 — 선생님 가이드 */
+.guide-link{font-size:13px;font-weight:700;color:var(--pen-blue-d);text-decoration:none;padding-bottom:4px;white-space:nowrap}
+.guide-link:hover{text-decoration:underline;text-underline-offset:3px}
+@media (max-width:900px){ .hbtn.hbox span{display:none} }

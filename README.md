@@ -25,7 +25,7 @@ node --test tests/*.test.mjs       # 활동 모델 시험
 node tools/check-links.mjs         # 화면이 부르는 파일이 다 있는지
 ```
 
-**사용 가이드(선생님용) → [docs/GUIDE.md](docs/GUIDE.md)**
+**사용 가이드(선생님용) → https://themakerrobot.github.io/ai-lab/guide/** (사이트 상단바 [가이드])
 
 구조와 규칙은 [CLAUDE.md](CLAUDE.md).
 

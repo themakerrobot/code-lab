@@ -77,6 +77,13 @@
   box.innerHTML = '<i class="fa-solid fa-box-archive"></i><span>' + T(BOX) + '</span>';
   header.appendChild(box);
 
+  const guide = document.createElement('a');
+  guide.className = 'hbtn hbox' + (menuId === 'guide' ? ' on' : '');
+  guide.href = ROOT + 'guide/index.html';
+  guide.title = lang === 'en' ? 'Guide for teachers' : '선생님 가이드';
+  guide.innerHTML = '<i class="fa-solid fa-book-open"></i><span>' + (lang === 'en' ? 'Guide' : '가이드') + '</span>';
+  header.appendChild(guide);
+
   // ── 전체화면 (지원하는 브라우저에서만) ──
   // 화면을 옮기면 브라우저가 전체화면을 풀기 때문에, 켜 둔 상태를 기억했다가 다음 화면의 첫 터치에서 되살린다.
   if (document.documentElement.requestFullscreen) {
