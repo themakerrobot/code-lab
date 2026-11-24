@@ -8,7 +8,12 @@
   var d = document.documentElement;
   try {
     var t = localStorage.getItem('ailab-theme');
-    if (t === 'dark') d.setAttribute('data-theme', 'dark');
+    if (t === 'dark') {
+      d.setAttribute('data-theme', 'dark');
+      // 휴대폰 브라우저 위쪽 띠 색 — <meta name="theme-color"> 는 이 스크립트보다 위에 있다
+      var tc = document.querySelector('meta[name="theme-color"]');
+      if (tc) tc.setAttribute('content', '#1D2420');
+    }
     var l = localStorage.getItem('language');
     if (l === 'en' || l === 'ko') d.setAttribute('lang', l);
   } catch (e) { /* 저장소를 못 쓰면 밝게 · 기본 언어 */ }

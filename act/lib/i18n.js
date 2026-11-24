@@ -193,6 +193,8 @@ const GL_I18N = {
   '감속': 'Slower',
   '그대로': 'Keep',
   '가속': 'Faster',
+  '왼쪽으로 (←)': 'Left (←)',
+  '오른쪽으로 (→)': 'Right (→)',
   '가속이나 감속하는 운전도 보여 주세요': 'Show some speeding up or slowing down too',
   '바퀴 수보다 왼쪽·오른쪽으로 도는 장면이 골고루 있는 게 중요해요. 둥근 트랙은 한쪽으로만 돌아요.': 'A good mix of left and right turns matters more than the number of laps. The round track only turns one way.',
   '직선에서 가속, 커브 앞에서 감속하는 장면을 골고루 보여 주세요. 감속을 안 보여 주면 AI도 안 줄여요.': 'Show speeding up on straights and slowing down before corners. If you never slow down, neither will the AI.',

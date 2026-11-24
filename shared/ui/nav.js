@@ -28,6 +28,7 @@
     else lang = /^ko/i.test(navigator.language || 'ko') ? 'ko' : 'en';
   } catch (e) {}
   const T = o => (o && (o[lang] || o.ko)) || '';
+  document.documentElement.lang = lang;     // 처음 오는 영어 브라우저도 html[lang] 이 맞게
 
   const header = document.querySelector('header');
   if (!header) return;
@@ -135,10 +136,15 @@
       if (next === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
       else document.documentElement.removeAttribute('data-theme');
       try { localStorage.setItem('ailab-theme', next); } catch (e) {}
+      const tc = document.querySelector('meta[name="theme-color"]');
+      if (tc) tc.content = next === 'dark' ? '#1D2420' : '#FBF7EF';      // 휴대폰 브라우저 위쪽 띠 색
       paint();
       document.dispatchEvent(new CustomEvent('ailab-theme', { detail: next }));   // 캔버스를 다시 그릴 화면을 위해
     });
     paint();
+    // 인쇄는 늘 밝게 (칠판 색 그대로 뽑으면 잉크만 든다) — 인쇄가 끝나면 되돌린다
+    addEventListener('beforeprint', () => { if (dark()) { document.documentElement.removeAttribute('data-theme'); document.documentElement.dataset.printDark = '1'; } });
+    addEventListener('afterprint', () => { if (document.documentElement.dataset.printDark) { delete document.documentElement.dataset.printDark; document.documentElement.setAttribute('data-theme', 'dark'); } });
     const fsb = document.getElementById('fsBtn');
     fsb ? header.insertBefore(tb, fsb) : header.appendChild(tb);
   }
@@ -157,9 +163,18 @@
     header.appendChild(lb);
   }
 
+  // ── 탭 제목 — 고른 말로 (활동 · 메뉴 · 보관함 · 첫 화면) ──
+  {
+    const here = location.pathname.replace(/\/$/, '/index.html');
+    const page = act && act.pages ? act.pages.find(p => here.endsWith('/' + p.href)) : null;
+    if (act) document.title = T(act) + (page && act.pages.indexOf(page) > 0 ? ' · ' + T(page) : '') + ' — AI Lab';
+    else if (menuId === 'box') document.title = T(BOX) + ' — AI Lab';
+    else if (menu) document.title = T(menu) + ' — AI Lab';
+    else if (!menuId) document.title = 'AI Lab — ' + (lang === 'en' ? 'AI worksheet' : '인공지능 학습지');
+  }
+
   // ── 활동 이름 (단계 표시줄 맨 앞) · 한 활동 안의 화면 전환 ──
   if (act) {
-    document.title = T(act) + ' — AI Lab';
     let slot = document.querySelector('#steps, .steps, [data-act-slot]');
     if (!slot) {                     // 단계 표시줄이 없는 화면은 이름 줄을 하나 만든다
       slot = document.createElement('div');
