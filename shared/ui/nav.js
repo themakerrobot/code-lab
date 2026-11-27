@@ -51,7 +51,13 @@
   home.href = ROOT + 'index.html';
   home.className = 'brand';
   home.title = lang === 'en' ? 'Home' : '처음 화면';
-  home.innerHTML = '<img src="' + ROOT + 'shared/assets/img/pibo-logo.png" alt=""><span class="brand-txt">AI Lab</span>';
+  // 로고: 예시 둘이 얽혀 답 하나(빨간 펜 점)로 모인다 — 탭 아이콘 shared/assets/img/favicon.svg 와 같은 그림.
+  // 색은 lab.css 가 킷 토큰으로 칠해 밝게 · 어둡게를 따라간다
+  home.innerHTML = '<svg class="logo" viewBox="0 0 32 32" aria-hidden="true">'
+    + '<path class="ln" d="M9.4 7H12.6M9.4 25H12.6M7.65 9.97L14.35 22.03M7.65 22.03L14.35 9.97M18.53 9.27L22.58 12.92M18.53 22.73L22.58 19.08"/>'
+    + '<circle class="ln" cx="6" cy="7" r="3.4"/><circle class="ln" cx="6" cy="25" r="3.4"/>'
+    + '<circle class="ln" cx="16" cy="7" r="3.4"/><circle class="ln" cx="16" cy="25" r="3.4"/>'
+    + '<circle class="out" cx="26" cy="16" r="4.6"/></svg><span class="brand-txt">AI Lab</span>';
   h1.appendChild(home);
   header.appendChild(h1);
 

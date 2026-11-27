@@ -20,7 +20,9 @@ body[data-menu]{ --acc:var(--m); --acc-ink:var(--m-ink); --acc-soft:var(--m-soft
 header{margin:0;border-radius:0;padding:0 10px;height:40px;gap:2px;box-shadow:0 1px 0 var(--line-soft)}
 header h1{padding-right:14px}
 header h1 .brand{display:flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;font-family:var(--serif);font-size:17px}
-header h1 img{height:24px}
+header h1 .logo{width:24px;height:24px;display:block;flex-shrink:0}
+header h1 .logo .ln{fill:none;stroke:var(--ink2);stroke-width:2.4;stroke-linecap:round}
+header h1 .logo .out{fill:var(--pen-red)}
 .navlink{height:40px;padding:3px 13px 0;font-size:14.5px;font-weight:700;color:var(--ink3);border-bottom-width:3px}
 .navlink:hover{color:var(--ink);border-bottom-color:var(--line-soft)}
 .navlink.on{color:var(--c);border-bottom-color:var(--c)}

@@ -10,7 +10,7 @@
 //    '__codelab__/sensor' 로 물으면 그 값을 바로 준다.
 // 카메라 AI 모델·wasm(models/ · vendor/tasks-vision/)은 처음 쓸 때 받아 담는다 (약 29MB).
 
-const VERSION = 'ailab-code-8';
+const VERSION = 'ailab-code-9';
 const RUNTIME = 'ailab-code-runtime';
 const INPUT_WAIT_MS = 4 * 60 * 1000;   // 그 뒤엔 204 → 워커가 같은 id 로 다시 묻는다
 
@@ -19,7 +19,7 @@ const PRECACHE = [
   'index.html',
   '../shared/css/themaker-ui.css', 'css/app.css', '../shared/css/all.min.css',
   '../shared/assets/fonts/pretendard.css',
-  '../shared/assets/img/favicon.png', '../shared/assets/img/pibo-logo.png',
+  '../shared/assets/img/favicon.png', '../shared/assets/img/favicon.svg',
   '../manifest.webmanifest',
   '../shared/webfonts/fa-solid-900.woff2', '../shared/webfonts/fa-brands-400.woff2',
   'vendor/codemirror/codemirror.css', 'vendor/codemirror/cobalt.css',
